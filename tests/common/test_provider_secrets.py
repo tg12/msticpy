@@ -217,17 +217,25 @@ class TestSecretsConfig(unittest.TestCase):
             self.assertEqual(kv_settings[attrib], expected[attrib])
 
         kv_settings.authority = "usgov"
-        self.assertEqual(kv_settings.authority_uri, "https://login.microsoftonline.us")
         self.assertEqual(
-            kv_settings.keyvault_uri, "https://{vault}.vault.usgovcloudapi.net/"
-        )
-        self.assertEqual(kv_settings.mgmt_uri, "https://management.usgovcloudapi.net/")
+            kv_settings.authority_uri,
+            "https://login.microsoftonline.us")
+        self.assertEqual(
+            kv_settings.keyvault_uri,
+            "https://{vault}.vault.usgovcloudapi.net/")
+        self.assertEqual(
+            kv_settings.mgmt_uri,
+            "https://management.usgovcloudapi.net/")
 
         kv_settings.authority = "de"
-        self.assertEqual(kv_settings.authority_uri, "https://login.microsoftonline.de")
+        self.assertEqual(
+            kv_settings.authority_uri,
+            "https://login.microsoftonline.de")
 
         kv_settings.authority = "chi"
-        self.assertEqual(kv_settings.authority_uri, "https://login.chinacloudapi.cn")
+        self.assertEqual(
+            kv_settings.authority_uri,
+            "https://login.chinacloudapi.cn")
 
     @patch(sec_client_patch)
     def test_keyvault_client(
@@ -283,7 +291,9 @@ class TestSecretsConfig(unittest.TestCase):
             keyvault_client.get_secret("NoSecret")
 
         kv_sec_client.set_secret("MyTestSecret", "TheActualValue")
-        self.assertEqual(keyvault_client.get_secret("MyTestSecret"), "TheActualValue")
+        self.assertEqual(
+            keyvault_client.get_secret("MyTestSecret"),
+            "TheActualValue")
 
     @patch(kv_mgmt_client_patch)
     @patch(az_connect_core_patch)
@@ -310,8 +320,8 @@ class TestSecretsConfig(unittest.TestCase):
         self.assertIn("myothervault", vault_mgmt.list_vaults())
 
         self.assertEqual(
-            vault_mgmt.get_vault_uri("mynewvault"), "https://mynewvault.vault.azure.net"
-        )
+            vault_mgmt.get_vault_uri("mynewvault"),
+            "https://mynewvault.vault.azure.net")
 
         kv_settings = get_kv_settings("msticpyconfig-kv.yaml")
         kv_settings["azureregion"] = None
@@ -365,8 +375,8 @@ class TestSecretsConfig(unittest.TestCase):
             elif p_name == "VirusTotal":
                 sec_value = sec_settings.read_secret(args["AuthKey"])
                 self.assertEqual(
-                    KV_SECRETS["TIProviders-VirusTotal-Args-AuthKey"], sec_value
-                )
+                    KV_SECRETS["TIProviders-VirusTotal-Args-AuthKey"],
+                    sec_value)
             elif p_name == "XForce":
                 sec_value = sec_settings.read_secret(args["AuthKey"])
                 self.assertEqual(KV_SECRETS["XForce-AuthKey"], sec_value)
@@ -388,12 +398,14 @@ def get_kv_settings(config_file):
 def mock_auth_context_methods(expiry_time):
     context_obj = MagicMock()
     context_obj.acquire_user_code = MagicMock(return_value=DEV_CODE)
-    context_obj.acquire_token_with_device_code = MagicMock(return_value=TEST_TOKEN)
+    context_obj.acquire_token_with_device_code = MagicMock(
+        return_value=TEST_TOKEN)
     refresh_token = deepcopy(TEST_TOKEN)
 
     refresh_token["expiresOn"] = expiry_time.strftime("%Y-%m-%d %H:%M:%S.%f")
     # acquire_with_refresh.return_value = refresh_token
-    context_obj.acquire_token_with_refresh_token = MagicMock(return_value=refresh_token)
+    context_obj.acquire_token_with_refresh_token = MagicMock(
+        return_value=refresh_token)
     return context_obj
 
 

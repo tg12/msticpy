@@ -14,10 +14,14 @@ __author__ = "Ian Hellen"
 
 
 def _add_script_args():
-    parser = argparse.ArgumentParser(description="Module static call tree analyer.")
+    parser = argparse.ArgumentParser(
+        description="Module static call tree analyer.")
     parser.add_argument(
-        "--module", "-m", default=".", required=True, help="Path to module to analyze."
-    )
+        "--module",
+        "-m",
+        default=".",
+        required=True,
+        help="Path to module to analyze.")
     parser.add_argument(
         "--all",
         "-a",

@@ -105,17 +105,18 @@ def test_mordor_search(mdr_driver: MordorDriver):
         len(search_mdr_data(mdr_driver.mordor_data, "Empire, Windows")), 50
     )
 
-    subset_search = search_mdr_data(mdr_driver.mordor_data, "Power", subset=subset)
+    subset_search = search_mdr_data(
+        mdr_driver.mordor_data, "Power", subset=subset)
     check.equal(len(emp_power), len(subset_search))
 
     result_set = mdr_driver.search_queries("AWS")
     check.greater_equal(len(list(result_set)), 1)
-    check.is_true(any(hit for hit in result_set if "small.aws.collection" in hit))
+    check.is_true(
+        any(hit for hit in result_set if "small.aws.collection" in hit))
 
 
-@pytest.mark.skipif(
-    not os.environ.get("MSTICPY_TEST_NOSKIP"), reason="Skipped for local tests."
-)
+@pytest.mark.skipif(not os.environ.get("MSTICPY_TEST_NOSKIP"),
+                    reason="Skipped for local tests.")
 def test_mordor_download(mdr_driver: MordorDriver):
     """Test file download."""
     entry_id = "SDWIN-190319021158"
@@ -130,9 +131,8 @@ def test_mordor_download(mdr_driver: MordorDriver):
     _cleanup_temp_files(_SAVE_FOLDER2)
 
 
-@pytest.mark.skipif(
-    not os.environ.get("MSTICPY_TEST_NOSKIP"), reason="Skipped for local tests."
-)
+@pytest.mark.skipif(not os.environ.get("MSTICPY_TEST_NOSKIP"),
+                    reason="Skipped for local tests.")
 def test_mordor_query_provider(qry_provider):
     """Test query functions from query provider."""
     queries = qry_provider.list_queries()

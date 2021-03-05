@@ -102,5 +102,5 @@ def _get_object_params(
                 elif hasattr(arg_object, param):
                     req_params[param] = getattr(arg_object, param)
         remaining_params = [
-            p_name for p_name, p_value in req_params.items() if p_value is not None
-        ]
+            p_name for p_name,
+            p_value in req_params.items() if p_value is not None]

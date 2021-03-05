@@ -42,7 +42,9 @@ class LAUploader(UploaderBase):
         self.workspace = workspace
         self.workspace_secret = workspace_secret
         self._debug = kwargs.get("debug", False)
-        self.ops_loc = kwargs.get("opsinsight_loc", ".ods.opinsights.azure.com")
+        self.ops_loc = kwargs.get(
+            "opsinsight_loc",
+            ".ods.opinsights.azure.com")
 
     def _build_signature(
         self,
@@ -81,8 +83,10 @@ class LAUploader(UploaderBase):
         bytes_to_hash = bytes(string_to_hash, encoding="utf-8")
         decoded_key = base64.b64decode(self.workspace_secret)
         encoded_hash = base64.b64encode(
-            hmac.new(decoded_key, bytes_to_hash, digestmod=hashlib.sha256).digest()
-        ).decode()
+            hmac.new(
+                decoded_key,
+                bytes_to_hash,
+                digestmod=hashlib.sha256).digest()).decode()
         authorization = f"SharedKey {self.workspace}:{encoded_hash}"
         return authorization
 
@@ -137,9 +141,7 @@ class LAUploader(UploaderBase):
         if response.status_code < 200 or response.status_code > 299:
             raise MsticpyConnectionError(
                 f"""LogAnalytics data upload failed with code {response.status_code}.
-                Check Workspace ID and key""",
-                title="Data Upload Failed",
-            )
+                Check Workspace ID and key""", title="Data Upload Failed", )
 
     def upload_df(self, data: pd.DataFrame, table_name: Any, **kwargs):
         """
@@ -156,7 +158,8 @@ class LAUploader(UploaderBase):
         events = []
         for row in data.iterrows():
             events.append(row[1].astype(str).to_dict())
-            # Due to 30MB limit if data is larger than 25Mb upload that chunk then continue
+            # Due to 30MB limit if data is larger than 25Mb upload that chunk
+            # then continue
             if sys.getsizeof(json.dumps(events)) > 26214400:
                 if self._debug is True:
                     print("Data larger than 25MB spliting data requests.")
@@ -172,8 +175,11 @@ class LAUploader(UploaderBase):
             print(f"Upload to {table_name} complete")
 
     def upload_file(
-        self, file_path: str, table_name: str = None, delim: str = ",", **kwargs
-    ):
+            self,
+            file_path: str,
+            table_name: str = None,
+            delim: str = ",",
+            **kwargs):
         """
         Upload a seperated value file to Log Analytics.
 
@@ -194,8 +200,11 @@ class LAUploader(UploaderBase):
         self.upload_df(data, table_name)
 
     def upload_folder(
-        self, folder_path: str, table_name: str = None, delim: str = ",", **kwargs
-    ):
+            self,
+            folder_path: str,
+            table_name: str = None,
+            delim: str = ",",
+            **kwargs):
         """
         Upload all files in a folder to Log Analytics.
 

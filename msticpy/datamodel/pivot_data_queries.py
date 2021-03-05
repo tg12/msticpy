@@ -35,7 +35,10 @@ class PivotQueryFunctions:
 
     current = None
 
-    def __init__(self, query_provider: QueryProvider, ignore_reqd: List[str] = None):
+    def __init__(
+            self,
+            query_provider: QueryProvider,
+            ignore_reqd: List[str] = None):
         """
         Instantiate PivotQueryFunctions class.
 
@@ -61,7 +64,8 @@ class PivotQueryFunctions:
             # for each query
             for src_name, q_source in fam_dict.items():
                 # get the set of required params
-                reqd_params = set(q_source.required_params.keys()) - ignore_params
+                reqd_params = set(
+                    q_source.required_params.keys()) - ignore_params
                 # add them to the param_usage attrib
                 for param, p_attrs in q_source.params.items():
                     self.param_usage[param].append(
@@ -116,7 +120,8 @@ class PivotQueryFunctions:
             for param in param_usage
         )
         return [
-            (q_name, q_family, p_type, getattr(self._provider, q_func), q_func)  # type: ignore
+            (q_name, q_family, p_type, getattr(
+                self._provider, q_func), q_func)  # type: ignore
             for q_name, q_family, p_type, q_func in get_param_props
         ]
 
@@ -280,7 +285,8 @@ def add_queries_to_entities(
                 continue
 
             # If multiple params - get the ones that are available in the same entity
-            # We could in the future get parameters for connected (graph) entities.
+            # We could in the future get parameters for connected (graph)
+            # entities.
             param_entities = {
                 param: (ent, attr)
                 for param, ent_list in PARAM_ENTITY_MAP.items()
@@ -288,9 +294,8 @@ def add_queries_to_entities(
                 if param in func_params.all and ent == entity_cls
             }
             # Build the map of param names to entity attributes
-            attr_map = {
-                param: ent_attr for param, (_, ent_attr) in param_entities.items()
-            }
+            attr_map = {param: ent_attr for param,
+                        (_, ent_attr) in param_entities.items()}
             # Wrap the function
             cls_func = _param_and_call_wrapper(
                 func, func_params.param_attrs, attr_map, get_timespan
@@ -426,7 +431,8 @@ def _create_data_func_exec(
             join_type, left_on, right_on = _get_join_params(func_kwargs)
             src_data = kwargs["data"] if join_type else None
             # Get the results of the query
-            result_df = _exec_query_for_df(func, func_kwargs, func_params, kwargs)
+            result_df = _exec_query_for_df(
+                func, func_kwargs, func_params, kwargs)
             if join_type and isinstance(src_data, pd.DataFrame):
                 if left_on and right_on:
                     # If explicit join keys
@@ -512,7 +518,8 @@ def _exec_query_for_df(func, func_kwargs, func_params, parent_kwargs):
     # extact the DF subset of df_iter_params columns and iterate over each row
     for row_index, row in src_df[list(df_iter_params.values())].iterrows():
         # build a single-line dict of {param1: row_value1...}
-        col_param_dict = {param: row[col] for param, col in df_iter_params.items()}
+        col_param_dict = {param: row[col]
+                          for param, col in df_iter_params.items()}
         # execute the function for each input row with key-value params from
         # col-name, col-value supplied as kwargs (along with any other kwargs)
         row_res_def = func(**col_param_dict, **func_kwargs)
@@ -545,7 +552,8 @@ def _check_df_params_require_iter(
             # If the parameter accepts iterable types try to use the
             # values of that column directly
             list_params[kw_name] = list(src_df[col_name].values)
-            # But also store it as a param that we might need to iterate through
+            # But also store it as a param that we might need to iterate
+            # through
         df_iter_params[kw_name] = col_name
     return df_iter_params, list_params
 
@@ -570,8 +578,13 @@ def _exec_query_for_values(func, func_kwargs, func_params, parent_kwargs):
     # zip the value lists into tuples
     for row in zip(*(var_iter_params.values())):
         # build a single-line dict of {param1: row_value1...}
-        col_param_dict = {param: row[idx] for idx, param in enumerate(var_iter_params)}
-        row_results.append(func(**simple_params, **col_param_dict, **func_kwargs))
+        col_param_dict = {param: row[idx]
+                          for idx, param in enumerate(var_iter_params)}
+        row_results.append(
+            func(
+                **simple_params,
+                **col_param_dict,
+                **func_kwargs))
     return pd.concat(row_results, ignore_index=True)
 
 

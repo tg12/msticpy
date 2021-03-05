@@ -46,7 +46,8 @@ class KqlTestDriver(DriverBase):
 
         indicator_file = Path(_TEST_DATA).joinpath("as_threatintel")
         self.test_df = pd.read_pickle(indicator_file)
-        self.ip_df = self.test_df[self.test_df["NetworkIP"].str.len() > 0].copy()
+        self.ip_df = self.test_df[self.test_df["NetworkIP"].str.len(
+        ) > 0].copy()
         self.ip_df["IoC"] = self.ip_df["NetworkIP"].str.lower()
         self.url_df = self.test_df[self.test_df["Url"].str.len() > 0].copy()
         self.url_df["IoC"] = self.url_df["Url"].str.lower()
@@ -59,7 +60,8 @@ class KqlTestDriver(DriverBase):
     def schema(self) -> Dict[str, Dict]:
         return self._schema
 
-    def query(self, query: str, query_source, **kwargs) -> Union[pd.DataFrame, Any]:
+    def query(self, query: str, query_source, **
+              kwargs) -> Union[pd.DataFrame, Any]:
         del query_source, kwargs
 
         query_toks = [tok.lower() for tok in query.split("'") if tok != ","]
@@ -130,7 +132,8 @@ class TestASKqlTIProvider(unittest.TestCase):
             self.assertGreaterEqual(1, len(ti_lookup.provider_status))
 
     def load_ti_lookup(self):
-        test_config1 = Path(_TEST_DATA).joinpath("msticpyconfig-askql.yaml").resolve()
+        test_config1 = Path(_TEST_DATA).joinpath(
+            "msticpyconfig-askql.yaml").resolve()
         with custom_mp_config(test_config1):
             as_byoti_prov = AzSTI(query_provider=self.qry_prov)
             return TILookup(primary_providers=[as_byoti_prov])
@@ -194,13 +197,14 @@ class TestASKqlTIProvider(unittest.TestCase):
         res_df = azs_result.raw_result
         self.assertIsInstance(res_df, pd.DataFrame)
         self.assertIsInstance(azs_result.reference, str)
-        self.assertTrue("ThreatIntelligenceIndicator  | where" in azs_result.reference)
+        self.assertTrue(
+            "ThreatIntelligenceIndicator  | where" in azs_result.reference)
 
         # Bulk URL Lookups
         results = ti_lookup.lookup_iocs(data=ioc_urls, start=start, end=end)
         self.assertIsNotNone(results)
         self.assertEqual(10, len(ioc_urls))
-        self.assertEqual(7, len(results[results["Result"] == True]))
+        self.assertEqual(7, len(results[results["Result"]]))
 
         # IP Lookups
         result = ti_lookup.lookup_ioc(observable=ioc_ip, start=start, end=end)
@@ -221,17 +225,20 @@ class TestASKqlTIProvider(unittest.TestCase):
         results = ti_lookup.lookup_iocs(data=ioc_ips, start=start, end=end)
         self.assertIsNotNone(results)
         self.assertEqual(20, len(ioc_ips))
-        self.assertEqual(15, len(results[results["Result"] == True]))
+        self.assertEqual(15, len(results[results["Result"]]))
 
         # Fail Lookups
-        results = ti_lookup.lookup_iocs(data={"c:\\empty_result.txt": "windows_path"})
+        results = ti_lookup.lookup_iocs(
+            data={"c:\\empty_result.txt": "windows_path"})
         self.assertEqual(results.iloc[0]["Details"], "Not found.")
         self.assertEqual(len(results), 1)
 
-        results = ti_lookup.lookup_iocs(data={"c:\\failed_query.txt": "windows_path"})
+        results = ti_lookup.lookup_iocs(
+            data={"c:\\failed_query.txt": "windows_path"})
         self.assertEqual(results.iloc[0]["Details"], "Query failure")
         self.assertEqual(len(results), 1)
 
-        results = ti_lookup.lookup_iocs(data={"c:\\no_dataframe.txt": "windows_path"})
+        results = ti_lookup.lookup_iocs(
+            data={"c:\\no_dataframe.txt": "windows_path"})
         self.assertEqual(results.iloc[0]["Details"], "Query failure")
         self.assertEqual(len(results), 1)

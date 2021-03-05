@@ -85,5 +85,9 @@ def az_user_connect(silent: bool = False) -> AzCredentials:
     AzCredentials
 
     """
-    credentials = az_connect_core(auth_methods=["cli", "interactive"], silent=silent)
+    credentials = az_connect_core(
+        auth_methods=[
+            "cli",
+            "interactive"],
+        silent=silent)
     return credentials

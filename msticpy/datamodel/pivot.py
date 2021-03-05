@@ -76,19 +76,20 @@ class Pivot:
         self._get_all_providers(namespace, providers)
 
         # load and assign functions for data queries
-        data_provs = (
-            prov for prov in self._providers.values() if isinstance(prov, QueryProvider)
-        )
+        data_provs = (prov for prov in self._providers.values()
+                      if isinstance(prov, QueryProvider))
         for prov in data_provs:
             add_data_queries_to_entities(prov, self.get_timespan)
 
         # load TI functions
-        add_ioc_queries_to_entities(self.get_provider("TILookup"), container="ti")
+        add_ioc_queries_to_entities(
+            self.get_provider("TILookup"), container="ti")
 
         # Add pivots from config registry
         register_pivots(
-            file_path=self._get_def_pivot_reg(), container="util", namespace=namespace
-        )
+            file_path=self._get_def_pivot_reg(),
+            container="util",
+            namespace=namespace)
 
     def _get_all_providers(
         self,
@@ -98,10 +99,9 @@ class Pivot:
         self._get_query_providers(namespace=namespace, providers=providers)
         self._providers["TILookup"] = (
             self._get_provider_by_type(
-                namespace=namespace, providers=providers, provider_type=TILookup
-            )
-            or TILookup()
-        )
+                namespace=namespace,
+                providers=providers,
+                provider_type=TILookup) or TILookup())
 
     def _get_query_providers(
         self,
@@ -147,13 +147,15 @@ class Pivot:
         providers: Iterable[Any] = None,
     ) -> Any:
         if providers:
-            ti_provs = [prov for prov in providers if isinstance(prov, provider_type)]
+            ti_provs = [
+                prov for prov in providers if isinstance(
+                    prov, provider_type)]
             if ti_provs:
                 return ti_provs[0]
         if namespace:
             ns_providers = [
-                prov for prov in namespace.values() if isinstance(prov, provider_type)
-            ]
+                prov for prov in namespace.values() if isinstance(
+                    prov, provider_type)]
             if ns_providers:
                 return ns_providers[-1]
         return None

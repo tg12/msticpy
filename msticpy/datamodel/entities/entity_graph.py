@@ -19,7 +19,8 @@ class Node:
         """Initialize the node."""
         self.edges: Set["Edge"] = set()
 
-    def add_edge(self, target: "Node", edge_attrs: Optional[Dict[str, Any]] = None):
+    def add_edge(self, target: "Node",
+                 edge_attrs: Optional[Dict[str, Any]] = None):
         """
         Add an edge between self and target.
 
@@ -31,7 +32,12 @@ class Node:
             Attributes to assign to new edge, by default None
 
         """
-        edge = Edge(self, target, edge_attrs) if edge_attrs else Edge(self, target)
+        edge = Edge(
+            self,
+            target,
+            edge_attrs) if edge_attrs else Edge(
+            self,
+            target)
         if not self.has_edge(target):
             self.edges.add(edge)
         if not target.has_edge(self):
@@ -39,13 +45,16 @@ class Node:
 
     def has_edge(self, other):
         """Return True if node has an edge with `other`."""
-        return any(edge for edge in self.edges if other in (edge.target, edge.source))
+        return any(
+            edge for edge in self.edges if other in (
+                edge.target, edge.source))
 
 
 class Edge:
     """Entity edge class."""
 
-    def __init__(self, source: Node, target: Node, attrs: Dict[str, Any] = None):
+    def __init__(self, source: Node, target: Node,
+                 attrs: Dict[str, Any] = None):
         """
         Create a new edge between `source` and `target`.
 

@@ -37,7 +37,10 @@ def risky_cmd_line(
     events: pd.DataFrame,
     log_type: str,
     detection_rules: str = os.path.join(
-        os.path.join(os.path.dirname(os.path.dirname(__file__)), _DETECTIONS_DEF_DIR),
+        os.path.join(
+            os.path.dirname(
+                os.path.dirname(__file__)),
+            _DETECTIONS_DEF_DIR),
         "cmd_line_rules.json",
     ),
     cmd_field: str = "Command",
@@ -101,7 +104,8 @@ def risky_cmd_line(
             if b64_regex.match(message):
                 b64match = b64_regex.search(message)
                 b64string = unpack(input_string=b64match[1])  # type: ignore
-                b64string = b64string[1]["decoded_string"].to_string()  # type: ignore
+                # type: ignore
+                b64string = b64string[1]["decoded_string"].to_string()
                 if re.match(detection, message):
                     risky_actions.update({date: message})
                 else:
@@ -147,7 +151,8 @@ def cmd_speed(
 
     """
     if cmd_field not in cmd_events.columns:
-        raise MsticpyException(f"Dataframe does not contain {cmd_field} column")
+        raise MsticpyException(
+            f"Dataframe does not contain {cmd_field} column")
 
     if isinstance(cmd_events["TimeGenerated"].iloc[0], dt.datetime) is False:
         raise MsticpyException("TimeGenerated is not a datetime format")
@@ -164,7 +169,7 @@ def cmd_speed(
         )
         if delta < dt.timedelta(seconds=time):
             suspicious_actions.append(
-                {df_len: [actions[df_len : (df_len + events)], delta]}  # noqa: E203
+                {df_len: [actions[df_len: (df_len + events)], delta]}  # noqa: E203
             )
         else:
             pass

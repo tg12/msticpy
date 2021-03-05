@@ -120,7 +120,8 @@ class FoliumMap:
                 or math.isnan(ip_entity.Location.Longitude)
             ):
                 warnings.warn(
-                    "Invalid location information for IP: " + ip_entity.Address,
+                    "Invalid location information for IP: " +
+                    ip_entity.Address,
                     RuntimeWarning,
                 )
                 continue
@@ -157,17 +158,23 @@ class FoliumMap:
                 popup_text = f"{popup_text}<br>{addl_props}"
                 tooltip_text = f"{tooltip_text}, {addl_props}"
             marker = folium.Marker(
-                location=[ip_entity.Location.Latitude, ip_entity.Location.Longitude],
+                location=[
+                    ip_entity.Location.Latitude,
+                    ip_entity.Location.Longitude],
                 popup=popup_text,
                 tooltip=tooltip_text,
-                icon=folium.Icon(**kwargs),
+                icon=folium.Icon(
+                    **kwargs),
             )
             marker.add_to(self.folium_map)
             self.locations.append(
                 (ip_entity.Location.Latitude, ip_entity.Location.Longitude)
             )
 
-    def add_geoloc_cluster(self, geo_locations: Iterable[GeoLocation], **kwargs):
+    def add_geoloc_cluster(
+            self,
+            geo_locations: Iterable[GeoLocation],
+            **kwargs):
         """
         Add a collection of GeoLocation objects to the map.
 
@@ -177,10 +184,12 @@ class FoliumMap:
             Iterable of GeoLocation entities.
 
         """
-        ip_entities = [IpAddress(Address="na", Location=geo) for geo in geo_locations]
+        ip_entities = [IpAddress(Address="na", Location=geo)
+                       for geo in geo_locations]
         self.add_ip_cluster(ip_entities=ip_entities, **kwargs)
 
-    def add_locations(self, locations: Iterable[Tuple[float, float]], **kwargs):
+    def add_locations(
+            self, locations: Iterable[Tuple[float, float]], **kwargs):
         """
         Add a collection of lat/long tuples to the map.
 
@@ -191,8 +200,10 @@ class FoliumMap:
 
         """
         geo_entities = [
-            GeoLocation(Latitude=lat, Longitude=long) for lat, long in locations
-        ]
+            GeoLocation(
+                Latitude=lat,
+                Longitude=long) for lat,
+            long in locations]
         self.add_geoloc_cluster(geo_locations=geo_entities, **kwargs)
 
 

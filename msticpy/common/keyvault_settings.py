@@ -82,7 +82,9 @@ class KeyVaultSettings:
         norm_settings = {key.casefold(): val for key, val in kv_config.items()}
         self.__dict__.update(norm_settings)
         if "authority_uri" in self:
-            rev_lookup = {uri.casefold(): code for code, uri in self.AAD_AUTHORITIES}
+            rev_lookup = {
+                uri.casefold(): code for code,
+                uri in self.AAD_AUTHORITIES}
             self.__dict__["authority"] = rev_lookup.get(
                 self["authorityuri"].casefold(), "global"
             ).casefold()

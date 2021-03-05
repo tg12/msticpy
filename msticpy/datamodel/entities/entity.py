@@ -352,7 +352,8 @@ class Entity(ABC, Node):
         overlap = self_id_props.keys() - other_id_props.keys()
         if not overlap:
             return True
-        return all(self.properties[prop] == other.properties[prop] for prop in overlap)
+        return all(self.properties[prop] ==
+                   other.properties[prop] for prop in overlap)
 
     @property
     def properties(self) -> dict:
@@ -420,7 +421,8 @@ class Entity(ABC, Node):
         if entity_type_name in cls.ENTITY_NAME_MAP:
             return cls.ENTITY_NAME_MAP[entity_type_name](raw_entity)
 
-        raise TypeError("Could not find a suitable type for {}".format(entity_type))
+        raise TypeError(
+            "Could not find a suitable type for {}".format(entity_type))
 
     @classmethod
     def _get_entity_type_name(cls, entity_type: Type) -> str:

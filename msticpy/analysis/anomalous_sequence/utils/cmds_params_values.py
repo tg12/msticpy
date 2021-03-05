@@ -124,19 +124,30 @@ def compute_counts(  # noqa MC0001  # nosec
 
 
 # pylint: disable=too-many-arguments
-def laplace_smooth_counts(
-    seq1_counts: DefaultDict[str, int],
-    seq2_counts: DefaultDict[str, DefaultDict[str, int]],
-    param_counts: DefaultDict[str, int],
-    cmd_param_counts: DefaultDict[str, DefaultDict[str, int]],
-    value_counts: DefaultDict[str, int],
-    param_value_counts: DefaultDict[str, DefaultDict[str, int]],
-    start_token: str,
-    end_token: str,
-    unk_token: str,
-) -> Tuple[
-    StateMatrix, StateMatrix, StateMatrix, StateMatrix, StateMatrix, StateMatrix
-]:
+def laplace_smooth_counts(seq1_counts: DefaultDict[str,
+                                                   int],
+                          seq2_counts: DefaultDict[str,
+                                                   DefaultDict[str,
+                                                               int]],
+                          param_counts: DefaultDict[str,
+                                                    int],
+                          cmd_param_counts: DefaultDict[str,
+                                                        DefaultDict[str,
+                                                                    int]],
+                          value_counts: DefaultDict[str,
+                                                    int],
+                          param_value_counts: DefaultDict[str,
+                                                          DefaultDict[str,
+                                                                      int]],
+                          start_token: str,
+                          end_token: str,
+                          unk_token: str,
+                          ) -> Tuple[StateMatrix,
+                                     StateMatrix,
+                                     StateMatrix,
+                                     StateMatrix,
+                                     StateMatrix,
+                                     StateMatrix]:
     """
     Laplace smoothing is applied to the counts.
 
@@ -210,7 +221,9 @@ def laplace_smooth_counts(
     seq1_counts_sm = StateMatrix(states=seq1_counts_ls, unk_token=unk_token)
     seq2_counts_sm = StateMatrix(states=seq2_counts_ls, unk_token=unk_token)
     param_counts_sm = StateMatrix(states=param_counts_ls, unk_token=unk_token)
-    cmd_param_counts_sm = StateMatrix(states=cmd_param_counts_ls, unk_token=unk_token)
+    cmd_param_counts_sm = StateMatrix(
+        states=cmd_param_counts_ls,
+        unk_token=unk_token)
     value_counts_sm = StateMatrix(states=value_counts_ls, unk_token=unk_token)
     param_value_counts_sm = StateMatrix(
         states=param_value_counts_ls, unk_token=unk_token
@@ -511,7 +524,7 @@ def compute_likelihood_windows_in_session(
         sess += [Cmd(name=str(end_token), params=dict())]
     end = len(sess) - window_len
     for i in range(end + 1):
-        window = sess[i : i + window_len]  # noqa E203
+        window = sess[i: i + window_len]  # noqa E203
         if i == 0:
             use_start = use_start_end_tokens
         else:
@@ -616,4 +629,4 @@ def rarest_window_session(
         return [], np.nan
     min_lik = min(likelihoods)
     ind = likelihoods.index(min_lik)
-    return session[ind : ind + window_len], min_lik  # noqa E203
+    return session[ind: ind + window_len], min_lik  # noqa E203

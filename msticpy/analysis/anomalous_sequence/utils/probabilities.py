@@ -110,8 +110,7 @@ def compute_params_probs(  # nosec
     """
     param_probs: DefaultDict[str, float] = defaultdict(lambda: 0)
     param_cond_cmd_probs: DefaultDict[str, DefaultDict[str, float]] = defaultdict(
-        lambda: defaultdict(lambda: 0)
-    )
+        lambda: defaultdict(lambda: 0))
 
     for cmd, params in cmd_param_counts.items():
         n_cmd = seq1_counts[cmd]
@@ -166,8 +165,7 @@ def compute_values_probs(  # nosec
     """
     value_probs: DefaultDict[str, float] = defaultdict(lambda: 0)
     value_cond_param_probs: DefaultDict[str, DefaultDict[str, float]] = defaultdict(
-        lambda: defaultdict(lambda: 0)
-    )
+        lambda: defaultdict(lambda: 0))
 
     for param, values in param_value_counts.items():
         n_val = sum(values.values())

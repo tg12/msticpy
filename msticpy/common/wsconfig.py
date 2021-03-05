@@ -59,7 +59,10 @@ class WorkspaceConfig:
     CONF_RES_GROUP_KEY = "resource_group"
     CONF_WS_NAME_KEY = "workspace_name"
 
-    def __init__(self, config_file: Optional[str] = None, workspace: str = None):
+    def __init__(
+            self,
+            config_file: Optional[str] = None,
+            workspace: str = None):
         """
         Load current Azure Notebooks configuration for Log Analytics.
 
@@ -125,7 +128,8 @@ class WorkspaceConfig:
         """
         ws_value = self._config.get(self.CONF_WS_ID_KEY, None)
         ten_value = self._config.get(self.CONF_TENANT_ID_KEY, None)
-        return is_valid_uuid(ws_value) and is_valid_uuid(ten_value)  # type: ignore
+        return is_valid_uuid(ws_value) and is_valid_uuid(
+            ten_value)  # type: ignore
 
     @property
     def code_connect_str(self) -> str:
@@ -174,7 +178,8 @@ class WorkspaceConfig:
             Dictionary of workspaces with workspace and tenantIds.
 
         """
-        ws_settings = pkg_config.settings.get("AzureSentinel", {}).get("Workspaces")
+        ws_settings = pkg_config.settings.get(
+            "AzureSentinel", {}).get("Workspaces")
         if not ws_settings:
             return {}
         return {
@@ -228,6 +233,9 @@ class WorkspaceConfig:
             raise MsticpyUserConfigError(
                 *_NO_CONFIG_ERR, title="Workspace configuration missing."
             )
-        # Warn that we're using a "found" file, not one in the current directory
-        warnings.warn("\n".join(_NO_CONFIG_WARN).format(config_file=config_file))
+        # Warn that we're using a "found" file, not one in the current
+        # directory
+        warnings.warn(
+            "\n".join(_NO_CONFIG_WARN).format(
+                config_file=config_file))
         return str(config_file)

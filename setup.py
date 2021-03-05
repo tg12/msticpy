@@ -32,7 +32,10 @@ with open("README.md", "r") as fh:
 
 # pylint: disable=locally-disabled, invalid-name
 with open("msticpy/_version.py", "r") as fd:
-    v_match = re.search(r'^VERSION\s*=\s*[\'"]([^\'"]*)[\'"]', fd.read(), re.MULTILINE)
+    v_match = re.search(
+        r'^VERSION\s*=\s*[\'"]([^\'"]*)[\'"]',
+        fd.read(),
+        re.MULTILINE)
     __version__ = v_match.group(1) if v_match else "no version"
 # pylint: enable=locally-disabled, invalid-name
 
@@ -44,9 +47,8 @@ with open("requirements-dev.txt", "r") as fh:
 
 
 def _combine_extras(extras: list) -> list:
-    return list(
-        {pkg for name, pkgs in EXTRAS.items() for pkg in pkgs if name in extras}
-    )
+    return list({pkg for name, pkgs in EXTRAS.items()
+                 for pkg in pkgs if name in extras})
 
 
 # Extras definitions
@@ -106,7 +108,11 @@ setuptools.setup(
         "Code": "https://github.com/microsoft/msticpy",
     },
     python_requires=">=3.6",
-    packages=setuptools.find_packages(exclude=["tests", "tests.*", "*.tests.*"]),
+    packages=setuptools.find_packages(
+        exclude=[
+            "tests",
+            "tests.*",
+            "*.tests.*"]),
     classifiers=[
         "Programming Language :: Python :: 3.6",
         "License :: OSI Approved :: MIT License",

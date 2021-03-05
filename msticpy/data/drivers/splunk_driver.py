@@ -78,7 +78,9 @@ class SplunkDriver(DriverBase):
             "saved_searches": self._saved_searches,
             "fired_alerts": self._fired_alerts,
         }
-        self.formatters = {"datetime": self._format_datetime, "list": self._format_list}
+        self.formatters = {
+            "datetime": self._format_datetime,
+            "list": self._format_list}
 
     def connect(self, connection_str: str = None, **kwargs):
         """
@@ -103,8 +105,8 @@ class SplunkDriver(DriverBase):
         cs_dict = self._get_connect_args(connection_str, **kwargs)
 
         arg_dict = {
-            key: val for key, val in cs_dict.items() if key in SPLUNK_CONNECT_ARGS
-        }
+            key: val for key,
+            val in cs_dict.items() if key in SPLUNK_CONNECT_ARGS}
         try:
             self.service = sp_client.connect(**arg_dict)
         except AuthenticationError as err:
@@ -204,10 +206,13 @@ class SplunkDriver(DriverBase):
         resp_rows = [row for row in reader if isinstance(row, dict)]
         if not resp_rows:
             print("Warning - query did not return any results.")
-            return [row for row in reader if isinstance(row, sp_results.Message)]
+            return [
+                row for row in reader if isinstance(
+                    row, sp_results.Message)]
         return pd.DataFrame(resp_rows)
 
-    def query_with_results(self, query: str, **kwargs) -> Tuple[pd.DataFrame, Any]:
+    def query_with_results(self, query: str, **
+                           kwargs) -> Tuple[pd.DataFrame, Any]:
         """
         Execute query string and return DataFrame of results.
 
@@ -238,7 +243,9 @@ class SplunkDriver(DriverBase):
         """
         if not self.connected:
             raise self._create_not_connected_err()
-        if hasattr(self.service, "saved_searches") and self.service.saved_searches:
+        if hasattr(
+                self.service,
+                "saved_searches") and self.service.saved_searches:
             queries = {
                 search.name.strip().replace(" ", "_"): f"search {search['search']}"
                 for search in self.service.saved_searches
@@ -265,7 +272,9 @@ class SplunkDriver(DriverBase):
         """
         if not self.connected:
             raise self._create_not_connected_err()
-        if hasattr(self.service, "saved_searches") and self.service.saved_searches:
+        if hasattr(
+                self.service,
+                "saved_searches") and self.service.saved_searches:
             return [
                 {
                     "name": search.name.strip().replace(" ", "_"),

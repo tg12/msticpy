@@ -59,8 +59,9 @@ class MordorBrowser:
         self._init_filter_ctrls()
 
         wgt_title = widgets.HTML(
-            value="<h2>Mordor dataset browser</h2>", style={"fontsize": "x-large"}
-        )
+            value="<h2>Mordor dataset browser</h2>",
+            style={
+                "fontsize": "x-large"})
 
         browse_ctrls = widgets.VBox(
             [wgt_title, self.widgets["ds_select"], self.widgets["filter_grp"]],
@@ -105,8 +106,9 @@ class MordorBrowser:
         """Initialize the filter controls."""
         # text_filter
         self.widgets["filter_text"] = widgets.Text(
-            description="Filter", layout=self.layouts["layout_norm"], style=self.w_style
-        )
+            description="Filter",
+            layout=self.layouts["layout_norm"],
+            style=self.w_style)
         self.widgets["filter_text"].on_submit(self._update_select_list)
         self.widgets["filter_help"] = widgets.Label(
             value=" comma ORs values, '+' ANDs values"
@@ -116,8 +118,8 @@ class MordorBrowser:
         self.widgets["sel_techniques"] = widgets.SelectMultiple(
             description="Mitre Techniques",
             options=self._get_mitre_filter_options(
-                self.mordor_driver.mdr_idx_tech, self.mordor_driver.mitre_techniques
-            ),
+                self.mordor_driver.mdr_idx_tech,
+                self.mordor_driver.mitre_techniques),
             layout=self.layouts["mitre_select_layout"],
             style=self.w_style,
         )
@@ -125,16 +127,19 @@ class MordorBrowser:
         self.widgets["sel_tactics"] = widgets.SelectMultiple(
             description="Mitre Tactics",
             options=self._get_mitre_filter_options(
-                self.mordor_driver.mdr_idx_tact, self.mordor_driver.mitre_tactics
-            ),
+                self.mordor_driver.mdr_idx_tact,
+                self.mordor_driver.mitre_tactics),
             layout=self.layouts["mitre_select_layout"],
             style=self.w_style,
         )
         self._reset_filters()
-        self.widgets["sel_techniques"].observe(self._update_select_list, names="value")
-        self.widgets["sel_tactics"].observe(self._update_select_list, names="value")
+        self.widgets["sel_techniques"].observe(
+            self._update_select_list, names="value")
+        self.widgets["sel_tactics"].observe(
+            self._update_select_list, names="value")
 
-        self.widgets["filter_reset"] = widgets.Button(description="Reset filter")
+        self.widgets["filter_reset"] = widgets.Button(
+            description="Reset filter")
         self.widgets["filter_reset"].on_click(self._reset_filters)
         wgt_filter_grp = widgets.VBox(
             [
@@ -150,7 +155,8 @@ class MordorBrowser:
                 ),
             ]
         )
-        self.widgets["filter_grp"] = widgets.Accordion(children=[wgt_filter_grp])
+        self.widgets["filter_grp"] = widgets.Accordion(
+            children=[wgt_filter_grp])
         self.widgets["filter_grp"].set_title(0, "Filters")
         self.widgets["filter_grp"].selected_index = None
 
@@ -227,7 +233,8 @@ class MordorBrowser:
             if field_attrs["type"] == "text":
                 self.fields[field].value = str(value)
             elif field_attrs["type"] == "list":
-                self.fields[field].value = ", ".join([str(item) for item in value])
+                self.fields[field].value = ", ".join(
+                    [str(item) for item in value])
             elif field_attrs["type"] == "raw":
                 self.fields[field].value = pformat(value)
             elif field == "attacks":
@@ -235,9 +242,11 @@ class MordorBrowser:
                 self.fields[field].value = _format_attacks(field_data)
             elif field == "file_paths":
                 file_paths = mdr_item.get_file_paths()
-                self.fields[field].children[0].options = _format_files(file_paths)
+                self.fields[field].children[0].options = _format_files(
+                    file_paths)
             elif field == "notebooks":
-                self.fields[field].value = _format_notebooks(mdr_item.notebooks)
+                self.fields[field].value = _format_notebooks(
+                    mdr_item.notebooks)
             elif field == "query name":
                 self.fields[field].value = _format_queries(mdr_item)
 
@@ -256,8 +265,9 @@ class MordorBrowser:
 
         md_items_filtered = filtered_tech & filtered_tact
         md_ids = search_mdr_data(
-            self.mdr_metadata, self.widgets["filter_text"].value, md_items_filtered
-        )
+            self.mdr_metadata,
+            self.widgets["filter_text"].value,
+            md_items_filtered)
         self.widgets["ds_select"].options = self._get_md_select_options(md_ids)
 
     def _reset_filters(self, event=None):
@@ -301,10 +311,10 @@ class MordorBrowser:
         self._df_disp.update(self.datasets[selection])
 
     @staticmethod
-    def _get_mitre_filter_options(mordor_index: Dict[str, MordorEntry], mitre_data):
-        return [
-            (f"{m_id} - {mitre_data.loc[m_id].Name}", m_id) for m_id in mordor_index
-        ]
+    def _get_mitre_filter_options(
+            mordor_index: Dict[str, MordorEntry], mitre_data):
+        return [(f"{m_id} - {mitre_data.loc[m_id].Name}", m_id)
+                for m_id in mordor_index]
 
 
 _FMT_STYLE = "border: 1px solid #AAAAAA; padding: 5px"

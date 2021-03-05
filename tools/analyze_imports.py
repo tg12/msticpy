@@ -28,9 +28,8 @@ def _add_script_args():
         required=True,
         help="Path to folder containing package",
     )
-    parser.add_argument(
-        "--package", "-k", required=True, help="Name of package (subfolder of --path)"
-    )
+    parser.add_argument("--package", "-k", required=True,
+                        help="Name of package (subfolder of --path)")
     parser.add_argument(
         "--req_file",
         "-r",
@@ -68,14 +67,18 @@ def _add_script_args():
         help="Show unknown imports for modules",
     )
     parser.add_argument(
-        "--modules", action="store_true", default=False, help="Show imports by module."
-    )
+        "--modules",
+        action="store_true",
+        default=False,
+        help="Show imports by module.")
     parser.add_argument(
         "--version", action="store_true", default=False, help="Show version."
     )
     parser.add_argument(
-        "--pkg_graph", action="store_true", default=False, help="Show dependency tree."
-    )
+        "--pkg_graph",
+        action="store_true",
+        default=False,
+        help="Show dependency tree.")
     return parser
 
 
@@ -114,7 +117,8 @@ def _print_all_imports(mod_imports, p_args):
         print(sorted({v for s in mod_imports.values() for v in s.setup_reqs}))
     if p_args.missing:
         print("missing imports (used but not in requirements)", end=" ")
-        print(sorted({v for s in mod_imports.values() for v in s.missing_reqs}))
+        print(sorted({v for s in mod_imports.values()
+                      for v in s.missing_reqs}))
     if p_args.unknown:
         print("unknown imports:", end=" ")
         print(sorted({v for s in mod_imports.values() for v in s.unknown}))
@@ -127,7 +131,8 @@ if __name__ == "__main__":
     if args.version:
         print(f"Version {VERSION}")
 
-    package_imports = analyze_imports(args.path, args.package, req_file=args.req_file)
+    package_imports = analyze_imports(
+        args.path, args.package, req_file=args.req_file)
     if args.modules:
         for mod, imports in package_imports.items():
             _print_single_module(mod, imports, args)

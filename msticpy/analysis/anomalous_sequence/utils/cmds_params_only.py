@@ -156,7 +156,9 @@ def laplace_smooth_counts(
     seq1_counts_sm = StateMatrix(states=seq1_counts_ls, unk_token=unk_token)
     seq2_counts_sm = StateMatrix(states=seq2_counts_ls, unk_token=unk_token)
     param_counts_sm = StateMatrix(states=param_counts_ls, unk_token=unk_token)
-    cmd_param_counts_sm = StateMatrix(states=cmd_param_counts_ls, unk_token=unk_token)
+    cmd_param_counts_sm = StateMatrix(
+        states=cmd_param_counts_ls,
+        unk_token=unk_token)
 
     return seq1_counts_sm, seq2_counts_sm, param_counts_sm, cmd_param_counts_sm
 
@@ -374,7 +376,7 @@ def compute_likelihood_windows_in_session(
     end = len(sess) - window_len
 
     for i in range(end + 1):
-        window = sess[i : i + window_len]  # noqa E203
+        window = sess[i: i + window_len]  # noqa E203
         if i == 0:
             use_start = use_start_end_tokens
         else:
@@ -463,4 +465,4 @@ def rarest_window_session(
 
     min_lik = min(likelihoods)
     ind = likelihoods.index(min_lik)
-    return session[ind : ind + window_len], min_lik  # noqa E203
+    return session[ind: ind + window_len], min_lik  # noqa E203

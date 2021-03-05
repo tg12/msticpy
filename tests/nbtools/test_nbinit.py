@@ -48,7 +48,10 @@ def test_nbinit_imports():
     ns_dict = {}
     init_notebook(
         namespace=ns_dict,
-        extra_imports=["pathlib", "datetime, time", "datetime, timedelta, tdelta"],
+        extra_imports=[
+            "pathlib",
+            "datetime, time",
+            "datetime, timedelta, tdelta"],
         def_imports="nb",
         verbose=True,
     )

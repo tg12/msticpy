@@ -38,7 +38,9 @@ __version__ = VERSION
 __author__ = "Ian Hellen"
 
 
-SanitizedObservable = namedtuple("SanitizedObservable", ["observable", "status"])
+SanitizedObservable = namedtuple(
+    "SanitizedObservable", [
+        "observable", "status"])
 
 
 # pylint: disable=too-few-public-methods
@@ -230,8 +232,8 @@ class TIProvider(ABC):
         self.description: Optional[str] = None
 
         self._supported_types = {
-            IoCType.parse(ioc_type.split("-")[0]) for ioc_type in self._IOC_QUERIES
-        }
+            IoCType.parse(
+                ioc_type.split("-")[0]) for ioc_type in self._IOC_QUERIES}
         if IoCType.unknown in self._supported_types:
             self._supported_types.remove(IoCType.unknown)
 
@@ -298,7 +300,8 @@ class TIProvider(ABC):
 
         """
         results = []
-        for observable, ioc_type in generate_items(data, obs_col, ioc_type_col):
+        for observable, ioc_type in generate_items(
+                data, obs_col, ioc_type_col):
             if not observable:
                 continue
             item_result = self.lookup_ioc(
@@ -306,10 +309,13 @@ class TIProvider(ABC):
             )
             results.append(pd.Series(attr.asdict(item_result)))
 
-        return pd.DataFrame(data=results).rename(columns=LookupResult.column_map())
+        return pd.DataFrame(
+            data=results).rename(
+            columns=LookupResult.column_map())
 
     @abc.abstractmethod
-    def parse_results(self, response: LookupResult) -> Tuple[bool, TISeverity, Any]:
+    def parse_results(
+            self, response: LookupResult) -> Tuple[bool, TISeverity, Any]:
         """
         Return the details of the response.
 
@@ -543,12 +549,14 @@ def _preprocess_url(
     clean_url, scheme, host = get_schema_and_host(url, require_url_encoding)
 
     if scheme is None or host is None:
-        return SanitizedObservable(None, f"Could not obtain scheme or host from {url}")
+        return SanitizedObservable(
+            None, f"Could not obtain scheme or host from {url}")
     # get rid of some obvious false positives (localhost, local hostnames)
     try:
         addr = ip_address(host)
         if addr.is_private:
-            return SanitizedObservable(None, "Host part of URL is a private IP address")
+            return SanitizedObservable(
+                None, "Host part of URL is a private IP address")
         if addr.is_loopback:
             return SanitizedObservable(
                 None, "Host part of URL is a loopback IP address"
@@ -560,7 +568,8 @@ def _preprocess_url(
         return SanitizedObservable(None, "Host is unqualified domain name")
 
     if scheme.lower() in ["file"]:
-        return SanitizedObservable(None, f"{scheme} URL scheme is not supported")
+        return SanitizedObservable(
+            None, f"{scheme} URL scheme is not supported")
 
     return SanitizedObservable(clean_url, "ok")
 
@@ -678,7 +687,8 @@ def _preprocess_hash(hash_str: str) -> SanitizedObservable:
     """Ensure Hash has minimum entropy (rather than a string of 'x')."""
     str_entropy = entropy(hash_str)
     if str_entropy < 3.0:
-        return SanitizedObservable(None, "String has too low an entropy to be a hash")
+        return SanitizedObservable(
+            None, "String has too low an entropy to be a hash")
     return SanitizedObservable(hash_str, "ok")
 
 
@@ -733,7 +743,10 @@ def _(data: pd.DataFrame, obs_col: str, ioc_type_col: Optional[str] = None):
 
 
 @generate_items.register(dict)  # type: ignore
-def _(data: dict, obs_col: Optional[str] = None, ioc_type_col: Optional[str] = None):
+def _(
+        data: dict,
+        obs_col: Optional[str] = None,
+        ioc_type_col: Optional[str] = None):
     for obs, ioc_type in data.items():
         if not ioc_type:
             ioc_type = TIProvider.resolve_ioc_type(obs)

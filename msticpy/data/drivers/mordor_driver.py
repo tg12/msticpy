@@ -85,7 +85,8 @@ class MordorDriver(DriverBase):
 
         print("Retrieving Mordor data...")
         self.mordor_data = _GET_MORDOR_METADATA()
-        self.mdr_idx_tech, self.mdr_idx_tact = _build_mdr_indexes(self.mordor_data)
+        self.mdr_idx_tech, self.mdr_idx_tact = _build_mdr_indexes(
+            self.mordor_data)
 
         self._connected = True
         self.public_attribs = {
@@ -139,7 +140,8 @@ class MordorDriver(DriverBase):
             return "Could not convert result to a DataFrame."
         return result_df
 
-    def query_with_results(self, query: str, **kwargs) -> Tuple[pd.DataFrame, Any]:
+    def query_with_results(self, query: str, **
+                           kwargs) -> Tuple[pd.DataFrame, Any]:
         """
         Execute query string and return DataFrame plus native results.
 
@@ -182,8 +184,7 @@ class MordorDriver(DriverBase):
             for file_path in mdr_item.get_file_paths():
                 mitre_data = mdr_item.get_attacks()
                 techniques = ", ".join(
-                    f"{att.technique}: {att.technique_name}" for att in mitre_data
-                )
+                    f"{att.technique}: {att.technique_name}" for att in mitre_data)
 
                 tactics = ", ".join(
                     f"{tac[0]}: {tac[1]}"
@@ -202,7 +203,8 @@ class MordorDriver(DriverBase):
                     f"Mitre Techniques: {techniques}",
                     f"Mitre Tactics: {tactics}",
                 ]
-                q_container, _, full_name = file_path["qry_path"].partition(".")
+                q_container, _, full_name = file_path["qry_path"].partition(
+                    ".")
                 short_name = file_path["qry_path"].split(".")[-1]
                 yield {
                     "name": full_name,
@@ -287,8 +289,10 @@ class MitreAttack:
                 "Either 'attack' or 'technique' and 'tactics' must be specified."
             )
         self.technique = attack.get("technique") if attack else technique
-        self.sub_technique = attack.get("sub-technique") if attack else sub_technique
-        self.tactics = attack.get("tactics") if attack else tactics  # type: ignore
+        self.sub_technique = attack.get(
+            "sub-technique") if attack else sub_technique
+        self.tactics = attack.get(
+            "tactics") if attack else tactics  # type: ignore
 
         self._technique_name = None
         self._technique_desc = None
@@ -581,7 +585,10 @@ def _fetch_mdr_metadata() -> Dict[str, MordorEntry]:
 
     md_metadata: Dict[str, MordorEntry] = {}
     mdr_md_paths = list(get_mdr_data_paths("metadata"))
-    for y_file in tqdm(mdr_md_paths, unit=" files", desc="Downloading Mordor metadata"):
+    for y_file in tqdm(
+            mdr_md_paths,
+            unit=" files",
+            desc="Downloading Mordor metadata"):
         gh_file_content = _get_mdr_file(y_file)
         yaml_doc = yaml.safe_load(gh_file_content)
         doc_id = yaml_doc.get("id")
@@ -624,8 +631,10 @@ def _build_mdr_indexes(
 
 
 def download_mdr_file(
-    file_uri: str, use_cached: bool = True, save_folder: str = ".", silent: bool = False
-) -> pd.DataFrame:
+        file_uri: str,
+        use_cached: bool = True,
+        save_folder: str = ".",
+        silent: bool = False) -> pd.DataFrame:
     """
     Download data file from Mordor.
 
@@ -750,9 +759,10 @@ def _json_to_df(file_path, silent):
     return out_df
 
 
-def search_mdr_data(
-    mdr_data: Dict[str, MordorEntry], terms: str = None, subset: Iterable[str] = None
-) -> Set[str]:
+def search_mdr_data(mdr_data: Dict[str,
+                                   MordorEntry],
+                    terms: str = None,
+                    subset: Iterable[str] = None) -> Set[str]:
     """
     Return IDs for items matching terms.
 

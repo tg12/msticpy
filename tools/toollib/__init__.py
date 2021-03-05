@@ -17,7 +17,10 @@ for check_path in Path(__file__).absolute().parents:
 else:
     ver_text = ""
 
-v_match = re.search(r'^VERSION\s*=\s*[\'"]([^\'"]*)[\'"]', ver_text, re.MULTILINE)
+v_match = re.search(
+    r'^VERSION\s*=\s*[\'"]([^\'"]*)[\'"]',
+    ver_text,
+    re.MULTILINE)
 __version__ = v_match.group(1) if v_match else "no version"
 
 VERSION = __version__

@@ -51,9 +51,9 @@ _PKG_RENAME_NAME = {
 }
 
 
-def _get_setup_reqs(
-    package_root: str, req_file="requirements.txt", extras: Optional[List[str]] = None
-):
+def _get_setup_reqs(package_root: str,
+                    req_file="requirements.txt",
+                    extras: Optional[List[str]] = None):
     with open(Path(package_root).joinpath(req_file), "r") as req_f:
         req_list = req_f.readlines()
 
@@ -74,8 +74,9 @@ def _get_setup_reqs(
             setup_reqs[src] = tgt
     # Rename Azure packages replace "." with "-"
     az_mgmt_reqs = {
-        pkg.replace("-", "."): pkg for pkg in setup_reqs if pkg.startswith("azure-")
-    }
+        pkg.replace(
+            "-",
+            "."): pkg for pkg in setup_reqs if pkg.startswith("azure-")}
 
     for key, pkg in az_mgmt_reqs.items():
         setup_reqs.pop(pkg)
@@ -239,7 +240,11 @@ def _get_pkg_modules(pkg_root):
     for py_file in pkg_root.glob("**/*.py"):
         pkg_modules.update(list(_get_pkg_from_path(py_file, pkg_root)))
         if py_file.name == "__init__.py":
-            pkg_modules.update(list(_get_pkg_from_path(py_file.parent, pkg_root)))
+            pkg_modules.update(
+                list(
+                    _get_pkg_from_path(
+                        py_file.parent,
+                        pkg_root)))
     return pkg_modules
 
 
@@ -298,7 +303,8 @@ def analyze_imports(
     pkg_py_files = list(pkg_root.glob("**/*.py"))
     print(f"processing {len(pkg_py_files)} modules")
     for py_file in pkg_py_files:
-        module_imports = _analyze_module_imports(py_file, pkg_modules, setup_reqs)
+        module_imports = _analyze_module_imports(
+            py_file, pkg_modules, setup_reqs)
         # add the external imports for the module
         mod_name = ".".join(py_file.relative_to(pkg_root).parts)
         all_mod_imports[mod_name] = module_imports
@@ -328,12 +334,12 @@ def _analyze_module_imports(py_file, pkg_modules, setup_reqs):
     ) = _check_std_lib(ext_imports)
 
     module_imports.setup_reqs, module_imports.missing_reqs = _match_pkg_to_reqs(
-        module_imports.external, setup_reqs
-    )
+        module_imports.external, setup_reqs)
     return module_imports
 
 
-def print_module_imports(modules: Dict[str, ModuleImports], imp_type="setup_reqs"):
+def print_module_imports(
+        modules: Dict[str, ModuleImports], imp_type="setup_reqs"):
     """
     Print module imports of type.
 
@@ -368,7 +374,8 @@ def build_import_graph(modules: Dict[str, ModuleImports]) -> nx.Graph:
     import_graph = nx.DiGraph()
     for py_mod, mod_imps in req_imports.items():
         for imp in mod_imps:
-            import_graph.add_node(py_mod, n_type="module", degree=len(mod_imps))
+            import_graph.add_node(
+                py_mod, n_type="module", degree=len(mod_imps))
             import_graph.add_node(imp, n_type="import")
             import_graph.add_edge(py_mod, imp)
 

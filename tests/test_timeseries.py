@@ -60,9 +60,8 @@ class TestTimeSeries(unittest.TestCase):
 
         self.output_df = out_df
 
-    @pytest.mark.skipif(
-        not os.environ.get("MSTICPY_TEST_NOSKIP"), reason="Skipped for local tests."
-    )
+    @pytest.mark.skipif(not os.environ.get("MSTICPY_TEST_NOSKIP"),
+                        reason="Skipped for local tests.")
     def test_timeseries_controls(self):
         nb_path = Path(_NB_FOLDER).joinpath(_NB_NAME)
         abs_path = Path(_NB_FOLDER).absolute()

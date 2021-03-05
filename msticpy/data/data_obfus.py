@@ -50,7 +50,8 @@ def hash_string(input_str: str) -> str:
     factor = int(len(input_str) / len(str_dig))
     out_str = (str_dig * max(factor, 1))[: len(input_str)]
     if not input_str.isnumeric():
-        return "".join([chr(int(c) + 105) if c.isdigit() else c for c in out_str])
+        return "".join(
+            [chr(int(c) + 105) if c.isdigit() else c for c in out_str])
     # Convert entirely numeric strings to numbers
     return "".join([c if c.isdigit() else str(ord(c) - 97) for c in out_str])
 
@@ -79,7 +80,8 @@ def hash_item(input_item: str, delim: str = None) -> str:
     if not delim:
         return hash_string(input_item)
     if len(delim) == 1:
-        return delim.join([hash_string(elem) for elem in input_item.split(delim)])
+        return delim.join([hash_string(elem)
+                           for elem in input_item.split(delim)])
 
     out_str = input_item
     delim_char = delim[0]
@@ -170,9 +172,8 @@ def _map_ip4_address(ip_addr: str) -> str:
         )
         return f"192.168.{ls_bytes}"
     # by default, remap all
-    return ".".join(
-        [ip_map[idx].get(byte, "1") for idx, byte in enumerate(ip_addr.split("."))]
-    )
+    return ".".join([ip_map[idx].get(byte, "1")
+                     for idx, byte in enumerate(ip_addr.split("."))])
 
 
 def hash_ip(input_item: Union[List[str], str]) -> Union[List[str], str]:
@@ -448,9 +449,8 @@ def mask_df(  # noqa: MC0001
                 )
             else:
                 out_df[col_name] = out_df.apply(
-                    lambda x, col=col_name, c_type=col_type: hash_item(x[col], c_type),
-                    axis=1,
-                )
+                    lambda x, col=col_name, c_type=col_type: hash_item(
+                        x[col], c_type), axis=1, )
         except Exception as err:
             print(col_name, str(err))
             raise
@@ -544,4 +544,7 @@ class ObfuscationAccessor:
             Obfuscated dataframe
 
         """
-        return mask_df(data=self._df, column_map=column_map, use_default=use_default)
+        return mask_df(
+            data=self._df,
+            column_map=column_map,
+            use_default=use_default)

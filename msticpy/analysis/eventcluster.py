@@ -113,7 +113,8 @@ def dbcluster_events(
         else:
             x_input = data[cluster_columns].values
     elif isinstance(data, np.ndarray):
-        x_input = data if cluster_columns is None else data[:, cluster_columns].values
+        x_input = data if cluster_columns is None else data[:,
+                                                            cluster_columns].values
     if x_input is None:
         mssg = "Input data not in expected format.\n{} is not one of allowed types {}"
         type_list = ", ".join([str(t) for t in allowed_types])
@@ -140,7 +141,8 @@ def dbcluster_events(
             len(cluster_set),
             " clusters",
         )
-        print("Individual cluster sizes: ", ", ".join([str(c) for c in counts]))
+        print("Individual cluster sizes: ",
+              ", ".join([str(c) for c in counts]))
 
     clustered_events = _merge_clustered_items(
         cluster_set, labels, data, time_column, counts
@@ -192,7 +194,8 @@ def _merge_clustered_items(
         cluster_id = cluster_set[idx]
         class_members = labels == cluster_id
         if isinstance(data, pd.DataFrame):
-            time_ordered = data[class_members].sort_values(time_column, ascending=True)
+            time_ordered = data[class_members].sort_values(
+                time_column, ascending=True)
             first_event_time = time_ordered[0:][time_column].iat[0]
             last_event_time = time_ordered[-1:][time_column].iat[0]
         else:
@@ -307,8 +310,10 @@ def add_process_features(
     if "CommandLine" in output_df:
         _add_commandline_features(output_df, force)
 
-    if "SubjectLogonId" in output_df and ("isSystemSession" not in output_df or force):
-        output_df["isSystemSession"] = output_df["SubjectLogonId"].isin(["0x3e7", "-1"])
+    if "SubjectLogonId" in output_df and (
+            "isSystemSession" not in output_df or force):
+        output_df["isSystemSession"] = output_df["SubjectLogonId"].isin([
+                                                                        "0x3e7", "-1"])
 
     return output_df
 
@@ -384,7 +389,9 @@ def _add_commandline_features(output_df: pd.DataFrame, force: bool):
 
 @export
 @lru_cache(maxsize=1024)
-def delim_count(value: str, delim_list: str = r'[\s\-\\/\.,"\'|&:;%$()]') -> int:
+def delim_count(
+        value: str,
+        delim_list: str = r'[\s\-\\/\.,"\'|&:;%$()]') -> int:
     r"""
     Count the delimiters in input column.
 
@@ -406,7 +413,9 @@ def delim_count(value: str, delim_list: str = r'[\s\-\\/\.,"\'|&:;%$()]') -> int
 
 @export
 @lru_cache(maxsize=1024)
-def delim_hash(value: str, delim_list: str = r'[\s\-\\/\.,"\'|&:;%$()]') -> int:
+def delim_hash(
+        value: str,
+        delim_list: str = r'[\s\-\\/\.,"\'|&:;%$()]') -> int:
     r"""
     Return a hash (CRC32) of the delimiters from input column.
 
@@ -511,8 +520,9 @@ def crc32_hash(value: str) -> int:
 
 @export
 def delim_count_df(
-    data: pd.DataFrame, column: str, delim_list: str = r'[\s\-\\/\.,"\'|&:;%$()]'
-) -> pd.Series:
+        data: pd.DataFrame,
+        column: str,
+        delim_list: str = r'[\s\-\\/\.,"\'|&:;%$()]') -> pd.Series:
     r"""
     Count the delimiters in input column.
 
@@ -535,7 +545,10 @@ def delim_count_df(
 
 
 @export
-def char_ord_score_df(data: pd.DataFrame, column: str, scale: int = 1) -> pd.Series:
+def char_ord_score_df(
+        data: pd.DataFrame,
+        column: str,
+        scale: int = 1) -> pd.Series:
     """
     Return sum of ord values of characters in string.
 
@@ -568,11 +581,15 @@ def char_ord_score_df(data: pd.DataFrame, column: str, scale: int = 1) -> pd.Ser
     algorithms.
 
     """
-    return data.apply(lambda x: sum(ord(char) for char in x[column]) / scale, axis=1)
+    return data.apply(lambda x: sum(ord(char)
+                                    for char in x[column]) / scale, axis=1)
 
 
 @export
-def token_count_df(data: pd.DataFrame, column: str, delimiter: str = " ") -> pd.Series:
+def token_count_df(
+        data: pd.DataFrame,
+        column: str,
+        delimiter: str = " ") -> pd.Series:
     """
     Return count of delimiter-separated tokens pd.Series column.
 
@@ -613,7 +630,11 @@ def crc32_hash_df(data: pd.DataFrame, column: str) -> pd.Series:
         CRC32 hash of input column
 
     """
-    return data.apply(lambda x: crc32(bytes(x[column].encode("utf-8"))), axis=1)
+    return data.apply(
+        lambda x: crc32(
+            bytes(
+                x[column].encode("utf-8"))),
+        axis=1)
 
 
 # pylint: disable=too-many-arguments, too-many-statements
@@ -660,12 +681,10 @@ def plot_cluster(
     max_idx = x_predict.shape[1] - 1
     if plot_features[0] >= x_predict.shape[1]:
         raise ValueError(
-            "plot_features[0] index must be a value from 0 to {}.".format(max_idx)
-        )
+            "plot_features[0] index must be a value from 0 to {}.".format(max_idx))
     if plot_features[1] >= x_predict.shape[1]:
         raise ValueError(
-            "plot_features[1] index must be a value from 0 to {}.".format(max_idx)
-        )
+            "plot_features[1] index must be a value from 0 to {}.".format(max_idx))
     if plot_features[0] == plot_features[1]:
         mssg = "plot_features indexes must be 2 different values in range 0 to"
         raise ValueError(mssg + f" {max_idx}.")
@@ -680,7 +699,8 @@ def plot_cluster(
 
     # pylint: disable=no-member
     # Spectral color map does exist
-    colors = [cm.Spectral(each) for each in np.linspace(0, 1, len(unique_labels))]
+    colors = [cm.Spectral(each)
+              for each in np.linspace(0, 1, len(unique_labels))]
     # Number of clusters in labels, ignoring noise if present.
     n_clusters_ = len(set(labels)) - (1 if -1 in labels else 0)
     n_noise_ = list(labels).count(-1)

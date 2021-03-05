@@ -127,12 +127,10 @@ class Account(Entity):
                 if "SubjectUserDomain" in src_event
                 else None
             )
-            self.Sid = (
-                src_event["SubjectUserSid"] if "SubjectUserSid" in src_event else None
-            )
+            self.Sid = (src_event["SubjectUserSid"]
+                        if "SubjectUserSid" in src_event else None)
             self.LogonId = (
-                src_event["SubjectLogonId"] if "SubjectLogonId" in src_event else None
-            )
+                src_event["SubjectLogonId"] if "SubjectLogonId" in src_event else None)
         if role == "target" and "TargetUserName" in src_event:
             self.Name = src_event["TargetUserName"]
             self.NTDomain = (
@@ -140,12 +138,10 @@ class Account(Entity):
                 if "TargetUserDomain" in src_event
                 else None
             )
-            self.Sid = (
-                src_event["TargetUserSid"] if "TargetUserSid" in src_event else None
-            )
+            self.Sid = (src_event["TargetUserSid"]
+                        if "TargetUserSid" in src_event else None)
             self.LogonId = (
-                src_event["TargetLogonId"] if "TargetLogonId" in src_event else None
-            )
+                src_event["TargetLogonId"] if "TargetLogonId" in src_event else None)
 
         self.AadTenantId = (
             src_event["AadTenantId"] if "AadTenantId" in src_event else None

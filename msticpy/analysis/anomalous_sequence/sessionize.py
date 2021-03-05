@@ -66,7 +66,8 @@ def sessionize_data(
         max_event_separation_mins=max_event_separation_mins,
     )
 
-    # aggregating will not work properly with nans. Temporarily replace nan values with dummy_str.
+    # aggregating will not work properly with nans. Temporarily replace nan
+    # values with dummy_str.
     for col in user_identifier_cols:
         df_with_sesind[col] = df_with_sesind[col].fillna("dummy_str")
 
@@ -153,7 +154,8 @@ def create_session_col(
         df_with_sesind["session_ind"] = None
         return df_with_sesind
 
-    # Sessionising will not work properly with nans. Temporarily replace nan values with dummy_str.
+    # Sessionising will not work properly with nans. Temporarily replace nan
+    # values with dummy_str.
     for col in user_identifier_cols:
         df_with_sesind[col] = df_with_sesind[col].fillna("dummy_str")
 
@@ -171,7 +173,8 @@ def create_session_col(
         cur = df_with_sesind.iloc[i]
         prev = df_with_sesind.iloc[i - 1]
 
-        # if any of the user_identifier_cols values change, a new session should start
+        # if any of the user_identifier_cols values change, a new session
+        # should start
         new_flag = False
         for col in user_identifier_cols:
             if cur[col] != prev[col]:

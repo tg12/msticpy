@@ -212,7 +212,8 @@ def unpack_items(
         return _decode_b64_string_recursive(input_string)
     if data is not None:
         if not column:
-            raise ValueError("column must be supplied if the input is a DataFrame")
+            raise ValueError(
+                "column must be supplied if the input is a DataFrame")
         return unpack_df(data=data, column=column, trace=trace, utf16=utf16)
     return None
 
@@ -318,7 +319,8 @@ def unpack_df(
     row_results: List[pd.DataFrame] = []
     rows_with_b64_match = data[data[column].str.contains(_BASE64_REGEX_NG)]
     for input_row in rows_with_b64_match[[column]].itertuples():
-        (decoded_string, output_frame) = _decode_b64_string_recursive(input_row[1])
+        (decoded_string, output_frame) = _decode_b64_string_recursive(
+            input_row[1])
         output_frame["src_index"] = input_row.Index
         output_frame[column] = input_row._asdict()[column]
         output_frame["full_decoded_string"] = decoded_string
@@ -376,7 +378,8 @@ def _decode_b64_string_recursive(
 
         decode_success = decoded_fragment != b64_candidate
         if decode_success:
-            # we did decode something so lets put our result this in the output string
+            # we did decode something so lets put our result this in the output
+            # string
             if binary_items:
                 new_records = _add_to_results(
                     binary_items,
@@ -390,10 +393,11 @@ def _decode_b64_string_recursive(
                 )
             # replace the decoded fragment in our current results string
             # (decode_string)
-            decoded_string = decoded_string.replace(b64_candidate, decoded_fragment)
+            decoded_string = decoded_string.replace(
+                b64_candidate, decoded_fragment)
             _debug_print_trace(
                 "Replaced string",
-                decoded_string[match_pos : match_pos + 100],  # noqa: E203
+                decoded_string[match_pos: match_pos + 100],  # noqa: E203
             )
             match_pos += len(decoded_fragment)
         else:
@@ -416,8 +420,7 @@ def _decode_b64_string_recursive(
         # stuff that we have already decoded may also contain further
         # base64 encoded strings
         prefix = (
-            f"{item_prefix}.{fragment_index}." if item_prefix else f"{fragment_index}."
-        )
+            f"{item_prefix}.{fragment_index}." if item_prefix else f"{fragment_index}.")
         next_level_string, child_records = _decode_b64_string_recursive(
             decoded_string,
             item_prefix=prefix,
@@ -487,8 +490,11 @@ def _decode_and_format_b64_string(
         _debug_print_trace("record:", out_record)
 
         disp_string = _format_single_record(
-            out_name, out_record, item_prefix, current_depth, str(current_index)
-        )
+            out_name,
+            out_record,
+            item_prefix,
+            current_depth,
+            str(current_index))
         return disp_string, [out_record]
 
     # Build header display string
@@ -511,7 +517,8 @@ def _decode_and_format_b64_string(
             child_name, child_rec, item_prefix, child_depth, child_index_string
         )
         child_display_strings.append(disp_string)
-    display_string = display_header + "".join(child_display_strings) + "</decoded>"
+    display_string = display_header + \
+        "".join(child_display_strings) + "</decoded>"
     return display_string, list(output_files.values())
 
 
@@ -608,7 +615,9 @@ def _get_byte_encoding(bytes_array: bytes) -> BinaryRecord:
             )
         except UnicodeDecodeError:
             pass
-    return result_rec._replace(encoding_type="binary", printable_bytes=printable_bytes)
+    return result_rec._replace(
+        encoding_type="binary",
+        printable_bytes=printable_bytes)
 
 
 def _is_known_b64_prefix(
@@ -660,7 +669,8 @@ def _unpack_and_hash_b64_binary(
     output_files = {}
     if file_type in ["zip", "gz", "tar"]:
         # if this is a known archive type - try to extract the contents
-        (unpacked_type, file_items) = _get_items_from_archive(input_bytes, file_type)
+        (unpacked_type, file_items) = _get_items_from_archive(
+            input_bytes, file_type)
         if unpacked_type != "unknown":
             for file_name, extracted_file in file_items.items():
                 file_results = _get_hashes_and_printable_string(extracted_file)

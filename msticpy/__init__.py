@@ -55,7 +55,8 @@ def check_version():
     if latest_version:
         latest_version = parse_version(latest_version)
     else:
-        latest_version = max(parse_version(s) for s in pkg_data["releases"].keys())
+        latest_version = max(parse_version(s)
+                             for s in pkg_data["releases"].keys())
 
     print(
         "msticpy version",

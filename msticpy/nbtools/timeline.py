@@ -154,7 +154,8 @@ def display_timeline(
     kwargs_sub = kwargs.copy()
     kwargs_sub["time_column"] = time_column
     kwargs_sub["source_columns"] = source_columns
-    kwargs_sub["ref_time"], kwargs_sub["ref_label"] = _get_ref_event_time(**kwargs)
+    kwargs_sub["ref_time"], kwargs_sub["ref_label"] = _get_ref_event_time(
+        **kwargs)
 
     if isinstance(data, pd.DataFrame):
         if overlay_data is not None:
@@ -281,8 +282,7 @@ def display_timeline_values(
     if y not in source_columns:
         source_columns.append(y)
     graph_df, group_count_df, tool_tip_columns, series_count = _create_data_grouping(
-        data, source_columns, time_column, group_by, color
-    )
+        data, source_columns, time_column, group_by, color)
 
     tooltips, formatters = _create_tool_tips(data, tool_tip_columns)
     hover = HoverTool(tooltips=tooltips, formatters=formatters)
@@ -329,7 +329,8 @@ def display_timeline_values(
             legend_label = str(first_group_item[group_by])
             inline_legend = str(group_id)
             group_color = first_group_item["color"]
-            row_source = ColumnDataSource(graph_df[graph_df[group_by] == group_id])
+            row_source = ColumnDataSource(
+                graph_df[graph_df[group_by] == group_id])
             p_series = []
             # create default plot args
             plot_args: Dict[str, Any] = dict(
@@ -339,13 +340,26 @@ def display_timeline_values(
                 plot_args["legend_label"] = str(inline_legend)
 
             if "vbar" in plot_kinds:
-                p_series.append(plot.vbar(top=y, width=4, color="color", **plot_args))
+                p_series.append(
+                    plot.vbar(
+                        top=y,
+                        width=4,
+                        color="color",
+                        **plot_args))
             if "circle" in plot_kinds:
-                p_series.append(plot.circle(y=y, size=4, color="color", **plot_args))
+                p_series.append(
+                    plot.circle(
+                        y=y,
+                        size=4,
+                        color="color",
+                        **plot_args))
             if "line" in plot_kinds:
                 p_series.append(
-                    plot.line(y=y, line_width=2, line_color=group_color, **plot_args)
-                )
+                    plot.line(
+                        y=y,
+                        line_width=2,
+                        line_color=group_color,
+                        **plot_args))
             if not inline_legend:
                 legend_items.append((legend_label, p_series))
 
@@ -364,8 +378,10 @@ def display_timeline_values(
             plot.add_layout(ext_legend, legend_pos)
     else:
         plot_args = dict(
-            x=time_column, color=color, alpha=0.7, source=ColumnDataSource(graph_df)
-        )
+            x=time_column,
+            color=color,
+            alpha=0.7,
+            source=ColumnDataSource(graph_df))
         if "vbar" in plot_kinds:
             plot.vbar(top=y, width=4, **plot_args)
         if "circle" in plot_kinds:
@@ -465,7 +481,8 @@ def _display_timeline_dict(data: dict, **kwargs) -> figure:  # noqa: C901, MC000
     ygrid: bool = kwargs.pop("ygrid", False)
     hide: bool = kwargs.pop("hide", False)
 
-    tool_tip_columns, min_time, max_time = _unpack_data_series_dict(data, **kwargs)
+    tool_tip_columns, min_time, max_time = _unpack_data_series_dict(
+        data, **kwargs)
     series_count = len(data)
 
     tooltips, formatters = _create_tool_tips(data, tool_tip_columns)
@@ -497,7 +514,9 @@ def _display_timeline_dict(data: dict, **kwargs) -> figure:  # noqa: C901, MC000
     plot.yaxis.visible = show_yaxis
     if show_yaxis:
         if data:
-            y_labels = {ser_def["y_index"]: str(lbl) for lbl, ser_def in data.items()}
+            y_labels = {
+                ser_def["y_index"]: str(lbl) for lbl,
+                ser_def in data.items()}
             plot.yaxis.major_label_overrides = y_labels
     if ygrid:
         plot.ygrid.minor_grid_line_color = "navy"
@@ -567,7 +586,8 @@ def _display_timeline_dict(data: dict, **kwargs) -> figure:  # noqa: C901, MC000
     elif legend_pos in ["left", "right"]:
         # Create the legend box outside of the plot area
         ext_legend = Legend(
-            items=legend_items[::-1],  # the legend is in the wrong order otherwise
+            items=legend_items[::-1],
+            # the legend is in the wrong order otherwise
             location="center",
             click_policy="hide",
             label_text_font_size="8pt",
@@ -683,7 +703,9 @@ def _create_data_grouping(data, source_columns, time_column, group_by, color):
         # re-join with the original data
         data_columns.update([group_by, "y_index", "color"])
         clean_data = data.drop(columns=["y_index", "color"], errors="ignore")
-        graph_df = clean_data.merge(group_count_df, on=group_by)[list(data_columns)]
+        graph_df = clean_data.merge(
+            group_count_df, on=group_by)[
+            list(data_columns)]
     else:
         graph_df = data[list(data_columns)].copy()
         graph_df["color"] = color
@@ -696,7 +718,12 @@ def _create_data_grouping(data, source_columns, time_column, group_by, color):
 # pylint: enable=too-many-arguments
 
 
-def _create_dict_from_grouping(data, source_columns, time_column, group_by, color):
+def _create_dict_from_grouping(
+        data,
+        source_columns,
+        time_column,
+        group_by,
+        color):
     if not source_columns:
         data_columns = set(["NewProcessName", "EventID", "CommandLine"])
     else:
@@ -782,7 +809,8 @@ def _create_tool_tips(
         for data_set in data.values():
             data_df = data_set.get("data", {})
             for col in columns:
-                disp_col, col_tooltip, col_fmt = _get_datetime_tooltip(col, data_df)
+                disp_col, col_tooltip, col_fmt = _get_datetime_tooltip(
+                    col, data_df)
                 tool_tip_dict[disp_col] = col_tooltip
                 formatters.update(col_fmt)
         return list(tool_tip_dict.items()), formatters

@@ -42,7 +42,10 @@ def analyze_calls(module: str, all_calls=False) -> nx.DiGraph:
     file_analysis = analyze(module)
 
     # create a set of all imports
-    return _create_call_graph(file_analysis["calls"], file_analysis["funcs"], all_calls)
+    return _create_call_graph(
+        file_analysis["calls"],
+        file_analysis["funcs"],
+        all_calls)
 
 
 def _create_call_graph(
@@ -51,7 +54,8 @@ def _create_call_graph(
     # Calculate the span (line numbers) of each function
     func_span = dict()
     last_func = None
-    for lineno, name in sorted([(span[0], name) for name, span in funcs.items()]):
+    for lineno, name in sorted([(span[0], name)
+                                for name, span in funcs.items()]):
         if last_func:
             func_span[last_func] = [func_span[last_func][0], lineno - 1]
 
@@ -67,9 +71,19 @@ def _create_call_graph(
     # add edged to the calls from each function
     for call_name, call_lines in calls.items():
         if call_name in funcs:
-            _add_call_edge(call_graph, call_name, func_span, call_lines, "local")
+            _add_call_edge(
+                call_graph,
+                call_name,
+                func_span,
+                call_lines,
+                "local")
         elif all_calls:
-            _add_call_edge(call_graph, call_name, func_span, call_lines, "external")
+            _add_call_edge(
+                call_graph,
+                call_name,
+                func_span,
+                call_lines,
+                "external")
 
     for node in call_graph.nodes():
         n_callers = len(list(call_graph.predecessors(node)))
@@ -89,8 +103,8 @@ def _add_call_edge(
     call_graph.add_node(call_name, call_type=call_type)
     for line in call_lines:
         calling_func = [
-            func for func, span in func_span.items() if span[0] <= line <= span[1]
-        ]
+            func for func,
+            span in func_span.items() if span[0] <= line <= span[1]]
         if calling_func:
             call_graph.add_edge(calling_func[0], call_name, line=line)
         else:

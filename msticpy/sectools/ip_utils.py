@@ -262,7 +262,9 @@ def get_whois_df(
     """
     if all_columns:
         return data.apply(
-            lambda x: get_whois_info(x[ip_column], show_progress=show_progress)[1],
+            lambda x: get_whois_info(
+                x[ip_column],
+                show_progress=show_progress)[1],
             axis=1,
             result_type="expand",
         )
@@ -275,7 +277,9 @@ def get_whois_df(
         )
     else:
         data[asn_col] = data.apply(
-            lambda x: get_whois_info(x[ip_column], show_progress=show_progress)[0],
+            lambda x: get_whois_info(
+                x[ip_column],
+                show_progress=show_progress)[0],
             axis=1,
         )
     return data
@@ -350,7 +354,8 @@ def create_ip_record(
     ip_entity.OSName = ip_hb["OSName"]  # type: ignore
     ip_entity.OSVMajorersion = ip_hb["OSMajorVersion"]  # type: ignore
     ip_entity.OSVMinorVersion = ip_hb["OSMinorVersion"]  # type: ignore
-    ip_entity.ComputerEnvironment = ip_hb["ComputerEnvironment"]  # type: ignore
+    # type: ignore
+    ip_entity.ComputerEnvironment = ip_hb["ComputerEnvironment"]
     ip_entity.OmsSolutions = [  # type: ignore
         sol.strip() for sol in ip_hb["Solutions"].split(",")
     ]

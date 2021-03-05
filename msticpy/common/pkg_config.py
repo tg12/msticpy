@@ -104,7 +104,8 @@ def get_config(setting_path: str) -> Any:
     for elem in path_elems:
         cur_node = cur_node.get(elem, None)
         if cur_node is None:
-            raise KeyError(f"{elem} value of {setting_path} is not a valid path")
+            raise KeyError(
+                f"{elem} value of {setting_path} is not a valid path")
     return cur_node
 
 
@@ -129,7 +130,8 @@ def set_config(setting_path: str, value: Any):
             break
         cur_node = cur_node.get(elem, None)
         if cur_node is None:
-            raise KeyError(f"{elem} value of {setting_path} is not a valid path")
+            raise KeyError(
+                f"{elem} value of {setting_path} is not a valid path")
     return cur_node
 
 
@@ -233,7 +235,8 @@ def _create_data_providers(mp_config: Dict[str, Any]) -> Dict[str, Any]:
 
     az_sent_config = mp_config.get(_AZ_SENTINEL)
     if az_sent_config and az_sent_config.get("Workspaces"):
-        for section, prov_settings in mp_config[_AZ_SENTINEL]["Workspaces"].items():
+        for section, prov_settings in mp_config[_AZ_SENTINEL]["Workspaces"].items(
+        ):
             sec_name = f"{_AZ_SENTINEL}_{section}"
             if sec_name in data_providers:
                 continue
@@ -322,7 +325,8 @@ def _validate_azure_sentinel(mp_config):
         return mp_errors, mp_warnings
     ws_settings = as_settings.get("Workspaces", {})
     if not ws_settings:
-        mp_errors.append("Missing or empty 'Workspaces' key in 'AzureSentinel' section")
+        mp_errors.append(
+            "Missing or empty 'Workspaces' key in 'AzureSentinel' section")
         return mp_errors, mp_warnings
     no_default = True
     for ws, ws_settings in ws_settings.items():
@@ -346,18 +350,23 @@ def _check_provider_settings(mp_config, section, key_provs):
         return mp_errors, mp_warnings
     for p_name, p_setting in mp_config.items():
         if not p_setting:
-            mp_warnings.append(f"'{section}/{p_name}' sub-section has no settings.")
+            mp_warnings.append(
+                f"'{section}/{p_name}' sub-section has no settings.")
             continue
         if "Args" not in p_setting:
             continue
         sec_args = p_setting.get("Args")
         if not sec_args:
-            mp_errors.append(f"'{section}/{p_name}/{sec_args}' key has no settings.")
+            mp_errors.append(
+                f"'{section}/{p_name}/{sec_args}' key has no settings.")
             continue
         sec_path = f"{section}/{p_name}" if section else f"{p_name}"
         mp_errors.extend(
-            _check_required_provider_settings(sec_args, sec_path, p_name, key_provs)
-        )
+            _check_required_provider_settings(
+                sec_args,
+                sec_path,
+                p_name,
+                key_provs))
 
         mp_errors.extend(
             _check_env_vars(args_key=p_setting.get("Args"), section=sec_path)
@@ -409,11 +418,13 @@ def _check_env_vars(args_key, section):
         if "EnvironmentVar" in val:
             env_name = val.get("EnvironmentVar")
             if not env_name:
-                mp_errs.append(f"{section}: No environment variable name specified.")
+                mp_errs.append(
+                    f"{section}: No environment variable name specified.")
             elif env_name not in os.environ:
                 mp_errs.append(f"{section}: Env variable {env_name} not set.")
             elif not os.environ[env_name]:
-                mp_errs.append(f"{section}: Env variable {env_name} value is not set.")
+                mp_errs.append(
+                    f"{section}: Env variable {env_name} value is not set.")
     return mp_errs
 
 

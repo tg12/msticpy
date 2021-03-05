@@ -149,10 +149,16 @@ JOIN_KEYWORDS = {
     RIGHT_OUTER_JOIN: "right",
     CROSS_JOIN: "CROSS_JOIN_TODO",
 }
-JOIN_KEYWORDS = {kw.replace("_", " "): kql for kw, kql in JOIN_KEYWORDS.items()}
+JOIN_KEYWORDS = {
+    kw.replace(
+        "_",
+        " "): kql for kw,
+    kql in JOIN_KEYWORDS.items()}
 
 
-BINARY_OPS = {val: key for key, val in moz_sql_parser.keywords.binary_ops.items()}
+BINARY_OPS = {
+    val: key for key,
+    val in moz_sql_parser.keywords.binary_ops.items()}
 BINARY_OPS["eq"] = "=="
 BINARY_OPS["neq"] = "!="
 BINARY_OPS["nin"] = "!in"
@@ -206,7 +212,8 @@ def _parse_query(parsed_sql: Dict[str, Any]) -> List[str]:  # noqa: MC0001
         distinct_select, expr_list = _is_distinct(parsed_sql[SELECT])
         _process_select(parsed_sql[SELECT], expr_list, query_lines)
     if ORDER_BY in parsed_sql:
-        query_lines.append(f"| order by {_create_order_by(parsed_sql[ORDER_BY])}")
+        query_lines.append(
+            f"| order by {_create_order_by(parsed_sql[ORDER_BY])}")
     if distinct_select:
         query_lines.append(
             f"| distinct {', '.join(_create_distinct_list(distinct_select))}"
@@ -242,7 +249,9 @@ def _process_from(
             if isinstance(from_item, str):
                 query_lines.append((from_item))
             elif isinstance(from_item, dict) and "value" in from_item:
-                query_lines.extend(_parse_query(from_item.get("value")))  # type: ignore
+                query_lines.extend(
+                    _parse_query(
+                        from_item.get("value")))  # type: ignore
 
     join_expr = from_expr if isinstance(from_expr, list) else [from_expr]
     join_list = _get_join_list(join_expr)
@@ -326,7 +335,8 @@ def _process_group_by(parsed_sql: Dict[str, Any], query_lines: List[str]):
     group_by_expr = (
         group_by_expr if isinstance(group_by_expr, list) else [group_by_expr]
     )
-    by_clause = ", ".join(val["value"] for val in group_by_expr if val.get("value"))
+    by_clause = ", ".join(val["value"]
+                          for val in group_by_expr if val.get("value"))
 
     _, expr_list = _is_distinct(parsed_sql[SELECT])
     group_by_expr_list = []
@@ -341,7 +351,8 @@ def _process_group_by(parsed_sql: Dict[str, Any], query_lines: List[str]):
             group_by_expr_list.append(
                 f"{name_expr}{_parse_expression(expr.get('value'))}"
             )
-    query_lines.append(f"| summarize {', '.join(group_by_expr_list)} by {by_clause}")
+    query_lines.append(
+        f"| summarize {', '.join(group_by_expr_list)} by {by_clause}")
 
 
 # pylint: disable=too-many-return-statements, too-many-branches
@@ -352,9 +363,11 @@ def _parse_expression(expression):  # noqa: MC0001
     if not isinstance(expression, dict):
         return expression
     if AND in expression:
-        return "\n  and ".join([_parse_expression(expr) for expr in expression[AND]])
+        return "\n  and ".join([_parse_expression(expr)
+                                for expr in expression[AND]])
     if OR in expression:
-        return "\n  or ".join([_parse_expression(expr) for expr in expression[OR]])
+        return "\n  or ".join([_parse_expression(expr)
+                               for expr in expression[OR]])
     if NOT in expression:
         return f" not ({_parse_expression(expression[NOT])})"
     if BETWEEN in expression:
@@ -373,7 +386,8 @@ def _parse_expression(expression):  # noqa: MC0001
         right = _quote_literal(args[1])
         if isinstance(right, list):
             _db_print(args[1])
-            arg_list = ", ".join([str(_parse_expression(l_item)) for l_item in right])
+            arg_list = ", ".join([str(_parse_expression(l_item))
+                                  for l_item in right])
             return f"{args[0]} {kql_op} ({arg_list})"
         sub_query = "\n".join(_parse_query(right))
         return f"{args[0]} {kql_op} ({sub_query})"
@@ -462,7 +476,10 @@ def _single_quote_strings(sql: str) -> str:
 def _remap_kewords(sql: str) -> str:
     """Replace keywords in source SQL statement."""
     for repl_kw in REMAPPED_KEYWORDS:
-        sql = re.sub(f"\\s{repl_kw}\\s", f" {REMAPPED_KEYWORDS[repl_kw]} ", sql)
+        sql = re.sub(
+            f"\\s{repl_kw}\\s",
+            f" {REMAPPED_KEYWORDS[repl_kw]} ",
+            sql)
     return sql
 
 
@@ -485,7 +502,8 @@ def _is_distinct(
         for expr in select_list:
             _db_print(expr)
             if "value" in expr and DISTINCT in expr["value"]:
-                dist_list.append({"value": _get_expr_value(expr["value"][DISTINCT])})
+                dist_list.append(
+                    {"value": _get_expr_value(expr["value"][DISTINCT])})
             select_list_out.append(expr)
     return dist_list, select_list_out
 
@@ -511,7 +529,8 @@ def _get_join_list(parsed_sql: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
     return join_list
 
 
-def _rewrite_table_refs(join_expr: Union[Any, str, List], table_expr: str) -> str:
+def _rewrite_table_refs(
+        join_expr: Union[Any, str, List], table_expr: str) -> str:
     """Rewrite dotted prefixes."""
     p_expr = _parse_expression(join_expr)
     prefixes = set(re.findall(r"(\w+)\.", p_expr))

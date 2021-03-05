@@ -45,7 +45,8 @@ class CredentialWrapper(BasicTokenAuthentication):
         self.token: Dict[str, Any] = {}
         if credential is None:
             credential = DefaultAzureCredential()
-        self._policy = BearerTokenCredentialPolicy(credential, resource_id, **kwargs)
+        self._policy = BearerTokenCredentialPolicy(
+            credential, resource_id, **kwargs)
 
     def set_token(self):
         """
@@ -72,5 +73,7 @@ class CredentialWrapper(BasicTokenAuthentication):
 def _make_request():
     """Make mocked request to get token."""
     return PipelineRequest(
-        HttpRequest("CredentialWrapper", "https://fakeurl"), PipelineContext(None)
-    )
+        HttpRequest(
+            "CredentialWrapper",
+            "https://fakeurl"),
+        PipelineContext(None))

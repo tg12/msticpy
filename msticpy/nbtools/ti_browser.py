@@ -72,32 +72,29 @@ def _create_ti_agg_list(ti_data: pd.DataFrame, severities: List[str] = None):
     """Aggregate ti results on IoC for multiple providers."""
     if not severities:
         severities = ["warning", "high"]
-    ti_data["Details"] = ti_data.apply(lambda x: _label_col_dict(x, "Details"), axis=1)
+    ti_data["Details"] = ti_data.apply(
+        lambda x: _label_col_dict(
+            x, "Details"), axis=1)
 
-    return (
-        ti_data[ti_data["Severity"].isin(severities)]
-        .groupby(["Ioc", "IocType", "Severity"])
-        .agg(
-            Providers=pd.NamedAgg(
-                column="Provider", aggfunc=lambda x: x.unique().tolist()
-            ),
-            Details=pd.NamedAgg(column="Details", aggfunc=lambda x: x.tolist()),
-            Responses=pd.NamedAgg(column="RawResult", aggfunc=lambda x: x.tolist()),
-            References=pd.NamedAgg(
-                column="Reference", aggfunc=lambda x: x.unique().tolist()
-            ),
-        )
-        .reset_index()
-    )
+    return (ti_data[ti_data["Severity"].isin(severities)] .groupby(["Ioc",
+                                                                    "IocType",
+                                                                    "Severity"]) .agg(Providers=pd.NamedAgg(column="Provider",
+                                                                                                            aggfunc=lambda x: x.unique().tolist()),
+                                                                                      Details=pd.NamedAgg(column="Details",
+                                                                                                          aggfunc=lambda x: x.tolist()),
+                                                                                      Responses=pd.NamedAgg(column="RawResult",
+                                                                                                            aggfunc=lambda x: x.tolist()),
+                                                                                      References=pd.NamedAgg(column="Reference",
+                                                                                                             aggfunc=lambda x: x.unique().tolist()),
+                                                                                      ) .reset_index())
 
 
 def _label_col_dict(row: pd.Series, column: str):
     """Add label from the Provider column to the details."""
     if not isinstance(row[column], dict):
         return row[column]
-    return (
-        {row.Provider: row[column]} if row.Provider not in row[column] else row[column]
-    )
+    return ({row.Provider: row[column]}
+            if row.Provider not in row[column] else row[column])
 
 
 def ti_details_display(ti_data):
@@ -115,9 +112,8 @@ def ti_details_display(ti_data):
                 (ti_data["Ioc"] == ioc) & (ti_data["Provider"] == prov)
             ].iloc[0]
             results.append(
-                f"<h3 style='{h3_style}'>Type: '{ioc_match.IocType}', Provider: {prov}, "
-                + f"severity: {ioc_match.Severity}</h3>"
-            )
+                f"<h3 style='{h3_style}'>Type: '{ioc_match.IocType}', Provider: {prov}, " +
+                f"severity: {ioc_match.Severity}</h3>")
             results.append("<h4>Details</h4>")
             results.append(_ti_detail_table(ioc_match.Details))
             results.append(
@@ -174,7 +170,8 @@ def _dict_to_html(detail_dict):
     if not isinstance(detail_dict, dict):
         return detail_dict
     for key, val in detail_dict.items():
-        html_txt.append(f"<tr class='cell_ti'><td class='cell_ti_first'>{key}</td>")
+        html_txt.append(
+            f"<tr class='cell_ti'><td class='cell_ti_first'>{key}</td>")
         if not isinstance(val, dict):
             html_txt.append(f"<td class='cell_ti'>{val}</td></tr>")
         else:

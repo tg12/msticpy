@@ -80,7 +80,9 @@ def screenshot(url: str, api_key: str = None) -> requests.models.Response:
             "    Args:",
             "      AuthKey: {your_auth_key}",
             title="Browshot configuration not found",
-            browshot_uri=("Get an API key for Browshot", "https://api.browshot.com/"),
+            browshot_uri=(
+                "Get an API key for Browshot",
+                "https://api.browshot.com/"),
         )
 
     # Request screenshot from Browshot and get request ID
@@ -313,7 +315,10 @@ def ip_rev_resolve(ip_address: str) -> Dict[str, Any]:
 
     """
     try:
-        return _resolve_resp_to_dict(_dns_resolve(ip_address, raise_on_no_answer=True))
+        return _resolve_resp_to_dict(
+            _dns_resolve(
+                ip_address,
+                raise_on_no_answer=True))
     except DNSException as err:
         return {
             "qname": ip_address,

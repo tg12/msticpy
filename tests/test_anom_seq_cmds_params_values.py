@@ -42,22 +42,27 @@ class TestCmdsParamsValues(unittest.TestCase):
         self.data1["sessions"] = []
         self.data1["_seq1_counts"] = defaultdict(lambda: 0)
         self.data1["seq1_counts"] = StateMatrix({UNK_TOKEN: 2}, UNK_TOKEN)
-        self.data1["_seq2_counts"] = defaultdict(lambda: defaultdict(lambda: 0))
-        self.data1["seq2_counts"] = StateMatrix({UNK_TOKEN: {UNK_TOKEN: 1}}, UNK_TOKEN)
+        self.data1["_seq2_counts"] = defaultdict(
+            lambda: defaultdict(lambda: 0))
+        self.data1["seq2_counts"] = StateMatrix(
+            {UNK_TOKEN: {UNK_TOKEN: 1}}, UNK_TOKEN)
         self.data1["_param_counts"] = defaultdict(lambda: 0)
         self.data1["param_counts"] = StateMatrix({UNK_TOKEN: 1}, UNK_TOKEN)
-        self.data1["_cmd_param_counts"] = defaultdict(lambda: defaultdict(lambda: 0))
+        self.data1["_cmd_param_counts"] = defaultdict(
+            lambda: defaultdict(lambda: 0))
         self.data1["cmd_param_counts"] = StateMatrix(
             {UNK_TOKEN: {UNK_TOKEN: 1}}, UNK_TOKEN
         )
         self.data1["_value_counts"] = defaultdict(lambda: 0)
         self.data1["value_counts"] = StateMatrix({UNK_TOKEN: 1}, UNK_TOKEN)
-        self.data1["_param_value_counts"] = defaultdict(lambda: defaultdict(lambda: 0))
+        self.data1["_param_value_counts"] = defaultdict(
+            lambda: defaultdict(lambda: 0))
         self.data1["param_value_counts"] = StateMatrix(
             {UNK_TOKEN: {UNK_TOKEN: 1}}, UNK_TOKEN
         )
         self.data1["prior_probs"] = StateMatrix({UNK_TOKEN: 1}, UNK_TOKEN)
-        self.data1["trans_probs"] = StateMatrix({UNK_TOKEN: {UNK_TOKEN: 1}}, UNK_TOKEN)
+        self.data1["trans_probs"] = StateMatrix(
+            {UNK_TOKEN: {UNK_TOKEN: 1}}, UNK_TOKEN)
         self.data1["param_probs"] = StateMatrix({UNK_TOKEN: 0.5}, UNK_TOKEN)
         self.data1["param_cond_cmd_probs"] = StateMatrix(
             {UNK_TOKEN: {UNK_TOKEN: 0.5}}, UNK_TOKEN
@@ -75,7 +80,8 @@ class TestCmdsParamsValues(unittest.TestCase):
         self.data2["seq1_counts"] = StateMatrix(
             {UNK_TOKEN: 4, START_TOKEN: 3, END_TOKEN: 3}, UNK_TOKEN
         )
-        self.data2["_seq2_counts"] = defaultdict(lambda: defaultdict(lambda: 0))
+        self.data2["_seq2_counts"] = defaultdict(
+            lambda: defaultdict(lambda: 0))
         self.data2["_seq2_counts"][START_TOKEN][END_TOKEN] = 1
         self.data2["seq2_counts"] = StateMatrix(
             {
@@ -86,7 +92,8 @@ class TestCmdsParamsValues(unittest.TestCase):
         )
         self.data2["_param_counts"] = defaultdict(lambda: 0)
         self.data2["param_counts"] = StateMatrix({UNK_TOKEN: 3}, UNK_TOKEN)
-        self.data2["_cmd_param_counts"] = defaultdict(lambda: defaultdict(lambda: 0))
+        self.data2["_cmd_param_counts"] = defaultdict(
+            lambda: defaultdict(lambda: 0))
         self.data2["cmd_param_counts"] = StateMatrix(
             {
                 START_TOKEN: {UNK_TOKEN: 1},
@@ -97,7 +104,8 @@ class TestCmdsParamsValues(unittest.TestCase):
         )
         self.data2["_value_counts"] = defaultdict(lambda: 0)
         self.data2["value_counts"] = StateMatrix({UNK_TOKEN: 1}, UNK_TOKEN)
-        self.data2["_param_value_counts"] = defaultdict(lambda: defaultdict(lambda: 0))
+        self.data2["_param_value_counts"] = defaultdict(
+            lambda: defaultdict(lambda: 0))
         self.data2["param_value_counts"] = StateMatrix(
             {UNK_TOKEN: {UNK_TOKEN: 1}}, UNK_TOKEN
         )
@@ -142,7 +150,8 @@ class TestCmdsParamsValues(unittest.TestCase):
         self.data3["seq1_counts"] = StateMatrix(
             {UNK_TOKEN: 6, START_TOKEN: 4, END_TOKEN: 4, cmd: 8}, UNK_TOKEN
         )
-        self.data3["_seq2_counts"] = defaultdict(lambda: defaultdict(lambda: 0))
+        self.data3["_seq2_counts"] = defaultdict(
+            lambda: defaultdict(lambda: 0))
         self.data3["_seq2_counts"][START_TOKEN][cmd] = 1
         self.data3["_seq2_counts"][cmd][END_TOKEN] = 1
         self.data3["_seq2_counts"][cmd][cmd] = 1
@@ -154,11 +163,13 @@ class TestCmdsParamsValues(unittest.TestCase):
             },
             UNK_TOKEN,
         )
-        self.data3["_param_counts"] = defaultdict(lambda: 0, {"Identity": 2, "City": 1})
+        self.data3["_param_counts"] = defaultdict(
+            lambda: 0, {"Identity": 2, "City": 1})
         self.data3["param_counts"] = StateMatrix(
             {UNK_TOKEN: 4, "City": 2, "Identity": 3}, UNK_TOKEN
         )
-        self.data3["_cmd_param_counts"] = defaultdict(lambda: defaultdict(lambda: 0))
+        self.data3["_cmd_param_counts"] = defaultdict(
+            lambda: defaultdict(lambda: 0))
         self.data3["_cmd_param_counts"][cmd]["Identity"] = 2
         self.data3["_cmd_param_counts"][cmd]["City"] = 1
         self.data3["cmd_param_counts"] = StateMatrix(
@@ -170,11 +181,13 @@ class TestCmdsParamsValues(unittest.TestCase):
             },
             UNK_TOKEN,
         )
-        self.data3["_value_counts"] = defaultdict(lambda: 0, {"york": 1, "blah": 2})
+        self.data3["_value_counts"] = defaultdict(
+            lambda: 0, {"york": 1, "blah": 2})
         self.data3["value_counts"] = StateMatrix(
             {"york": 2, "blah": 3, UNK_TOKEN: 3}, UNK_TOKEN
         )
-        self.data3["_param_value_counts"] = defaultdict(lambda: defaultdict(lambda: 0))
+        self.data3["_param_value_counts"] = defaultdict(
+            lambda: defaultdict(lambda: 0))
         self.data3["_param_value_counts"]["City"]["york"] = 1
         self.data3["_param_value_counts"]["Identity"]["blah"] = 2
         self.data3["param_value_counts"] = StateMatrix(
@@ -255,7 +268,9 @@ class TestCmdsParamsValues(unittest.TestCase):
         self.assertDictEqual(param_actual, self.data1["_param_counts"])
         self.assertDictEqual(cmd_param_actual, self.data1["_cmd_param_counts"])
         self.assertDictEqual(val_actual, self.data1["_value_counts"])
-        self.assertDictEqual(param_val_actual, self.data1["_param_value_counts"])
+        self.assertDictEqual(
+            param_val_actual,
+            self.data1["_param_value_counts"])
 
         (
             seq1_actual,
@@ -275,7 +290,9 @@ class TestCmdsParamsValues(unittest.TestCase):
         self.assertDictEqual(param_actual, self.data2["_param_counts"])
         self.assertDictEqual(cmd_param_actual, self.data2["_cmd_param_counts"])
         self.assertDictEqual(val_actual, self.data2["_value_counts"])
-        self.assertDictEqual(param_val_actual, self.data2["_param_value_counts"])
+        self.assertDictEqual(
+            param_val_actual,
+            self.data2["_param_value_counts"])
 
         (
             seq1_actual,
@@ -295,7 +312,9 @@ class TestCmdsParamsValues(unittest.TestCase):
         self.assertDictEqual(param_actual, self.data3["_param_counts"])
         self.assertDictEqual(cmd_param_actual, self.data3["_cmd_param_counts"])
         self.assertDictEqual(val_actual, self.data3["_value_counts"])
-        self.assertDictEqual(param_val_actual, self.data3["_param_value_counts"])
+        self.assertDictEqual(
+            param_val_actual,
+            self.data3["_param_value_counts"])
 
     def test_laplace_smooth_counts(self):
         (
@@ -322,7 +341,9 @@ class TestCmdsParamsValues(unittest.TestCase):
         self.assertDictEqual(param_actual, self.data1["param_counts"])
         self.assertDictEqual(cmd_param_actual, self.data1["cmd_param_counts"])
         self.assertDictEqual(val_actual, self.data1["value_counts"])
-        self.assertDictEqual(param_val_actual, self.data1["param_value_counts"])
+        self.assertDictEqual(
+            param_val_actual,
+            self.data1["param_value_counts"])
 
         (
             seq1_actual,
@@ -348,7 +369,9 @@ class TestCmdsParamsValues(unittest.TestCase):
         self.assertDictEqual(param_actual, self.data2["param_counts"])
         self.assertDictEqual(cmd_param_actual, self.data2["cmd_param_counts"])
         self.assertDictEqual(val_actual, self.data2["value_counts"])
-        self.assertDictEqual(param_val_actual, self.data2["param_value_counts"])
+        self.assertDictEqual(
+            param_val_actual,
+            self.data2["param_value_counts"])
 
         (
             seq1_actual,
@@ -374,7 +397,9 @@ class TestCmdsParamsValues(unittest.TestCase):
         self.assertDictEqual(param_actual, self.data3["param_counts"])
         self.assertDictEqual(cmd_param_actual, self.data3["cmd_param_counts"])
         self.assertDictEqual(val_actual, self.data3["value_counts"])
-        self.assertDictEqual(param_val_actual, self.data3["param_value_counts"])
+        self.assertDictEqual(
+            param_val_actual,
+            self.data3["param_value_counts"])
 
     def test_get_params_to_model_values(self):
         actual = cmds_params_values.get_params_to_model_values(

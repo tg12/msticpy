@@ -31,9 +31,9 @@ def data_providers():
         warnings.simplefilter("ignore", category=UserWarning)
         return {
             "LocalData": QueryProvider(
-                "LocalData", data_paths=[str(data_path)], query_paths=[str(data_path)]
-            ),
-        }
+                "LocalData", data_paths=[
+                    str(data_path)], query_paths=[
+                    str(data_path)]), }
 
 
 def _reset_entities():
@@ -130,7 +130,11 @@ def test_data_query_entity(_create_pivot, test_case):
 @pytest.mark.parametrize("test_case", _PIVOT_QUERIES)
 def test_data_query_value(_create_pivot, test_case):
     """Test calling function with value."""
-    func = getattr(getattr(test_case.entity, test_case.provider), test_case.pivot_func)
+    func = getattr(
+        getattr(
+            test_case.entity,
+            test_case.provider),
+        test_case.pivot_func)
     # Test value input
     val = next(iter(test_case.value))
     params = {test_case.func_param: val}
@@ -141,7 +145,11 @@ def test_data_query_value(_create_pivot, test_case):
 @pytest.mark.parametrize("test_case", _PIVOT_QUERIES)
 def test_data_query_itbl(_create_pivot, test_case):
     """Test calling function with iterable input."""
-    func = getattr(getattr(test_case.entity, test_case.provider), test_case.pivot_func)
+    func = getattr(
+        getattr(
+            test_case.entity,
+            test_case.provider),
+        test_case.pivot_func)
 
     val = next(iter(test_case.value))
     params = {test_case.func_param: val}
@@ -158,13 +166,20 @@ def test_data_query_itbl(_create_pivot, test_case):
     # mulitplied by the number of input values, except in cases
     # where the query supports "list" parameters. In that case we
     # should just get 1x the data set.
-    check.equal(len(single_val_result_df) * test_case.exp_count, len(result_df))
+    check.equal(
+        len(single_val_result_df) *
+        test_case.exp_count,
+        len(result_df))
 
 
 @pytest.mark.parametrize("test_case", _PIVOT_QUERIES)
 def test_data_query_df(_create_pivot, test_case):
     """Test calling function with DF input attributes."""
-    func = getattr(getattr(test_case.entity, test_case.provider), test_case.pivot_func)
+    func = getattr(
+        getattr(
+            test_case.entity,
+            test_case.provider),
+        test_case.pivot_func)
 
     val = next(iter(test_case.value))
     params = {test_case.func_param: val}
@@ -181,14 +196,21 @@ def test_data_query_df(_create_pivot, test_case):
     # mulitplied by the number of input values, except in cases
     # where the query supports "list" parameters. In that case we
     # should just get 1x the data set.
-    check.equal(len(single_val_result_df) * test_case.exp_count, len(result_df))
+    check.equal(
+        len(single_val_result_df) *
+        test_case.exp_count,
+        len(result_df))
 
 
 @pytest.mark.parametrize("join_type", ["left", "inner", "right"])
 @pytest.mark.parametrize("test_case", _PIVOT_QUERIES)
 def test_pivot_funcs_df_merge(_create_pivot, join_type, test_case):
     """Test calling function with DF input attributes."""
-    func = getattr(getattr(test_case.entity, test_case.provider), test_case.pivot_func)
+    func = getattr(
+        getattr(
+            test_case.entity,
+            test_case.provider),
+        test_case.pivot_func)
     # Test DF input
     val = test_case.value
     in_df = pd.DataFrame(val, columns=[test_case.src_df_col])

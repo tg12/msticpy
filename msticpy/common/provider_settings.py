@@ -60,7 +60,8 @@ if "KeyVault" in config.settings and _SECRETS_ENABLED:
     _SECRETS_CLIENT = SecretsClient()
 
 
-def get_provider_settings(config_section="TIProviders") -> Dict[str, ProviderSettings]:
+def get_provider_settings(
+        config_section="TIProviders") -> Dict[str, ProviderSettings]:
     """
     Read Provider settings from package config.
 

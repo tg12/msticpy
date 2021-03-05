@@ -38,8 +38,9 @@ WIDGET_DEFAULTS = {
 
 @export
 def create_host_record(
-    syslog_df: pd.DataFrame, heartbeat_df: pd.DataFrame, az_net_df: pd.DataFrame = None
-) -> Host:
+        syslog_df: pd.DataFrame,
+        heartbeat_df: pd.DataFrame,
+        az_net_df: pd.DataFrame = None) -> Host:
     """
     Generate host_entity record for selected computer.
 
@@ -79,14 +80,16 @@ def create_host_record(
         ):
             applications.append(app)
 
-    # Produce host_entity record mapping linux heartbeat elements to host_entity fields
+    # Produce host_entity record mapping linux heartbeat elements to
+    # host_entity fields
     host_hb = heartbeat_df.iloc[0]
     host_entity.SourceComputerId = host_hb["SourceComputerId"]  # type: ignore
     host_entity.OSType = host_hb["OSType"]  # type: ignore
     host_entity.OSName = host_hb["OSName"]  # type: ignore
     host_entity.OSVMajorersion = host_hb["OSMajorVersion"]  # type: ignore
     host_entity.OSVMinorVersion = host_hb["OSMinorVersion"]  # type: ignore
-    host_entity.ComputerEnvironment = host_hb["ComputerEnvironment"]  # type: ignore
+    # type: ignore
+    host_entity.ComputerEnvironment = host_hb["ComputerEnvironment"]
     host_entity.OmsSolutions = [  # type: ignore
         sol.strip() for sol in host_hb["Solutions"].split(",")
     ]  # type: ignore
@@ -166,7 +169,8 @@ def cluster_syslog_logons_df(logon_events: pd.DataFrame) -> pd.DataFrame:
         .sort_index(ascending=True)
     )
     if logons_opened.empty or logons_closed.empty:
-        raise MsticpyException("There are no logon sessions in the supplied data set")
+        raise MsticpyException(
+            "There are no logon sessions in the supplied data set")
 
     # For each session identify the likely start and end times
     while ses_opened < len(logons_opened.index) and ses_closed < len(
@@ -195,7 +199,8 @@ def cluster_syslog_logons_df(logon_events: pd.DataFrame) -> pd.DataFrame:
         ses_close_time = ses_end
         ses_closed = ses_closed + 1
         ses_opened = ses_opened + 1
-    logon_sessions_df = pd.DataFrame({"User": users, "Start": starts, "End": ends})
+    logon_sessions_df = pd.DataFrame(
+        {"User": users, "Start": starts, "End": ends})
     return logon_sessions_df
 
 
@@ -247,7 +252,8 @@ def risky_sudo_sessions(
 
 def _normalize_to_utc(time_stamp: dt.datetime):
     # Normalize datetimes to UTC in case we have mixed timezones in datasets
-    if time_stamp.tzinfo is None or time_stamp.tzinfo.utcoffset(time_stamp) is None:
+    if time_stamp.tzinfo is None or time_stamp.tzinfo.utcoffset(
+            time_stamp) is None:
         time_stamp = time_stamp.replace(tzinfo=pytz.UTC)
     else:
         time_stamp = time_stamp.astimezone(pytz.utc)
@@ -268,7 +274,9 @@ def _find_risky_sudo_session(risky_actions: dict, sudo_sessions: dict):
     return risky_sessions
 
 
-def _find_suspicious_sudo_session(suspicious_actions: list, sudo_sessions: dict):
+def _find_suspicious_sudo_session(
+        suspicious_actions: list,
+        sudo_sessions: dict):
     risky_sessions = {}
     # Determine if suspicious event occurs during a session time window
     for event in suspicious_actions:
@@ -279,5 +287,6 @@ def _find_suspicious_sudo_session(suspicious_actions: list, sudo_sessions: dict)
                     <= _normalize_to_utc(value[0]["TimeGenerated"].iloc[1])
                     <= _normalize_to_utc(sess_val["End"])
                 ):
-                    risky_sessions.update({sess_key: "Suspicious event pattern"})
+                    risky_sessions.update(
+                        {sess_key: "Suspicious event pattern"})
     return risky_sessions

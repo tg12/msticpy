@@ -28,7 +28,11 @@ def _get_entities_with_pivots():
     piv_entities = {}
     for entity_name in dir(entities):
         entity = getattr(entities, entity_name)
-        if not isinstance(entity, type) or not issubclass(entity, entities.Entity):
+        if not isinstance(
+                entity,
+                type) or not issubclass(
+                entity,
+                entities.Entity):
             continue
         piv_list = sorted(entity.get_pivot_list())
         if piv_list:
@@ -110,7 +114,8 @@ class PivotBrowser:
             layout=widgets.Layout(height="300px", width="95%"),
         )
 
-        self._select["pivot_funcs"].observe(self._select_function, names="value")
+        self._select["pivot_funcs"].observe(
+            self._select_function, names="value")
 
         self._select["entities"] = widgets.Select(
             description="entity",
@@ -131,7 +136,8 @@ class PivotBrowser:
             ],
             layout=_box_layout("95%"),
         )
-        self._layout["func_help_accd"].set_title(0, "Generic Pivot function help")
+        self._layout["func_help_accd"].set_title(
+            0, "Generic Pivot function help")
         self._layout["func_help_accd"].set_title(1, "Function-specific help")
         self._layout["func_help_accd"].set_title(2, "Search results (0)")
         self._layout["func_help_accd"].selected_index = None
@@ -167,8 +173,8 @@ class PivotBrowser:
         )
         self._text["search_txt"].observe(self._search_func, names="value")
         self._html["cur_func_title"] = widgets.HTML(
-            description="Current function:", style={"description_width": "initial"}
-        )
+            description="Current function:", style={
+                "description_width": "initial"})
         self._btn["copy"] = widgets.Button(description="Copy to clipboard")
         self._btn["copy"].on_click(self._copy_to_clip)
         self._btn["copy"].enabled = _ENABLE_CLIP
@@ -229,8 +235,7 @@ class PivotBrowser:
 
     def _search_funcs(self, search_txt):
         f_entities = {
-            ent for ent in self.piv_entities if search_txt.casefold() in ent.casefold()
-        }
+            ent for ent in self.piv_entities if search_txt.casefold() in ent.casefold()}
         matching_funcs = [
             (ent, func)
             for ent, ent_piv in self.piv_entities.items()
@@ -246,7 +251,8 @@ class PivotBrowser:
         for entity in f_entities:
             ent_func_list.append(f"<b>{entity}</b>")
             if entity in ent_with_funcs:
-                ent_funcs = [item[1] for item in matching_funcs if item[0] == entity]
+                ent_funcs = [item[1]
+                             for item in matching_funcs if item[0] == entity]
                 ent_func_list.extend(ent_funcs)
                 hit_count += len(ent_funcs)
         return "<br>".join(ent_func_list), hit_count

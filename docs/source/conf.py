@@ -38,7 +38,10 @@ author = "Ian Hellen"
 
 
 with open("../../msticpy/_version.py", "r") as fd:
-    v_match = re.search(r'^VERSION\s*=\s*[\'"]([^\'"]*)[\'"]', fd.read(), re.MULTILINE)
+    v_match = re.search(
+        r'^VERSION\s*=\s*[\'"]([^\'"]*)[\'"]',
+        fd.read(),
+        re.MULTILINE)
     _ver = v_match.group(1) if v_match else "no version"
 
 # The full version, including alpha/beta/rc tags
@@ -152,8 +155,11 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (master_doc, "msticpy.tex", "msticpy Documentation", "Ian Hellen", "manual")
-]
+    (master_doc,
+     "msticpy.tex",
+     "msticpy Documentation",
+     "Ian Hellen",
+     "manual")]
 
 
 # -- Options for manual page output ------------------------------------------

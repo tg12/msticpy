@@ -129,10 +129,10 @@ def plot_outlier_results(
     plt.contourf(xx, yy, z, cmap=plt.cm.Blues_r)
 
     b1 = plt.scatter(x[:, 0], x[:, 1], c="white", s=20, edgecolor="k")
-    b2 = plt.scatter(x_predict[:, 0], x_predict[:, 1], c="green", s=40, edgecolor="k")
-    c = plt.scatter(
-        x_outliers[:, 0], x_outliers[:, 1], c="red", marker="x", s=200, edgecolor="k"
-    )
+    b2 = plt.scatter(x_predict[:, 0], x_predict[:, 1],
+                     c="green", s=40, edgecolor="k")
+    c = plt.scatter(x_outliers[:, 0], x_outliers[:, 1],
+                    c="red", marker="x", s=200, edgecolor="k")
     plt.axis("tight")
 
     xp_max_x = x_predict[:, 0].max() + (x_predict[:, 0].max() / 10)
@@ -157,7 +157,9 @@ def plot_outlier_results(
     plt.show()
 
 
-def remove_common_items(data: pd.DataFrame, columns: List[str]) -> pd.DataFrame:
+def remove_common_items(
+        data: pd.DataFrame,
+        columns: List[str]) -> pd.DataFrame:
     """
     Remove rows from input DataFrame.
 

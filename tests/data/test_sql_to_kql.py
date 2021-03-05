@@ -92,7 +92,7 @@ SQL_CASES = [
         | join kind=inner (apt29Host
         | where Channel == 'Microsoft-Windows-Sysmon/Operational'
         and EventID == 1
-        and tolower(ParentImage) matches regex '.*\â€Ž|â€|â€ª|â€«|â€¬|â€|â€®.*'
+        and tolower(ParentImage) matches regex '.*\\â€Ž|â€|â€ª|â€«|â€¬|â€|â€®.*'
         and tolower(Image) endswith 'cmd.exe'
         | project ProcessGuid) on $left.ParentProcessGuid == $right.ProcessGuid
         | where Channel == 'Microsoft-Windows-Sysmon/Operational'
@@ -188,4 +188,7 @@ def test_sql_convert(get_sql_cases):
     for line_test, line_expected in zip(
         kql_query.strip().split("\n"), kql.strip().split("\n")
     ):
-        check.equal(line_test.strip(), line_expected.strip(), f"TestID={test_id}")
+        check.equal(
+            line_test.strip(),
+            line_expected.strip(),
+            f"TestID={test_id}")

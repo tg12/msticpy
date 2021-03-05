@@ -59,7 +59,8 @@ class KqlTIProvider(TIProvider):
             self._query_provider = self._create_query_provider(**kwargs)
 
         if not self._query_provider or not self._query_provider.connected:
-            raise MsticpyConfigException("Query provider for KQL could not be created.")
+            raise MsticpyConfigException(
+                "Query provider for KQL could not be created.")
 
     # pylint: disable=duplicate-code
     @lru_cache(maxsize=256)
@@ -111,8 +112,7 @@ class KqlTIProvider(TIProvider):
 
         try:
             query_obj, query_params = self._get_query_and_params(
-                ioc=ioc, ioc_type=result.ioc_type, query_type=query_type, **kwargs
-            )
+                ioc=ioc, ioc_type=result.ioc_type, query_type=query_type, **kwargs)
         except LookupError as err:
             result.details = err.args
             result.raw_result = type(err).__name__ + "\n" + str(err) + "\n"
@@ -196,7 +196,8 @@ class KqlTIProvider(TIProvider):
             except LookupError:
                 pass
             if not query_obj:
-                warnings.warn(f"Could not find query for {ioc_type}, {query_type}")
+                warnings.warn(
+                    f"Could not find query for {ioc_type}, {query_type}")
                 continue
 
             # run the query
@@ -216,12 +217,15 @@ class KqlTIProvider(TIProvider):
                         + str(data_result.completion_query_info)
                     )
                 else:
-                    print("Unknown response from provider: " + str(data_result))
+                    print(
+                        "Unknown response from provider: " +
+                        str(data_result))
 
             src_ioc_frame = pd.DataFrame(obs_set, columns=["Ioc"])
             src_ioc_frame["IocType"] = ioc_type
             src_ioc_frame["QuerySubtype"] = query_type
-            src_ioc_frame["Reference"] = query_obj("print_query", **query_params)
+            src_ioc_frame["Reference"] = query_obj(
+                "print_query", **query_params)
 
             # If no results, add the empty dataframe to the combined results
             # and continue
@@ -245,17 +249,18 @@ class KqlTIProvider(TIProvider):
             data_result["Status"] = TILookupStatus.ok.value
             data_result["Severity"] = self._get_severity(data_result)
             data_result["Details"] = self._get_detail_summary(data_result)
-            data_result["RawResult"] = data_result.apply(lambda x: x.to_dict(), axis=1)
+            data_result["RawResult"] = data_result.apply(
+                lambda x: x.to_dict(), axis=1)
 
             combined_results_df = self._combine_results(
-                input_df=src_ioc_frame, results_df=data_result, reslt_ioc_key="IoC"
-            )
+                input_df=src_ioc_frame, results_df=data_result, reslt_ioc_key="IoC")
             all_results.append(combined_results_df)
 
         return pd.concat(all_results, ignore_index=True, sort=False, axis=0)
 
     @abc.abstractmethod
-    def parse_results(self, response: LookupResult) -> Tuple[bool, TISeverity, Any]:
+    def parse_results(
+            self, response: LookupResult) -> Tuple[bool, TISeverity, Any]:
         """
         Return the details of the response.
 
@@ -296,7 +301,8 @@ class KqlTIProvider(TIProvider):
             # those in case there are multiple workspaces set globally.
             config_file = kwargs.get("config_file")
             workspace = kwargs.get("workspace")
-            ws_config = WorkspaceConfig(config_file=config_file, workspace=workspace)
+            ws_config = WorkspaceConfig(
+                config_file=config_file, workspace=workspace)
             workspace_id = ws_config["workspace_id"]
             tenant_id = ws_config["tenant_id"]
         # Either the format or connect() call will fail if these values are
@@ -398,7 +404,8 @@ class KqlTIProvider(TIProvider):
         # Fill in any NaN values from the merge
         combined_df["Result"] = combined_df["Result"].fillna(False)
         combined_df["Details"] = combined_df["Details"].fillna("Not found.")
-        combined_df["Status"] = combined_df["Status"].fillna(TILookupStatus.ok.value)
+        combined_df["Status"] = combined_df["Status"].fillna(
+            TILookupStatus.ok.value)
         combined_df["Severity"] = combined_df["Severity"].fillna(
             TISeverity.information.value
         )

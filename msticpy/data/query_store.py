@@ -75,8 +75,10 @@ class QueryStore:
 
         """
         self.environment: str = environment
-        self.data_families: Dict[str, Dict[str, QuerySource]] = defaultdict(dict)
-        self.data_family_defaults: Dict[str, Dict[str, Any]] = defaultdict(dict)
+        self.data_families: Dict[str,
+                                 Dict[str, QuerySource]] = defaultdict(dict)
+        self.data_family_defaults: Dict[str,
+                                        Dict[str, Any]] = defaultdict(dict)
 
     def __getattr__(self, name: str):
         """Return the item in dot-separated path `name`."""
@@ -164,7 +166,8 @@ class QueryStore:
         if prefix:
             query_paths = [f"{q_path}.{prefix}" for q_path in query_paths]
 
-        src_dict = {"args": {"query": query}, "description": description or name}
+        src_dict = {"args": {"query": query},
+                    "description": description or name}
         md_dict = {"data_families": query_paths}
 
         query_source = QuerySource(
@@ -228,7 +231,8 @@ class QueryStore:
                 raise FileNotFoundError(f"{query_dir} is not a directory")
             for file_path in find_yaml_files(query_dir, recursive):
                 try:
-                    sources, defaults, metadata = read_query_def_file(str(file_path))
+                    sources, defaults, metadata = read_query_def_file(
+                        str(file_path))
                 except ValueError:
                     print(
                         f"{file_path} is not a valid query definition file - skipping."
@@ -243,12 +247,14 @@ class QueryStore:
                         raise ValueError(f"Unknown environment {env_value}")
 
                     if environment.name not in env_stores:
-                        env_stores[environment.name] = cls(environment=environment.name)
+                        env_stores[environment.name] = cls(
+                            environment=environment.name)
                     for source_name, source in sources.items():
                         new_source = QuerySource(
                             source_name, source, defaults, metadata
                         )
-                        env_stores[environment.name].add_data_source(new_source)
+                        env_stores[environment.name].add_data_source(
+                            new_source)
 
         return env_stores
 
@@ -285,9 +291,11 @@ class QueryStore:
                 )
                 if query_container in self.data_families:
                     query_path = query_container
-        query = self.data_families.get(query_path, {}).get(query_name)  # type: ignore
+        query = self.data_families.get(
+            query_path, {}).get(query_name)  # type: ignore
         if not query:
-            raise LookupError(f"Could not find {query_name} in path {query_path}.")
+            raise LookupError(
+                f"Could not find {query_name} in path {query_path}.")
         return query
 
     def find_query(self, query_name: str) -> Set[Optional[QuerySource]]:

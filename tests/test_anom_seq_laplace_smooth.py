@@ -23,11 +23,13 @@ class TestLaplaceSmooth(unittest.TestCase):
         self.data1["seq2_counts_ls"] = {UNK_TOKEN: {UNK_TOKEN: 1}}
         self.data1["param_counts"] = defaultdict(lambda: 0)
         self.data1["param_counts_ls"] = {UNK_TOKEN: 1}
-        self.data1["cmd_param_counts"] = defaultdict(lambda: defaultdict(lambda: 0))
+        self.data1["cmd_param_counts"] = defaultdict(
+            lambda: defaultdict(lambda: 0))
         self.data1["cmd_param_counts_ls"] = {UNK_TOKEN: {UNK_TOKEN: 1}}
         self.data1["value_counts"] = defaultdict(lambda: 0)
         self.data1["value_counts_ls"] = {UNK_TOKEN: 1}
-        self.data1["param_value_counts"] = defaultdict(lambda: defaultdict(lambda: 0))
+        self.data1["param_value_counts"] = defaultdict(
+            lambda: defaultdict(lambda: 0))
         self.data1["param_value_counts_ls"] = {UNK_TOKEN: {UNK_TOKEN: 1}}
         self.data1["cmds"] = [UNK_TOKEN]
         self.data1["params"] = [UNK_TOKEN]
@@ -37,7 +39,8 @@ class TestLaplaceSmooth(unittest.TestCase):
         self.data2["seq1_counts"] = defaultdict(
             lambda: 0, {START_TOKEN: 1, END_TOKEN: 1}
         )
-        self.data2["seq1_counts_ls"] = {UNK_TOKEN: 4, START_TOKEN: 3, END_TOKEN: 3}
+        self.data2["seq1_counts_ls"] = {
+            UNK_TOKEN: 4, START_TOKEN: 3, END_TOKEN: 3}
         self.data2["seq2_counts"] = defaultdict(lambda: defaultdict(lambda: 0))
         self.data2["seq2_counts"][START_TOKEN][END_TOKEN] = 1
         self.data2["seq2_counts_ls"] = {
@@ -46,7 +49,8 @@ class TestLaplaceSmooth(unittest.TestCase):
         }
         self.data2["param_counts"] = defaultdict(lambda: 0)
         self.data2["param_counts_ls"] = {UNK_TOKEN: 3}
-        self.data2["cmd_param_counts"] = defaultdict(lambda: defaultdict(lambda: 0))
+        self.data2["cmd_param_counts"] = defaultdict(
+            lambda: defaultdict(lambda: 0))
         self.data2["cmd_param_counts_ls"] = {
             START_TOKEN: {UNK_TOKEN: 1},
             END_TOKEN: {UNK_TOKEN: 1},
@@ -54,7 +58,8 @@ class TestLaplaceSmooth(unittest.TestCase):
         }
         self.data2["value_counts"] = defaultdict(lambda: 0)
         self.data2["value_counts_ls"] = {UNK_TOKEN: 1}
-        self.data2["param_value_counts"] = defaultdict(lambda: defaultdict(lambda: 0))
+        self.data2["param_value_counts"] = defaultdict(
+            lambda: defaultdict(lambda: 0))
         self.data2["param_value_counts_ls"] = {UNK_TOKEN: {UNK_TOKEN: 1}}
         self.data2["cmds"] = [START_TOKEN, END_TOKEN, UNK_TOKEN]
         self.data2["params"] = [UNK_TOKEN]
@@ -85,9 +90,12 @@ class TestLaplaceSmooth(unittest.TestCase):
             UNK_TOKEN: {END_TOKEN: 1, UNK_TOKEN: 1, cmd: 1},
             cmd: {cmd: 2, END_TOKEN: 2, UNK_TOKEN: 1},
         }
-        self.data3["param_counts"] = defaultdict(lambda: 0, {"City": 1, "Identity": 2})
-        self.data3["param_counts_ls"] = {UNK_TOKEN: 4, "City": 2, "Identity": 3}
-        self.data3["cmd_param_counts"] = defaultdict(lambda: defaultdict(lambda: 0))
+        self.data3["param_counts"] = defaultdict(
+            lambda: 0, {"City": 1, "Identity": 2})
+        self.data3["param_counts_ls"] = {
+            UNK_TOKEN: 4, "City": 2, "Identity": 3}
+        self.data3["cmd_param_counts"] = defaultdict(
+            lambda: defaultdict(lambda: 0))
         self.data3["cmd_param_counts"][cmd]["City"] = 1
         self.data3["cmd_param_counts"][cmd]["Identity"] = 2
         self.data3["cmd_param_counts_ls"] = {
@@ -96,9 +104,11 @@ class TestLaplaceSmooth(unittest.TestCase):
             UNK_TOKEN: {UNK_TOKEN: 1},
             cmd: {"City": 2, "Identity": 3, UNK_TOKEN: 1},
         }
-        self.data3["value_counts"] = defaultdict(lambda: 0, {"york": 1, "blah": 2})
+        self.data3["value_counts"] = defaultdict(
+            lambda: 0, {"york": 1, "blah": 2})
         self.data3["value_counts_ls"] = {"york": 2, "blah": 3, UNK_TOKEN: 3}
-        self.data3["param_value_counts"] = defaultdict(lambda: defaultdict(lambda: 0))
+        self.data3["param_value_counts"] = defaultdict(
+            lambda: defaultdict(lambda: 0))
         self.data3["param_value_counts"]["City"]["york"] = 1
         self.data3["param_value_counts"]["Identity"]["blah"] = 2
         self.data3["param_value_counts_ls"] = {
@@ -156,7 +166,9 @@ class TestLaplaceSmooth(unittest.TestCase):
             unk_token=UNK_TOKEN,
         )
         self.assertDictEqual(param_ls_actual, self.data1["param_counts_ls"])
-        self.assertDictEqual(cmd_param_ls_actual, self.data1["cmd_param_counts_ls"])
+        self.assertDictEqual(
+            cmd_param_ls_actual,
+            self.data1["cmd_param_counts_ls"])
 
         (
             param_ls_actual,
@@ -168,7 +180,9 @@ class TestLaplaceSmooth(unittest.TestCase):
             unk_token=UNK_TOKEN,
         )
         self.assertDictEqual(param_ls_actual, self.data2["param_counts_ls"])
-        self.assertDictEqual(cmd_param_ls_actual, self.data2["cmd_param_counts_ls"])
+        self.assertDictEqual(
+            cmd_param_ls_actual,
+            self.data2["cmd_param_counts_ls"])
 
         (
             param_ls_actual,
@@ -180,7 +194,9 @@ class TestLaplaceSmooth(unittest.TestCase):
             unk_token=UNK_TOKEN,
         )
         self.assertDictEqual(param_ls_actual, self.data3["param_counts_ls"])
-        self.assertDictEqual(cmd_param_ls_actual, self.data3["cmd_param_counts_ls"])
+        self.assertDictEqual(
+            cmd_param_ls_actual,
+            self.data3["cmd_param_counts_ls"])
 
     def test_laplace_smooth_value_counts(self):
         (
@@ -193,7 +209,9 @@ class TestLaplaceSmooth(unittest.TestCase):
             unk_token=UNK_TOKEN,
         )
         self.assertDictEqual(values_ls_actual, self.data1["value_counts_ls"])
-        self.assertDictEqual(param_value_ls_actual, self.data1["param_value_counts_ls"])
+        self.assertDictEqual(
+            param_value_ls_actual,
+            self.data1["param_value_counts_ls"])
 
         (
             values_ls_actual,
@@ -205,7 +223,9 @@ class TestLaplaceSmooth(unittest.TestCase):
             unk_token=UNK_TOKEN,
         )
         self.assertDictEqual(values_ls_actual, self.data2["value_counts_ls"])
-        self.assertDictEqual(param_value_ls_actual, self.data2["param_value_counts_ls"])
+        self.assertDictEqual(
+            param_value_ls_actual,
+            self.data2["param_value_counts_ls"])
 
         (
             values_ls_actual,
@@ -217,7 +237,9 @@ class TestLaplaceSmooth(unittest.TestCase):
             unk_token=UNK_TOKEN,
         )
         self.assertDictEqual(values_ls_actual, self.data3["value_counts_ls"])
-        self.assertDictEqual(param_value_ls_actual, self.data3["param_value_counts_ls"])
+        self.assertDictEqual(
+            param_value_ls_actual,
+            self.data3["param_value_counts_ls"])
 
 
 if __name__ == "__main__":

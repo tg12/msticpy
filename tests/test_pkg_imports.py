@@ -64,14 +64,17 @@ def test_conda_reqs(extras_from_setup):
     main_reqs_dict = _get_reqs_from_file(main_reqs_file)
     # Add extras
     for item in [re.split(REQS_OP_RGX, line) for line in extras_from_setup]:
-        main_reqs_dict[item[0].strip()] = item[1].strip() if len(item) > 1 else None
+        main_reqs_dict[item[0].strip()] = item[1].strip() if len(
+            item) > 1 else None
 
     conda_reqs_dict = _get_reqs_from_file(conda_reqs_file)
     conda_reqs_pip_dict = _get_reqs_from_file(conda_reqs_pip_file)
 
     for key, val in main_reqs_dict.items():
-        print(f"Checking {key} in conda-reqs.txt", bool(key in conda_reqs_dict))
-        print(f"Checking {key} in conda-reqs-pip.txt", bool(key in conda_reqs_pip_dict))
+        print(f"Checking {key} in conda-reqs.txt",
+              bool(key in conda_reqs_dict))
+        print(f"Checking {key} in conda-reqs-pip.txt",
+              bool(key in conda_reqs_pip_dict))
 
         check.is_true(
             key in conda_reqs_dict
@@ -100,7 +103,10 @@ def test_conda_reqs(extras_from_setup):
                         f"{key} version mismatch - setup: {val}: {conda_reqs_pip_dict[key]}",
                         "in conda-reqs-pip.txt",
                     )
-                check.equal(val, conda_reqs_pip_dict[key], f"{key} in condas pip reqs")
+                check.equal(
+                    val,
+                    conda_reqs_pip_dict[key],
+                    f"{key} in condas pip reqs")
             conda_reqs_pip_dict.pop(key)
 
     if conda_reqs_dict:

@@ -89,4 +89,5 @@ class TestMorph:
         )
         with pytest.raises(MsticpyException):
             assert test_morph.display(data=test_data, chart_name="test")
-            assert test_morph.display(data="test_data", chart_name="SigninsChart")
+            assert test_morph.display(
+                data="test_data", chart_name="SigninsChart")

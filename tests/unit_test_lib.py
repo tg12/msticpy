@@ -56,7 +56,8 @@ def custom_mp_config(
     """
     current_path = os.environ.get(pkg_config._CONFIG_ENV_VAR)
     if not Path(mp_path).is_file():
-        raise FileNotFoundError(f"Setting MSTICPYCONFIG to non-existent file {mp_path}")
+        raise FileNotFoundError(
+            f"Setting MSTICPYCONFIG to non-existent file {mp_path}")
     try:
         os.environ[pkg_config._CONFIG_ENV_VAR] = str(mp_path)
         pkg_config.refresh_config()

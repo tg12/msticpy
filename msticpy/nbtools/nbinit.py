@@ -183,11 +183,14 @@ def init_notebook(
         information.
 
     """
-    check_kwargs(
-        kwargs, ["user_install", "friendly_exceptions", "no_config_check", "verbose"]
-    )
+    check_kwargs(kwargs,
+                 ["user_install",
+                  "friendly_exceptions",
+                  "no_config_check",
+                  "verbose"])
     user_install: bool = kwargs.pop("user_install", False)
-    friendly_exceptions: Optional[bool] = kwargs.pop("friendly_exceptions", None)
+    friendly_exceptions: Optional[bool] = kwargs.pop(
+        "friendly_exceptions", None)
     no_config_check: bool = kwargs.pop("no_config_check", False)
     verbose: bool = kwargs.pop("verbose", False)
 
@@ -195,8 +198,11 @@ def init_notebook(
 
     print("Processing imports....")
     imp_ok = _global_imports(
-        namespace, additional_packages, user_install, extra_imports, def_imports
-    )
+        namespace,
+        additional_packages,
+        user_install,
+        extra_imports,
+        def_imports)
 
     if no_config_check:
         conf_ok = True
@@ -222,10 +228,8 @@ def init_notebook(
             md(_AZNB_GUIDE)
         if not conf_ok:
             md("One or more configuration items were missing or set incorrectly.")
-            md(
-                _AZNB_GUIDE
-                + f" and the <a href='{_CONF_URI}'>msticpy configuration guide</a>."
-            )
+            md(_AZNB_GUIDE +
+                f" and the <a href='{_CONF_URI}'>msticpy configuration guide</a>.")
         md("This notebook may still run but with reduced functionality.")
         return False
     display(HTML("<h3>Notebook setup complete</h3>"))
@@ -335,7 +339,11 @@ def _import_extras(nm_spc: Dict[str, Any], extra_imports: List[str]):
             raise MsticpyException(
                 f"First parameter in extra_imports is mandatory: {imp_spec}"
             )
-        _imp_from_package(nm_spc=nm_spc, pkg=params[0], tgt=params[1], alias=params[2])
+        _imp_from_package(
+            nm_spc=nm_spc,
+            pkg=params[0],
+            tgt=params[1],
+            alias=params[2])
 
 
 def _imp_module(nm_spc: Dict[str, Any], module_name: str, alias: str = None):
@@ -414,7 +422,8 @@ def _check_and_reload_pkg(
             warn_mssg.append(f"{pkg_name} was installed or upgraded.")
             pip_ver = ".".join([str(elem) for elem in req_version])
             pkg_spec = f"{pkg_name}>={pip_ver}"
-            check_and_install_missing_packages(required_packages=[pkg_spec], user=True)
+            check_and_install_missing_packages(
+                required_packages=[pkg_spec], user=True)
 
             if pkg_name in sys.modules:
                 importlib.reload(pkg)

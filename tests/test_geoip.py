@@ -18,9 +18,8 @@ _NB_FOLDER = "docs/notebooks"
 _NB_NAME = "GeoIPLookups.ipynb"
 
 
-@pytest.mark.skipif(
-    not os.environ.get("MSTICPY_TEST_NOSKIP"), reason="Skipped for local tests."
-)
+@pytest.mark.skipif(not os.environ.get("MSTICPY_TEST_NOSKIP"),
+                    reason="Skipped for local tests.")
 def test_geoip_notebook():
     nb_path = Path(_NB_FOLDER).joinpath(_NB_NAME)
     abs_path = Path(_NB_FOLDER).absolute()
@@ -43,9 +42,8 @@ def test_geoip_notebook():
         raise
 
 
-@pytest.mark.skipif(
-    not os.environ.get("MSTICPY_TEST_NOSKIP"), reason="Skipped for local tests."
-)
+@pytest.mark.skipif(not os.environ.get("MSTICPY_TEST_NOSKIP"),
+                    reason="Skipped for local tests.")
 def test_geoiplite_download():
     """Test forced download of GeoIPLite DB."""
     test_folder = "test_geolite_data"
@@ -53,7 +51,8 @@ def test_geoiplite_download():
     try:
         tgt_folder.mkdir(exist_ok=True)
         with pytest.warns(None) as warning_record:
-            iplocation = GeoLiteLookup(db_folder=str(tgt_folder), force_update=True)
+            iplocation = GeoLiteLookup(
+                db_folder=str(tgt_folder), force_update=True)
             iplocation.close()
         check.equal(len(warning_record), 0)
     finally:

@@ -65,7 +65,8 @@ def is_benign_ioc(request_item):
     if isinstance(request_item, str):
         return any([item for item in ioc_benign_iocs if item in request_item])
     if isinstance(request_item, dict):
-        return any([item for item in ioc_benign_iocs if item in request_item.values()])
+        return any(
+            [item for item in ioc_benign_iocs if item in request_item.values()])
     return False
 
 
@@ -214,7 +215,9 @@ class mock_req_session:
                             "domain": dom,
                         }
                     rand_responses.append(dom_resp)
-                mocked_result = {"status_code": 200, "response": rand_responses}
+                mocked_result = {
+                    "status_code": 200,
+                    "response": rand_responses}
                 return MockResponse(mocked_result, 200)
         return MockResponse(None, 404)
 
@@ -236,7 +239,8 @@ class TestTIProviders(unittest.TestCase):
                 return TILookup()
 
     def test_ti_config_and_load(self):
-        config_path = Path(_TEST_DATA).parent.joinpath("msticpyconfig-test.yaml")
+        config_path = Path(_TEST_DATA).parent.joinpath(
+            "msticpyconfig-test.yaml")
         with custom_mp_config(self.config_path):
             with warnings.catch_warnings():
                 # We want to ignore warnings from missing config
@@ -308,7 +312,7 @@ class TestTIProviders(unittest.TestCase):
             data=(ioc_ips + ioc_benign_iocs), providers=[provider_name]
         )
         self.assertEqual(20, len(results_df))
-        self.assertEqual(17, len(results_df[results_df["Result"] == True]))
+        self.assertEqual(17, len(results_df[results_df["Result"]]))
 
         ti_provider._requests_session = saved_session
 
@@ -385,14 +389,15 @@ class TestTIProviders(unittest.TestCase):
         ti_provider._requests_session = mock_req_session()
 
         n_requests = 250
-        gen_doms = {self._generate_rand_domain(): "dns" for i in range(n_requests)}
+        gen_doms = {self._generate_rand_domain(
+        ): "dns" for i in range(n_requests)}
         results_df = ti_lookup.lookup_iocs(data=gen_doms, providers=["OPR"])
         self.assertEqual(n_requests, len(results_df))
         self.assertGreater(
             len(results_df[results_df["Severity"].isin(["warning", "high"]) > 0]),
             n_requests / 3,
         )
-        self.assertEqual(n_requests, len(results_df[results_df["Result"] == True]))
+        self.assertEqual(n_requests, len(results_df[results_df["Result"]]))
 
     def _generate_rand_domain(self):
         dom_suffixes = ["com", "org", "net", "biz"]
@@ -400,7 +405,8 @@ class TestTIProviders(unittest.TestCase):
         str_length = random.randint(4, 20)
         dom = ""
         for i in range(0, 2):
-            dom_part = "".join(random.choice(letters) for i in range(str_length))
+            dom_part = "".join(random.choice(letters)
+                               for i in range(str_length))
             dom = dom + "." + dom_part if dom else dom_part
         suffix = random.choice(dom_suffixes)
 
@@ -461,7 +467,8 @@ class TestTIProviders(unittest.TestCase):
         self.assertEqual(lu_result.status, 2)
         lu_result = provider._check_ioc_type(ioc="123", ioc_type="dns")
         self.assertEqual(lu_result.status, 2)
-        lu_result = provider._check_ioc_type(ioc="424246", ioc_type="file_hash")
+        lu_result = provider._check_ioc_type(
+            ioc="424246", ioc_type="file_hash")
         self.assertEqual(lu_result.status, 2)
 
     def test_tiseverity(self):
@@ -493,18 +500,18 @@ class TestTIProviders(unittest.TestCase):
         self.assertEqual(result.status, "IP address is not global")
         result = preprocess_observable("not an ip address", ioc_type="ipv4")
         self.assertEqual(
-            result.status, "Observable does not match expected pattern for ipv4"
-        )
+            result.status,
+            "Observable does not match expected pattern for ipv4")
         result = preprocess_observable("185.92.220.35", ioc_type="ipv6")
         self.assertEqual(
-            result.status, "Observable does not match expected pattern for ipv6"
-        )
+            result.status,
+            "Observable does not match expected pattern for ipv6")
         result = preprocess_observable(
             "2001:0db8:85a3:0000:0000:8a2e:0370:7334", ioc_type="ipv4"
         )
         self.assertEqual(
-            result.status, "Observable does not match expected pattern for ipv4"
-        )
+            result.status,
+            "Observable does not match expected pattern for ipv4")
         result = preprocess_observable("localhost", ioc_type="dns")
         self.assertEqual(
             result.status, "Observable does not match expected pattern for dns"
@@ -521,7 +528,8 @@ class TestTIProviders(unittest.TestCase):
     def test_iterable_generator(self):
         test_df = pd.DataFrame({"col1": ioc_ips, "col2": ioc_ips})
 
-        for ioc, _ in generate_items(test_df, obs_col="col1", ioc_type_col="col2"):
+        for ioc, _ in generate_items(
+                test_df, obs_col="col1", ioc_type_col="col2"):
             self.assertIn(ioc, ioc_ips)
 
         for ioc, ioc_type in generate_items(test_df[["col1"]], obs_col="col1"):

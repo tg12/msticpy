@@ -66,10 +66,10 @@ _IP_LIST = {
 # pylint: disable=line-too-long
 _B64_ENCODINGS = {
     "VGhpcyBpcyBhIHRlc3Qgb2YgYmFzZTY0IGVuY29kZWQgc3RyaW5n": "This is a test of base64 encoded string",
-    "QSBLdXN0byBxdWVyeSBpcyBhIHJlYWQtb25seSByZXF1ZXN0IHRvIHByb2Nlc3MgZGF0YS"
-    + "BhbmQgcmV0dXJuIHJlc3VsdHMu": "A Kusto query is a read-only request to process data and return results.",
-    "VGhpcyBpcyBhbiBlbWJlZGRlZCBCNjQgVkdocGN5QnBjeUJoSUhSbGMzUWdiMllnWW1GelpU"
-    + "WTBJR1Z1WTI5a1pXUWdjM1J5YVc1bg==": "This is an embedded B64 VGhpcyBpcyBhIHRlc3Qgb2YgYmFzZTY0IGVuY29kZWQgc3RyaW5n",
+    "QSBLdXN0byBxdWVyeSBpcyBhIHJlYWQtb25seSByZXF1ZXN0IHRvIHByb2Nlc3MgZGF0YS" +
+    "BhbmQgcmV0dXJuIHJlc3VsdHMu": "A Kusto query is a read-only request to process data and return results.",
+    "VGhpcyBpcyBhbiBlbWJlZGRlZCBCNjQgVkdocGN5QnBjeUJoSUhSbGMzUWdiMllnWW1GelpU" +
+    "WTBJR1Z1WTI5a1pXUWdjM1J5YVc1bg==": "This is an embedded B64 VGhpcyBpcyBhIHRlc3Qgb2YgYmFzZTY0IGVuY29kZWQgc3RyaW5n",
 }
 # pylint: enable=line-too-long
 
@@ -80,8 +80,8 @@ _URLS = {
         "ipv4": "10.2.4.5",
         "md5_hash": "00236a2ae558018ed13b5222ef1bd987",
     },
-    "https://www.microsoft.com/path?p1=test&p2=10.2.4.5&"
-    + "hash=EE35D33B6F6A069CE82E45C83FBDE97A267261E9": {
+    "https://www.microsoft.com/path?p1=test&p2=10.2.4.5&" +
+    "hash=EE35D33B6F6A069CE82E45C83FBDE97A267261E9": {
         "dns": "www.microsoft.com",
         "url": "input",
         "ipv4": "10.2.4.5",
@@ -135,7 +135,11 @@ _PIVOT_QUERIES = [
 @pytest.mark.parametrize("test_case", _PIVOT_QUERIES)
 def test_pivot_funcs_value(_create_pivot, test_case):
     """Test calling function with value."""
-    func = getattr(getattr(test_case.entity, test_case.provider), test_case.pivot_func)
+    func = getattr(
+        getattr(
+            test_case.entity,
+            test_case.provider),
+        test_case.pivot_func)
     # Test value input
     val = next(iter(test_case.value.keys()))
     params = {test_case.func_param: val}
@@ -153,7 +157,11 @@ def test_pivot_funcs_value(_create_pivot, test_case):
 @pytest.mark.parametrize("test_case", _PIVOT_QUERIES)
 def test_pivot_funcs_itbl(_create_pivot, test_case):
     """Test calling function with iterable input."""
-    func = getattr(getattr(test_case.entity, test_case.provider), test_case.pivot_func)
+    func = getattr(
+        getattr(
+            test_case.entity,
+            test_case.provider),
+        test_case.pivot_func)
     # Test value input
     val = test_case.value.keys()
 
@@ -174,7 +182,11 @@ def test_pivot_funcs_itbl(_create_pivot, test_case):
 @pytest.mark.parametrize("test_case", _PIVOT_QUERIES)
 def test_pivot_funcs_df(_create_pivot, test_case):
     """Test calling function with DF input attributes."""
-    func = getattr(getattr(test_case.entity, test_case.provider), test_case.pivot_func)
+    func = getattr(
+        getattr(
+            test_case.entity,
+            test_case.provider),
+        test_case.pivot_func)
     # Test DF input
     val = test_case.value.keys()
     in_df = pd.DataFrame(val, columns=[test_case.src_df_col])
@@ -194,14 +206,21 @@ def test_pivot_funcs_df(_create_pivot, test_case):
 @pytest.mark.parametrize("test_case", _PIVOT_QUERIES)
 def test_pivot_funcs_df_merge(_create_pivot, join_type, test_case):
     """Test calling function with DF input attributes."""
-    func = getattr(getattr(test_case.entity, test_case.provider), test_case.pivot_func)
+    func = getattr(
+        getattr(
+            test_case.entity,
+            test_case.provider),
+        test_case.pivot_func)
     # Test DF input
     val = enumerate(test_case.value.keys())
     in_df = pd.DataFrame(val, columns=["idx", test_case.src_df_col])
     in_df["extra_col1"] = "test1"
     in_df["extra_col2"] = "test2"
     result_no_merge_df = func(data=in_df, src_column=test_case.src_df_col)
-    result_df = func(data=in_df, src_column=test_case.src_df_col, join=join_type)
+    result_df = func(
+        data=in_df,
+        src_column=test_case.src_df_col,
+        join=join_type)
 
     in_cols = in_df.shape[1]
     no_merge_cols = result_no_merge_df.shape[1]

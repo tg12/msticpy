@@ -45,8 +45,7 @@ def compute_counts(  # nosec
     if not start_token != end_token != unk_token:
         raise MsticpyException(
             "start_token, end_token, unk_tokens should all be set to something "
-            "different"
-        )
+            "different")
 
     seq1_counts: DefaultDict[str, int] = defaultdict(lambda: 0)
     seq2_counts: DefaultDict[str, DefaultDict[str, int]] = defaultdict(
@@ -245,7 +244,7 @@ def compute_likelihood_windows_in_session(
         sess += [str(end_token)]
     end = len(sess) - window_len
     for i in range(end + 1):
-        window = sess[i : i + window_len]  # noqa: E203
+        window = sess[i: i + window_len]  # noqa: E203
 
         if i == 0:
             use_start = use_start_end_tokens
@@ -327,4 +326,4 @@ def rarest_window_session(
         return [], np.nan
     min_lik = min(likelihoods)
     ind = likelihoods.index(min_lik)
-    return session[ind : ind + window_len], min_lik  # noqa: E203
+    return session[ind: ind + window_len], min_lik  # noqa: E203

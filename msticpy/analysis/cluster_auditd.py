@@ -15,7 +15,9 @@ __version__ = VERSION
 __author__ = "Ian Hellen"
 
 
-def cluster_auditd_processes(audit_data: pd.DataFrame, app: str = None) -> pd.DataFrame:
+def cluster_auditd_processes(
+        audit_data: pd.DataFrame,
+        app: str = None) -> pd.DataFrame:
     """
     Clusters process data into specific processes.
 

@@ -67,7 +67,8 @@ def check_docs(
 
 
 # pyline: disable=broad-except
-def _get_links_from_files(doc_path: str, recurse: bool = True) -> Dict[str, Set[str]]:
+def _get_links_from_files(
+        doc_path: str, recurse: bool = True) -> Dict[str, Set[str]]:
     links_to_check: Dict[str, Set[str]] = defaultdict(set)
 
     html_glob_pattern = "**/*.html" if recurse else "*.html"
@@ -154,7 +155,11 @@ def check_uris(
     """
     loop = asyncio.get_event_loop()
 
-    future = asyncio.ensure_future(_check_uris_async(uris_to_check, max_threads, delay))
+    future = asyncio.ensure_future(
+        _check_uris_async(
+            uris_to_check,
+            max_threads,
+            delay))
     return loop.run_until_complete(future)
 
 
@@ -189,10 +194,10 @@ async def _check_url_async(url: str, session: ClientSession) -> UrlResult:
                     )
                 elif resp.status == 200:
                     result = UrlResult(
-                        resp.status, resp.history, url, "No error. No redirect."
-                    )
+                        resp.status, resp.history, url, "No error. No redirect.")
                 else:
-                    result = UrlResult(resp.status, resp.history, url, "Error?")
+                    result = UrlResult(
+                        resp.status, resp.history, url, "Error?")
             except ClientResponseError as client_err:
                 return UrlResult(client_err.status, [], url, client_err)
     except ClientConnectionError as err:
@@ -220,7 +225,9 @@ async def _check_uris_async(
             if delay:
                 asyncio.sleep(delay)
             # pass Semaphore and session to every GET request
-            task = asyncio.ensure_future(_check_uri_with_sem_async(sem, uri, session))
+            task = asyncio.ensure_future(
+                _check_uri_with_sem_async(
+                    sem, uri, session))
             tasks.append(task)
 
         results = await asyncio.gather(*tasks)

@@ -26,7 +26,12 @@ class UploaderBase(ABC):
         self._debug = False
 
     @abc.abstractmethod
-    def upload_file(self, file_path: str, table_name: str, delim: str = ",", **kwargs):
+    def upload_file(
+            self,
+            file_path: str,
+            table_name: str,
+            delim: str = ",",
+            **kwargs):
         """
         Upload a file to the data store.
 
@@ -43,8 +48,11 @@ class UploaderBase(ABC):
 
     @abc.abstractmethod
     def upload_folder(
-        self, folder_path: str, table_name: str = None, delim: str = ",", **kwargs
-    ):
+            self,
+            folder_path: str,
+            table_name: str = None,
+            delim: str = ",",
+            **kwargs):
         """
         Upload a folder of files to the data store.
 

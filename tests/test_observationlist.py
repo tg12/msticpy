@@ -96,7 +96,9 @@ class TestObservations(unittest.TestCase):
         )
         obs_list.add_observation(ob2)
         self.assertEqual(len(obs_list.observations), 2)
-        self.assertEqual(obs_list.observations["O1"].description, "Description2")
+        self.assertEqual(
+            obs_list.observations["O1"].description,
+            "Description2")
         self.assertEqual(obs_list.observations["O1"], ob2)
 
         # Add observation with keywords
@@ -110,7 +112,7 @@ class TestObservations(unittest.TestCase):
         )
         self.assertEqual(len(obs_list.observations), 3)
         self.assertEqual(
-            obs_list.observations["O3"].additional_properties["foo"], "some extra data"
-        )
+            obs_list.observations["O3"].additional_properties["foo"],
+            "some extra data")
 
         obs_list.display_observations()

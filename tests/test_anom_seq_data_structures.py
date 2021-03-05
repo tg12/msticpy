@@ -10,10 +10,19 @@ UNK_TOKEN = "##UNK##"
 
 class TestDataStructures(unittest.TestCase):
     def test_state_matrix(self):
-        self.assertRaises(MsticpyException, lambda: StateMatrix({"haha": 1}, UNK_TOKEN))
-        self.assertRaises(MsticpyException, lambda: StateMatrix(dict(), UNK_TOKEN))
+        self.assertRaises(MsticpyException,
+                          lambda: StateMatrix({"haha": 1}, UNK_TOKEN))
+        self.assertRaises(
+            MsticpyException,
+            lambda: StateMatrix(
+                dict(),
+                UNK_TOKEN))
         states = {"haha": {"lol": 1, UNK_TOKEN: 1}, UNK_TOKEN: {"hehe": 1}}
-        self.assertRaises(MsticpyException, lambda: StateMatrix(states, UNK_TOKEN))
+        self.assertRaises(
+            MsticpyException,
+            lambda: StateMatrix(
+                states,
+                UNK_TOKEN))
 
         states = {"haha": 2, UNK_TOKEN: 5}
         states_matrix = StateMatrix(states, UNK_TOKEN)

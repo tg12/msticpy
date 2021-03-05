@@ -53,8 +53,11 @@ def test_txt2df():
 
     # separator
     res_df = run_txt2df(
-        line="--headers --sep=\t", cell=_INPUT_TEST.replace(",", "\t"), local_ns=None
-    )
+        line="--headers --sep=\t",
+        cell=_INPUT_TEST.replace(
+            ",",
+            "\t"),
+        local_ns=None)
     check.is_instance(res_df, pd.DataFrame)
     check.equal(res_df.shape, (14, 5))
 
@@ -65,7 +68,10 @@ def test_txt2df():
             cell_input.append(line + ",")
         else:
             cell_input.append(line)
-    res_df = run_txt2df(line="--headers", cell="\n".join(cell_input), local_ns=None)
+    res_df = run_txt2df(
+        line="--headers",
+        cell="\n".join(cell_input),
+        local_ns=None)
     # expect output with dropped columns
     check.is_instance(res_df, pd.DataFrame)
     check.equal(res_df.shape, (14, 5))
@@ -89,7 +95,10 @@ def test_txt2df():
         check.is_in(col.strip(), list(res_df.columns))
 
     # keepna should force blank columns to remain
-    res_df = run_txt2df(line="--keepna", cell="\n".join(cell_input), local_ns=None)
+    res_df = run_txt2df(
+        line="--keepna",
+        cell="\n".join(cell_input),
+        local_ns=None)
     check.is_instance(res_df, pd.DataFrame)
     check.equal(res_df.shape, (15, 7))
 

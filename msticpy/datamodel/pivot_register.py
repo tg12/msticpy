@@ -99,7 +99,9 @@ class PivotRegistration:
     entity_container_name: Optional[str] = None
     return_raw_output: bool = False
 
-    def attr_for_entity(self, entity: Union[entities.Entity, str]) -> Optional[str]:
+    def attr_for_entity(self,
+                        entity: Union[entities.Entity,
+                                      str]) -> Optional[str]:
         """
         Return the attribute to use for the specified entity.
 
@@ -163,7 +165,8 @@ def create_pivot_func(
         # with other operations and doesn't get sent to the function)
         join_type = kwargs.pop("join", None)
 
-        input_value = _get_input_value(*args, pivot_reg=pivot_reg, parent_kwargs=kwargs)
+        input_value = _get_input_value(
+            *args, pivot_reg=pivot_reg, parent_kwargs=kwargs)
         _check_valid_settings_for_input(input_value, pivot_reg)
 
         # If the input_value is not a DF convert it into one and return the DF,
@@ -185,7 +188,8 @@ def create_pivot_func(
                     "Try again with a single row/value as input.",
                     "E.g. func(data=df.iloc[N], column=...)",
                 )
-            result_df = _iterate_func(target_func, input_df, input_column, pivot_reg)
+            result_df = _iterate_func(
+                target_func, input_df, input_column, pivot_reg)
         else:
             result_df = target_func(**param_dict, **kwargs)  # type: ignore
         merge_key = pivot_reg.func_out_column_name or input_column
@@ -245,7 +249,9 @@ def _get_input_value(
     return input_value
 
 
-def _check_valid_settings_for_input(input_value: Any, pivot_reg: PivotRegistration):
+def _check_valid_settings_for_input(
+        input_value: Any,
+        pivot_reg: PivotRegistration):
     """Check input against settings in `pivot_reg`."""
     # Must have one of these specified
     if not (pivot_reg.func_df_col_param_name or pivot_reg.func_input_value_arg):
@@ -257,7 +263,8 @@ def _check_valid_settings_for_input(input_value: Any, pivot_reg: PivotRegistrati
     # that the input_value is a simple value
     if pivot_reg.input_type == "value":
         if not pivot_reg.func_input_value_arg:
-            raise ValueError("No value for pivot func input argument was given")
+            raise ValueError(
+                "No value for pivot func input argument was given")
         if not pivot_reg.can_iterate and (
             isinstance(input_value, pd.DataFrame)
             or (
@@ -352,18 +359,20 @@ def _iterate_func(target_func, input_df, input_column, pivot_reg):
     res_key_col_name = pivot_reg.func_out_column_name or pivot_reg.func_input_value_arg
     for row in input_df[[input_column]].itertuples(index=False):
         param_dict = {pivot_reg.func_input_value_arg: row[0]}
-        result = target_func(**param_dict, **(pivot_reg.func_static_params or {}))
-        if not pivot_reg.return_raw_output and not isinstance(result, pd.DataFrame):
+        result = target_func(**param_dict,
+                             **(pivot_reg.func_static_params or {}))
+        if not pivot_reg.return_raw_output and not isinstance(
+                result, pd.DataFrame):
             col_value = next(iter(row._asdict().values()))
             if isinstance(result, dict):
                 # if result is a dict - make that into a row.
                 result = pd.DataFrame(pd.Series(result)).T
                 result[res_key_col_name] = col_value
             else:
-                # just make the result into a string and use that as a single col
-                result = pd.DataFrame(
-                    [[col_value, str(result)]], columns=[res_key_col_name, "result"]
-                )
+                # just make the result into a string and use that as a single
+                # col
+                result = pd.DataFrame([[col_value, str(result)]], columns=[
+                    res_key_col_name, "result"])
         results.append(result)
     if pivot_reg.return_raw_output:
         return results

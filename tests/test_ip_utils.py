@@ -79,13 +79,17 @@ class TestIpUtils(unittest.TestCase):
         self.assertIn("AsnDescription", results.columns)
 
         results2 = get_whois_df(
-            data=self.input_df, ip_column="AllExtIPs", asn_col="asn", whois_col="whois"
-        )
+            data=self.input_df,
+            ip_column="AllExtIPs",
+            asn_col="asn",
+            whois_col="whois")
         self.assertEqual(len(results2), len(self.input_df))
         self.assertIn("asn", results2.columns)
         self.assertIn("whois", results2.columns)
-        self.assertEqual(len(results2[~results2["asn"].isna()]), len(self.input_df))
-        self.assertEqual(len(results2[~results2["whois"].isna()]), len(self.input_df))
+        self.assertEqual(
+            len(results2[~results2["asn"].isna()]), len(self.input_df))
+        self.assertEqual(
+            len(results2[~results2["whois"].isna()]), len(self.input_df))
 
     def test_whois_pdext(self):
         results = self.input_df.mp_whois.lookup(ip_column="AllExtIPs")
@@ -98,5 +102,7 @@ class TestIpUtils(unittest.TestCase):
         self.assertEqual(len(results2), len(self.input_df))
         self.assertIn("asn", results2.columns)
         self.assertIn("whois", results2.columns)
-        self.assertEqual(len(results2[~results2["asn"].isna()]), len(self.input_df))
-        self.assertEqual(len(results2[~results2["whois"].isna()]), len(self.input_df))
+        self.assertEqual(
+            len(results2[~results2["asn"].isna()]), len(self.input_df))
+        self.assertEqual(
+            len(results2[~results2["whois"].isna()]), len(self.input_df))

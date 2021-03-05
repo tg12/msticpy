@@ -91,7 +91,10 @@ class Alert(Entity):
 
     def _add_additional_data(self, src_entity: Mapping[str, Any]):
         """Populate additional alert properties."""
-        entity_props = set(self.__dict__.keys()) | {"AlertDisplayName", "SystemAlertId"}
+        entity_props = set(
+            self.__dict__.keys()) | {
+            "AlertDisplayName",
+            "SystemAlertId"}
         if isinstance(src_entity, dict):
             prop_list = src_entity.items()
         elif type(src_entity).__name__ == "SecurityAlert":
@@ -121,7 +124,8 @@ class Alert(Entity):
         # Severity (type System.Nullable`1
         # [Microsoft.Azure.Security.Detection.AlertContracts.V3.Severity])
         "Severity": None,
-        # SystemAlertIds (type System.Collections.Generic.List`1[System.String])
+        # SystemAlertIds (type
+        # System.Collections.Generic.List`1[System.String])
         "SystemAlertIds": None,
         # AlertType (type System.String)
         "AlertType": None,

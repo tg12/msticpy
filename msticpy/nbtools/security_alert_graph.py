@@ -85,7 +85,8 @@ def create_alert_graph(alert: SecurityAlert):
 
             # if we have a previously created an edge to the alert, remove it
             if alertentity_graph.has_edge(alert["AlertType"], related_entity):
-                alertentity_graph.remove_edge(alert["AlertType"], related_entity)
+                alertentity_graph.remove_edge(
+                    alert["AlertType"], related_entity)
 
         # if we haven't added an edge to this entity from anything else,
         # add one to the alert
@@ -96,7 +97,9 @@ def create_alert_graph(alert: SecurityAlert):
 
 
 @export
-def add_related_alerts(related_alerts: pd.DataFrame, alertgraph: nx.Graph) -> nx.Graph:
+def add_related_alerts(
+        related_alerts: pd.DataFrame,
+        alertgraph: nx.Graph) -> nx.Graph:
     """
     Add related alerts to the graph.
 
@@ -106,7 +109,9 @@ def add_related_alerts(related_alerts: pd.DataFrame, alertgraph: nx.Graph) -> nx
 
     alert_host_node = _find_graph_node(related_alerts_graph, "host", "")
 
-    related_alerts.apply(lambda x: _add_alert_node(related_alerts_graph, x), axis=1)
+    related_alerts.apply(
+        lambda x: _add_alert_node(
+            related_alerts_graph, x), axis=1)
     if alert_host_node:
         related_alerts.apply(
             lambda x: _add_related_alert_edges(
@@ -126,7 +131,8 @@ def _add_related_alert_edges(related_alerts_graph, alert_row, default_node):
             related_alert.primary_account.qualified_name,
         )
         if acct_node is not None:
-            _add_related_alert_edge(related_alerts_graph, acct_node, related_alert)
+            _add_related_alert_edge(
+                related_alerts_graph, acct_node, related_alert)
 
     if related_alert.primary_process is not None:
         proc_node = _find_graph_node(
@@ -135,19 +141,25 @@ def _add_related_alert_edges(related_alerts_graph, alert_row, default_node):
             related_alert.primary_process.ProcessFilePath,
         )
         if proc_node is not None:
-            _add_related_alert_edge(related_alerts_graph, proc_node, related_alert)
+            _add_related_alert_edge(
+                related_alerts_graph, proc_node, related_alert)
 
     if related_alert.primary_host is not None:
         host_node = _find_graph_node(
-            related_alerts_graph, "host", related_alert.primary_host["HostName"]
-        )
+            related_alerts_graph,
+            "host",
+            related_alert.primary_host["HostName"])
         if host_node is not None:
-            _add_related_alert_edge(related_alerts_graph, host_node, related_alert)
+            _add_related_alert_edge(
+                related_alerts_graph, host_node, related_alert)
 
     # if we haven't added an edge to this entity from anything else,
     # add one to the alert
     if not related_alerts_graph[related_alert["AlertType"] + "(R)"]:
-        _add_related_alert_edge(related_alerts_graph, default_node, related_alert)
+        _add_related_alert_edge(
+            related_alerts_graph,
+            default_node,
+            related_alert)
 
 
 def _add_alert_node(nx_graph, alert):
@@ -186,9 +198,16 @@ def _add_related_alert_edge(nx_graph, source, target):
     description = "Related alert: {}  Count:{}".format(
         target["AlertType"], current_count
     )
-    node_attrs = {target_node: {"count": current_count, "description": description}}
+    node_attrs = {
+        target_node: {
+            "count": current_count,
+            "description": description}}
     nx.set_node_attributes(nx_graph, node_attrs)
-    nx_graph.add_edge(source, target_node, weight=0.7, description="Related Alert")
+    nx_graph.add_edge(
+        source,
+        target_node,
+        weight=0.7,
+        description="Related Alert")
 
 
 def _get_account_qualified_name(account):
@@ -212,7 +231,8 @@ def _get_name_and_description(entity, os_family="Windows"):
     elif entity["Type"] == "host-logon-session":
         e_name = "host-logon-session"
         e_description = f'Logon session {entity["SessionId"]}\n'
-        e_description = e_description + f'(Start time: {entity["StartTimeUtc"]}'
+        e_description = e_description + \
+            f'(Start time: {entity["StartTimeUtc"]}'
     elif entity["Type"] == "process":
         e_name, e_description = _get_process_name_desc(entity)
     elif entity["Type"] == "file":

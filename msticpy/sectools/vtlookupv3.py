@@ -200,7 +200,8 @@ class VTLookupV3:
 
         endpoint_name = self._get_endpoint_name(vt_type)
         try:
-            response = self._vt_client.get_object(f"/{endpoint_name}/{observable}")
+            response = self._vt_client.get_object(
+                f"/{endpoint_name}/{observable}")
             return self._parse_vt_object(response)
         except vt.APIError as err:
             raise MsticpyVTNoDataError(
@@ -272,7 +273,8 @@ class VTLookupV3:
         dfs_futures = []
         for observable, observable_type in zip(observables_list, types_list):
             try:
-                ioc_df_future = self._lookup_ioc_async(observable, observable_type)
+                ioc_df_future = self._lookup_ioc_async(
+                    observable, observable_type)
                 dfs_futures.append(ioc_df_future)
             except KeyError:
                 print(
@@ -380,7 +382,8 @@ class VTLookupV3:
             if vt_objects:
                 # Inject source and target columns
                 result_df[ColumnNames.SOURCE.value] = observable
-                result_df[ColumnNames.SOURCE_TYPE.value] = VTEntityType(vt_type).value
+                result_df[ColumnNames.SOURCE_TYPE.value] = VTEntityType(
+                    vt_type).value
                 result_df[ColumnNames.RELATIONSHIP_TYPE.value] = relationship
                 result_df.reset_index(inplace=True)
                 result_df.rename(
@@ -401,8 +404,11 @@ class VTLookupV3:
         return result_df
 
     def lookup_ioc_relationships(
-        self, observable: str, vt_type: str, relationship: str, limit: int = None
-    ) -> pd.DataFrame:
+            self,
+            observable: str,
+            vt_type: str,
+            relationship: str,
+            limit: int = None) -> pd.DataFrame:
         """
         Look up and single IoC observable relationships.
 
@@ -689,7 +695,11 @@ class VTLookupV3:
             response: vt.object.Object = self._vt_client.get_object(
                 f"/{endpoint_name}/{vt_id}"
             )
-            return pd.DataFrame(data=response.to_dict()).drop(columns=["id", "type"])
+            return pd.DataFrame(
+                data=response.to_dict()).drop(
+                columns=[
+                    "id",
+                    "type"])
         except vt.APIError as err:
             raise MsticpyVTNoDataError(
                 "An error occurred requesting data from VirusTotal"

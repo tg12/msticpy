@@ -48,7 +48,8 @@ class UTDataDriver(DriverBase):
         del query_source, kwargs
         return pd.DataFrame(data=query, index=[0], columns=["query"])
 
-    def query_with_results(self, query: str, **kwargs) -> Tuple[pd.DataFrame, Any]:
+    def query_with_results(self, query: str, **
+                           kwargs) -> Tuple[pd.DataFrame, Any]:
         """Test method."""
         return (pd.DataFrame(data=query, index=[0], columns=["query"]), query)
 
@@ -132,8 +133,8 @@ class TestDataQuery(unittest.TestCase):
             q for q in dir(la_provider.all_queries) if not q.startswith("__")
         ]
         winsec_queries = [
-            q for q in dir(la_provider.WindowsSecurity) if not q.startswith("__")
-        ]
+            q for q in dir(
+                la_provider.WindowsSecurity) if not q.startswith("__")]
         alert_queries = [
             q for q in dir(la_provider.SecurityAlert) if not q.startswith("__")
         ]
@@ -163,7 +164,9 @@ class TestDataQuery(unittest.TestCase):
 
     def test_load_graph_query_defs(self):
         """Test Security graph query load."""
-        provider = QueryProvider(data_environment="SecurityGraph", driver=self.provider)
+        provider = QueryProvider(
+            data_environment="SecurityGraph",
+            driver=self.provider)
 
         # Did we read and process the query definitions OK
         q_sources = provider.query_store.data_families
@@ -183,12 +186,16 @@ class TestDataQuery(unittest.TestCase):
 
     def test_graph_query_create_funcs(self):
         """Test Security Graph create partial functions."""
-        provider = QueryProvider(data_environment="SecurityGraph", driver=self.provider)
+        provider = QueryProvider(
+            data_environment="SecurityGraph",
+            driver=self.provider)
 
-        all_queries = [q for q in dir(provider.all_queries) if not q.startswith("__")]
+        all_queries = [
+            q for q in dir(
+                provider.all_queries) if not q.startswith("__")]
         alert_queries = [
-            q for q in dir(provider.SecurityGraphAlert) if not q.startswith("__")
-        ]
+            q for q in dir(
+                provider.SecurityGraphAlert) if not q.startswith("__")]
         self.assertGreaterEqual(len(all_queries), 7)
         self.assertGreaterEqual(len(alert_queries), 7)
 
@@ -200,7 +207,9 @@ class TestDataQuery(unittest.TestCase):
 
     def test_graph_load_query_exec(self):
         """Test Security graph run query."""
-        provider = QueryProvider(data_environment="SecurityGraph", driver=self.provider)
+        provider = QueryProvider(
+            data_environment="SecurityGraph",
+            driver=self.provider)
         df = provider.all_queries.get_alert("help")
         self.assertIsNone(df)
 
@@ -234,7 +243,8 @@ class TestDataQuery(unittest.TestCase):
         file_path = Path(_TEST_DATA, "data_q_success.yaml")
         la_provider.import_query_file(query_file=file_path)
 
-        self.assertEqual(before_queries + 3, len(list(la_provider.list_queries())))
+        self.assertEqual(before_queries + 3,
+                         len(list(la_provider.list_queries())))
 
     def test_load_hierchical_q_paths(self):
         """Test use of hierarchical query paths."""
@@ -305,8 +315,12 @@ class TestDataQuery(unittest.TestCase):
             attr = attr["name"].split(".")[0]
             self.assertTrue(hasattr(saved_searches, attr))
             self.assertTrue(
-                isinstance(getattr(saved_searches, attr), (partial, QueryContainer))
-            )
+                isinstance(
+                    getattr(
+                        saved_searches,
+                        attr),
+                    (partial,
+                     QueryContainer)))
 
         # Check that we have expected query text
         q_store = data_provider.query_store
@@ -333,8 +347,12 @@ class TestDataQuery(unittest.TestCase):
             attr = attr["name"].split(".")[0]
             self.assertTrue(hasattr(saved_searches, attr))
             self.assertTrue(
-                isinstance(getattr(saved_searches, attr), (partial, QueryContainer))
-            )
+                isinstance(
+                    getattr(
+                        saved_searches,
+                        attr),
+                    (partial,
+                     QueryContainer)))
 
         q_store = data_provider.query_store
         q_src = q_store.get_query("Saved.Searches.test.query3")

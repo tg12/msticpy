@@ -40,7 +40,9 @@ class KqlResultTest:
 
     def __init__(self, code=0, partial=False, status="success"):
         """Create instance."""
-        self.completion_query_info = {"StatusCode": code, "StatusDescription": status}
+        self.completion_query_info = {
+            "StatusCode": code,
+            "StatusDescription": status}
         self.is_partial_table = partial
 
     def to_dataframe(self):
@@ -155,15 +157,13 @@ def test_kql_connect_kql_exceptions(get_ipython):
 
     with pytest.raises(MsticpyKqlConnectionError) as mp_ex:
         kql_driver.connect(
-            connection_str="la://connection.workspace('1234').tenant(KqlErrorWS)"
-        )
+            connection_str="la://connection.workspace('1234').tenant(KqlErrorWS)")
     check.is_in("unknown workspace", mp_ex.value.args)
     check.is_false(kql_driver.connected)
 
     with pytest.raises(MsticpyKqlConnectionError) as mp_ex:
         kql_driver.connect(
-            connection_str="la://connection.workspace('1234').tenant(KqlEngineError)"
-        )
+            connection_str="la://connection.workspace('1234').tenant(KqlEngineError)")
     check.is_in("kql connection error", mp_ex.value.args)
     check.is_false(kql_driver.connected)
 
@@ -198,7 +198,8 @@ def test_kql_connect_authn_exceptions(get_ipython):
     kql_driver = KqlDriver()
 
     with pytest.raises(MsticpyKqlConnectionError) as mp_ex:
-        kql_driver.connect(connection_str="la://connection+AuthenticationError")
+        kql_driver.connect(
+            connection_str="la://connection+AuthenticationError")
     check.is_in("authentication failed", mp_ex.value.args)
     check.is_false(kql_driver.connected)
 
@@ -241,8 +242,8 @@ def test_kql_query_failed(get_ipython):
     check.is_in("test query_failed", arg_str)
     check.is_in("Query failed", arg_str)
     check.is_in(
-        "https://msticpy.readthedocs.io/en/latest/DataAcquisition.html", arg_str
-    )
+        "https://msticpy.readthedocs.io/en/latest/DataAcquisition.html",
+        arg_str)
 
 
 @patch(GET_IPYTHON_PATCH)

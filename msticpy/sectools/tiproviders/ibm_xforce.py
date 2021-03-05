@@ -71,7 +71,8 @@ class XForce(HttpProvider):
     _REQUIRED_PARAMS = ["API_ID", "API_KEY"]
 
     # pylint: disable=too-many-branches
-    def parse_results(self, response: LookupResult) -> Tuple[bool, TISeverity, Any]:
+    def parse_results(
+            self, response: LookupResult) -> Tuple[bool, TISeverity, Any]:
         """
         Return the details of the response.
 
@@ -89,7 +90,8 @@ class XForce(HttpProvider):
 
         """
         severity = TISeverity.information
-        if self._failed_response(response) or not isinstance(response.raw_result, dict):
+        if self._failed_response(response) or not isinstance(
+                response.raw_result, dict):
             return False, severity, "Not found."
         result = True
         result_dict = {}
@@ -119,10 +121,8 @@ class XForce(HttpProvider):
                 if score == 1
                 else TISeverity.high
             )
-        if (
-            response.ioc_type in ["file_hash", "md5_hash", "sha1_hash", "sha256_hash"]
-            or response.query_subtype == "malware"
-        ):
+        if (response.ioc_type in ["file_hash", "md5_hash", "sha1_hash",
+                                  "sha256_hash"] or response.query_subtype == "malware"):
             malware = response.raw_result.get("malware")
             if malware:
                 result_dict.update(

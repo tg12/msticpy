@@ -27,7 +27,11 @@ TEST_CASES = {
 class TestIoCExtractor(unittest.TestCase):
     """Unit test class."""
 
-    def __run_extract(self, extractor=None, testcase=None, expected_items=None):
+    def __run_extract(
+            self,
+            extractor=None,
+            testcase=None,
+            expected_items=None):
         if extractor is None or testcase is None or expected_items is None:
             raise Exception("One or more required parameters were missing")
 
@@ -46,8 +50,12 @@ class TestIoCExtractor(unittest.TestCase):
         self.__run_extract(self.extractor, "ipv6", {"ipv6": 3})
 
     def test_url(self):
-        self.__run_extract(self.extractor, "url", {"url": 2, "dns": 2, "ipv4": 0})
-        self.__run_extract(self.extractor, "url2", {"url": 1, "dns": 1, "ipv4": 1})
+        self.__run_extract(
+            self.extractor, "url", {
+                "url": 2, "dns": 2, "ipv4": 0})
+        self.__run_extract(
+            self.extractor, "url2", {
+                "url": 1, "dns": 1, "ipv4": 1})
 
     def test_windows_path(self):
         self.__run_extract(self.extractor, "windows_path", {"windows_path": 3})
@@ -78,11 +86,16 @@ class TestIoCExtractor(unittest.TestCase):
         self.assertEqual(output_df[output_df["IoCType"] == "ipv4"].shape[0], 3)
         self.assertEqual(output_df[output_df["IoCType"] == "ipv6"].shape[0], 3)
         self.assertEqual(output_df[output_df["IoCType"] == "url"].shape[0], 3)
-        self.assertEqual(output_df[output_df["IoCType"] == "windows_path"].shape[0], 6)
-        self.assertEqual(output_df[output_df["IoCType"] == "linux_path"].shape[0], 0)
-        self.assertEqual(output_df[output_df["IoCType"] == "md5_hash"].shape[0], 3)
-        self.assertEqual(output_df[output_df["IoCType"] == "sha1_hash"].shape[0], 3)
-        self.assertEqual(output_df[output_df["IoCType"] == "sha256_hash"].shape[0], 3)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "windows_path"].shape[0], 6)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "linux_path"].shape[0], 0)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "md5_hash"].shape[0], 3)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "sha1_hash"].shape[0], 3)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "sha256_hash"].shape[0], 3)
 
         input_df = pd.DataFrame.from_dict(
             data=TEST_CASES, orient="index", columns=["input"]
@@ -97,19 +110,26 @@ class TestIoCExtractor(unittest.TestCase):
             "sha256_hash",
         ]
         output_df = self.extractor.extract(
-            data=input_df, columns=["input"], include_paths=True, ioc_types=ioc_types
-        )
+            data=input_df,
+            columns=["input"],
+            include_paths=True,
+            ioc_types=ioc_types)
         # for _, row in output_df[output_df['IoCType'] == 'url'].iterrows():
         #     print(row.Observable)
         self.assertGreater(output_df.shape[0], 0)
         self.assertEqual(output_df[output_df["IoCType"] == "ipv4"].shape[0], 3)
         self.assertEqual(output_df[output_df["IoCType"] == "ipv6"].shape[0], 3)
         self.assertEqual(output_df[output_df["IoCType"] == "url"].shape[0], 3)
-        self.assertEqual(output_df[output_df["IoCType"] == "windows_path"].shape[0], 0)
-        self.assertEqual(output_df[output_df["IoCType"] == "linux_path"].shape[0], 8)
-        self.assertEqual(output_df[output_df["IoCType"] == "md5_hash"].shape[0], 3)
-        self.assertEqual(output_df[output_df["IoCType"] == "sha1_hash"].shape[0], 3)
-        self.assertEqual(output_df[output_df["IoCType"] == "sha256_hash"].shape[0], 3)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "windows_path"].shape[0], 0)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "linux_path"].shape[0], 8)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "md5_hash"].shape[0], 3)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "sha1_hash"].shape[0], 3)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "sha256_hash"].shape[0], 3)
 
     def test_dataframe_ioc_types(self):
 
@@ -117,18 +137,23 @@ class TestIoCExtractor(unittest.TestCase):
             data=TEST_CASES, orient="index", columns=["input"]
         )
         output_df = self.extractor.extract(
-            data=input_df, columns=["input"], ioc_types=["ipv4", "url", "md5_hash"]
-        )
+            data=input_df, columns=["input"], ioc_types=[
+                "ipv4", "url", "md5_hash"])
 
         self.assertGreater(output_df.shape[0], 0)
         self.assertEqual(output_df[output_df["IoCType"] == "ipv4"].shape[0], 3)
         self.assertEqual(output_df[output_df["IoCType"] == "ipv6"].shape[0], 0)
         self.assertEqual(output_df[output_df["IoCType"] == "url"].shape[0], 3)
-        self.assertEqual(output_df[output_df["IoCType"] == "windows_path"].shape[0], 0)
-        self.assertEqual(output_df[output_df["IoCType"] == "linux_path"].shape[0], 0)
-        self.assertEqual(output_df[output_df["IoCType"] == "md5_hash"].shape[0], 3)
-        self.assertEqual(output_df[output_df["IoCType"] == "sha1_hash"].shape[0], 0)
-        self.assertEqual(output_df[output_df["IoCType"] == "sha256_hash"].shape[0], 0)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "windows_path"].shape[0], 0)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "linux_path"].shape[0], 0)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "md5_hash"].shape[0], 3)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "sha1_hash"].shape[0], 0)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "sha256_hash"].shape[0], 0)
 
     def test_dataframe_new(self):
 
@@ -143,11 +168,16 @@ class TestIoCExtractor(unittest.TestCase):
         self.assertEqual(output_df[output_df["IoCType"] == "ipv4"].shape[0], 3)
         self.assertEqual(output_df[output_df["IoCType"] == "ipv6"].shape[0], 3)
         self.assertEqual(output_df[output_df["IoCType"] == "url"].shape[0], 3)
-        self.assertEqual(output_df[output_df["IoCType"] == "windows_path"].shape[0], 6)
-        self.assertEqual(output_df[output_df["IoCType"] == "linux_path"].shape[0], 0)
-        self.assertEqual(output_df[output_df["IoCType"] == "md5_hash"].shape[0], 3)
-        self.assertEqual(output_df[output_df["IoCType"] == "sha1_hash"].shape[0], 3)
-        self.assertEqual(output_df[output_df["IoCType"] == "sha256_hash"].shape[0], 3)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "windows_path"].shape[0], 6)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "linux_path"].shape[0], 0)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "md5_hash"].shape[0], 3)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "sha1_hash"].shape[0], 3)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "sha256_hash"].shape[0], 3)
 
         input_df = pd.DataFrame.from_dict(
             data=TEST_CASES, orient="index", columns=["input"]
@@ -162,19 +192,26 @@ class TestIoCExtractor(unittest.TestCase):
             "sha256_hash",
         ]
         output_df = self.extractor.extract_df(
-            data=input_df, columns=["input"], include_paths=True, ioc_types=ioc_types
-        )
+            data=input_df,
+            columns=["input"],
+            include_paths=True,
+            ioc_types=ioc_types)
         # for _, row in output_df[output_df['IoCType'] == 'url'].iterrows():
         #     print(row.Observable)
         self.assertGreater(output_df.shape[0], 0)
         self.assertEqual(output_df[output_df["IoCType"] == "ipv4"].shape[0], 3)
         self.assertEqual(output_df[output_df["IoCType"] == "ipv6"].shape[0], 3)
         self.assertEqual(output_df[output_df["IoCType"] == "url"].shape[0], 3)
-        self.assertEqual(output_df[output_df["IoCType"] == "windows_path"].shape[0], 0)
-        self.assertEqual(output_df[output_df["IoCType"] == "linux_path"].shape[0], 8)
-        self.assertEqual(output_df[output_df["IoCType"] == "md5_hash"].shape[0], 3)
-        self.assertEqual(output_df[output_df["IoCType"] == "sha1_hash"].shape[0], 3)
-        self.assertEqual(output_df[output_df["IoCType"] == "sha256_hash"].shape[0], 3)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "windows_path"].shape[0], 0)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "linux_path"].shape[0], 8)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "md5_hash"].shape[0], 3)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "sha1_hash"].shape[0], 3)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "sha256_hash"].shape[0], 3)
 
     def test_dataframe_ioc_types_new(self):
 
@@ -182,18 +219,23 @@ class TestIoCExtractor(unittest.TestCase):
             data=TEST_CASES, orient="index", columns=["input"]
         )
         output_df = self.extractor.extract_df(
-            data=input_df, columns=["input"], ioc_types=["ipv4", "url", "md5_hash"]
-        )
+            data=input_df, columns=["input"], ioc_types=[
+                "ipv4", "url", "md5_hash"])
 
         self.assertGreater(output_df.shape[0], 0)
         self.assertEqual(output_df[output_df["IoCType"] == "ipv4"].shape[0], 3)
         self.assertEqual(output_df[output_df["IoCType"] == "ipv6"].shape[0], 0)
         self.assertEqual(output_df[output_df["IoCType"] == "url"].shape[0], 3)
-        self.assertEqual(output_df[output_df["IoCType"] == "windows_path"].shape[0], 0)
-        self.assertEqual(output_df[output_df["IoCType"] == "linux_path"].shape[0], 0)
-        self.assertEqual(output_df[output_df["IoCType"] == "md5_hash"].shape[0], 3)
-        self.assertEqual(output_df[output_df["IoCType"] == "sha1_hash"].shape[0], 0)
-        self.assertEqual(output_df[output_df["IoCType"] == "sha256_hash"].shape[0], 0)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "windows_path"].shape[0], 0)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "linux_path"].shape[0], 0)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "md5_hash"].shape[0], 3)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "sha1_hash"].shape[0], 0)
+        self.assertEqual(
+            output_df[output_df["IoCType"] == "sha256_hash"].shape[0], 0)
 
 
 if __name__ == "__main__":

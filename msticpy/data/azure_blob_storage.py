@@ -41,7 +41,8 @@ class AzureBlobStorage:
         self.credentials = az_connect(auth_methods=auth_methods, silent=silent)
         if not self.credentials:
             raise CloudError("Could not obtain credentials.")
-        self.abs_client = BlobServiceClient(self.abs_site, self.credentials.modern)
+        self.abs_client = BlobServiceClient(
+            self.abs_site, self.credentials.modern)
         if not self.abs_client:
             raise CloudError("Could not create a Blob Storage client.")
         self.connected = True
@@ -83,7 +84,8 @@ class AzureBlobStorage:
                 container_name, **kwargs
             )  # type:ignore
         except ResourceExistsError as err:
-            raise CloudError(f"Container {container_name} already exists.") from err
+            raise CloudError(
+                f"Container {container_name} already exists.") from err
         properties = new_container.get_container_properties()
         container_df = _parse_returned_items(
             [properties], ["encryption_scope", "lease"]
@@ -105,13 +107,17 @@ class AzureBlobStorage:
             Details of the blobs.
 
         """
-        container_client = self.abs_client.get_container_client(container_name)  # type: ignore
+        container_client = self.abs_client.get_container_client(
+            container_name)  # type: ignore
         blobs = list(container_client.list_blobs())
         return _parse_returned_items(blobs) if blobs else None
 
     def upload_to_blob(
-        self, blob: Any, container_name: str, blob_name: str, overwrite: bool = True
-    ):
+            self,
+            blob: Any,
+            container_name: str,
+            blob_name: str,
+            overwrite: bool = True):
         """
         Upload a blob of data.
 
@@ -168,7 +174,8 @@ class AzureBlobStorage:
             data_stream = blob_client.download_blob()
             data = data_stream.content_as_bytes()
         else:
-            raise CloudError(f"The blob {blob_name} does not exist in {container_name}")
+            raise CloudError(
+                f"The blob {blob_name} does not exist in {container_name}")
         return data
 
     def delete_blob(self, container_name: str, blob_name: str) -> bool:
@@ -195,7 +202,8 @@ class AzureBlobStorage:
         if blob_client.exists():
             blob_client.delete_blob(delete_snapshots="include")
         else:
-            raise CloudError(f"The blob {blob_name} does not exist in {container_name}")
+            raise CloudError(
+                f"The blob {blob_name} does not exist in {container_name}")
 
         return True
 
@@ -229,7 +237,8 @@ class AzureBlobStorage:
         start = datetime.datetime.now()
         if not end:
             end = start + datetime.timedelta(days=7)
-        key = self.abs_client.get_user_delegation_key(start, end)  # type: ignore
+        key = self.abs_client.get_user_delegation_key(
+            start, end)  # type: ignore
         abs_name = self.abs_client.account_name  # type: ignore
         sast = generate_blob_sas(
             abs_name,

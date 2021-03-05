@@ -144,7 +144,8 @@ class HttpProvider(TIProvider):
             if result.status == 200:
                 try:
                     result.raw_result = response.json()
-                    result.result, severity, result.details = self.parse_results(result)
+                    result.result, severity, result.details = self.parse_results(
+                        result)
                 except JSONDecodeError:
                     result.raw_result = f"""There was a problem parsing results from this lookup:
                                         {response.text}"""
@@ -211,14 +212,12 @@ class HttpProvider(TIProvider):
             else src.path.format(observable=ioc)
         )
         if src.headers:
-            headers: Dict[str, Any] = {
-                key: val.format(**req_params) for key, val in src.headers.items()
-            }
+            headers: Dict[str, Any] = {key: val.format(
+                **req_params) for key, val in src.headers.items()}
             req_dict["headers"] = headers
         if src.params:
-            q_params: Dict[str, Any] = {
-                key: val.format(**req_params) for key, val in src.params.items()
-            }
+            q_params: Dict[str, Any] = {key: val.format(
+                **req_params) for key, val in src.params.items()}
             req_dict["params"] = q_params
         if src.data:
             q_data: Dict[str, Any] = {
@@ -226,7 +225,8 @@ class HttpProvider(TIProvider):
             }
             req_dict["data"] = q_data
         if src.auth_type and src.auth_str:
-            auth_strs: Tuple = tuple(p.format(**req_params) for p in src.auth_str)
+            auth_strs: Tuple = tuple(p.format(**req_params)
+                                     for p in src.auth_str)
             if src.auth_type == "HTTPBasic":
                 req_dict["auth"] = auth_strs
             else:
@@ -234,7 +234,8 @@ class HttpProvider(TIProvider):
         return src.verb, req_dict
 
     @abc.abstractmethod
-    def parse_results(self, response: LookupResult) -> Tuple[bool, TISeverity, Any]:
+    def parse_results(
+            self, response: LookupResult) -> Tuple[bool, TISeverity, Any]:
         """
         Return the details of the response.
 
@@ -278,8 +279,11 @@ class HttpProvider(TIProvider):
     def _err_to_results(result: LookupResult, err: Exception):
         result.details = err.args
         result.raw_result = (
-            type(err).__name__ + "\n" + str(err) + "\n" + traceback.format_exc()
-        )
+            type(err).__name__ +
+            "\n" +
+            str(err) +
+            "\n" +
+            traceback.format_exc())
 
     @staticmethod
     def _response_message(status_code):

@@ -26,7 +26,7 @@ def test_risky_cmd_line():
     input_df = pd.read_csv(input_file)
     output = cl.risky_cmd_line(events=input_df, log_type="Syslog")
     assert len(output) >= 1  # nosec
-    assert type(output) == dict  # nosec
+    assert isinstance(output, dict)  # nosec
     assert output["2019-07-05T18:19:52.873Z"] == "/bin/bash"  # nosec
     with raises(MsticpyException):
         cl.risky_cmd_line(events=input_df, log_type="Syslog", cmd_field="Test")
@@ -37,7 +37,7 @@ def test_cmd_speed():
     input_df = pd.read_csv(input_file, parse_dates=["TimeGenerated"])
     output = cl.cmd_speed(cmd_events=input_df, cmd_field="Command")
     assert len(output) >= 1  # nosec
-    assert type(output[0]) == dict  # nosec
+    assert isinstance(output[0], dict)  # nosec
     with raises(MsticpyException):
         output = cl.cmd_speed(cmd_events=input_df, cmd_field="Test")
 
@@ -53,4 +53,4 @@ def test_syslog_risky_actions():
         detection_rules=risky_stuff,
     )
     assert len(output) >= 1  # nosec
-    assert type(output) == dict  # nosec
+    assert isinstance(output, dict)  # nosec

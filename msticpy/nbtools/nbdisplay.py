@@ -167,8 +167,12 @@ def draw_alert_entity_graph(
 
     pos = nx.kamada_kawai_layout(nx_graph, scale=scale, weight="weight")
     nx.draw_networkx_nodes(
-        nx_graph, pos, nodelist=alert_node, node_color="red", alpha=0.5, node_shape="o"
-    )
+        nx_graph,
+        pos,
+        nodelist=alert_node,
+        node_color="red",
+        alpha=0.5,
+        node_shape="o")
     nx.draw_networkx_nodes(
         nx_graph,
         pos,
@@ -184,8 +188,11 @@ def draw_alert_entity_graph(
     nx.draw_networkx_edges(nx_graph, pos)
     elabels = nx.get_edge_attributes(nx_graph, "description")
     nx.draw_networkx_edge_labels(
-        nx_graph, pos, edge_labels=elabels, font_size=font_size * 2 / 3, alpha=0.6
-    )
+        nx_graph,
+        pos,
+        edge_labels=elabels,
+        font_size=font_size * 2 / 3,
+        alpha=0.6)
 
 
 # Constants for Windows logon
@@ -214,8 +221,9 @@ _DOM_OR_MACHINE_SID = "S-1-5-21"
 
 @export
 def display_logon_data(
-    logon_event: pd.DataFrame, alert: SecurityAlert = None, os_family: str = None
-):
+        logon_event: pd.DataFrame,
+        alert: SecurityAlert = None,
+        os_family: str = None):
     """
     Display logon data for one or more events as HTML table.
 
@@ -290,14 +298,16 @@ def format_logon(
                 text-align: left !important; padding: 15px !important;}
         </style>
         """
-    return HTML(f"{t_style}<table class='table_logon'>{''.join(logon_output)}</table>")
+    return HTML(
+        f"{t_style}<table class='table_logon'>{''.join(logon_output)}</table>")
 
 
 def _fmt_single_row(logon_row: pd.Series, os_family: str) -> List[str]:
     """Format a pandas series logon record."""
     logon_record = []
     logon_record.append(f"<b>Account: </b>{logon_row['TargetUserName']}")
-    logon_record.append(f"<b>Account Domain: </b>{logon_row['TargetDomainName']}")
+    logon_record.append(
+        f"<b>Account Domain: </b>{logon_row['TargetDomainName']}")
     logon_record.append(f"<b>Logon Time: </b>{logon_row['TimeGenerated']}")
 
     if os_family == "Windows":
@@ -330,7 +340,8 @@ def _fmt_single_row(logon_row: pd.Series, os_family: str) -> List[str]:
         subj_account = f"{domain}/{logon_row.SubjectUserName}"
     logon_record.append(f"<b>Subject (source) account: </b>{subj_account}")
 
-    logon_record.append(f"<b>Logon process: </b>{logon_row['LogonProcessName']}")
+    logon_record.append(
+        f"<b>Logon process: </b>{logon_row['LogonProcessName']}")
     logon_record.append(
         f"<b>Authentication: </b>{logon_row['AuthenticationPackageName']}"
     )
@@ -352,5 +363,6 @@ def _format_sid_info(sid):
     elif sid.endswith(_GUEST_SID):
         sid_info.append(f"&nbsp;&nbsp;SID {sid} is guest")
     if sid.startswith(_DOM_OR_MACHINE_SID):
-        sid_info.append(f"&nbsp;&nbsp;SID {sid} is local machine or domain account")
+        sid_info.append(
+            f"&nbsp;&nbsp;SID {sid} is local machine or domain account")
     return sid_info

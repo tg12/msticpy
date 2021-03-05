@@ -85,7 +85,8 @@ class TILookup:
         if not (primary_providers or secondary_providers):
             self._load_providers()
 
-        self._all_providers = ChainMap(self._secondary_providers, self._providers)
+        self._all_providers = ChainMap(
+            self._secondary_providers, self._providers)
 
     @property
     def loaded_providers(self) -> Dict[str, TIProvider]:
@@ -266,12 +267,13 @@ class TILookup:
                 # If the TI Provider didn't load, raise an exception
                 raise MsticpyUserConfigError(
                     f"Could not load TI Provider {provider_name}",
-                    *mp_ex.args,
-                    "To avoid loading this provider please use the 'providers' parameter"
-                    + " to TILookup() to specify which providers to load.",
+                    *
+                    mp_ex.args,
+                    "To avoid loading this provider please use the 'providers' parameter" +
+                    " to TILookup() to specify which providers to load.",
                     title="TIProvider configuration error",
-                    help_uri="https://msticpy.readthedocs.io/en/latest/data_acquisition/"
-                    + "TIProviders.html#configuration-file",
+                    help_uri="https://msticpy.readthedocs.io/en/latest/data_acquisition/" +
+                    "TIProviders.html#configuration-file",
                 ) from mp_ex
 
             # set the description from settings, if one is provided, otherwise
@@ -281,8 +283,9 @@ class TILookup:
             )
 
             self.add_provider(
-                provider=provider_instance, name=provider_name, primary=settings.primary
-            )
+                provider=provider_instance,
+                name=provider_name,
+                primary=settings.primary)
 
     def add_provider(
         self, provider: TIProvider, name: str = None, primary: bool = True
@@ -359,8 +362,7 @@ class TILookup:
         ioc_type = ioc_type or TIProvider.resolve_ioc_type(observable)
         for prov_name, provider in selected_providers.items():
             provider_result: LookupResult = provider.lookup_ioc(
-                ioc=observable, ioc_type=ioc_type, query_type=ioc_query_type, **kwargs
-            )
+                ioc=observable, ioc_type=ioc_type, query_type=ioc_query_type, **kwargs)
             result_list.append((prov_name, provider_result))
         overall_result = any(res.result for _, res in result_list)
         return overall_result, result_list
@@ -421,13 +423,11 @@ class TILookup:
             if provider_result is None or provider_result.empty:
                 continue
             if not kwargs.get("show_not_supported", False):
-                provider_result = provider_result[
-                    provider_result["Status"] != TILookupStatus.not_supported.value
-                ]
+                provider_result = provider_result[provider_result["Status"]
+                                                  != TILookupStatus.not_supported.value]
             if not kwargs.get("show_bad_ioc", False):
-                provider_result = provider_result[
-                    provider_result["Status"] != TILookupStatus.bad_format.value
-                ]
+                provider_result = provider_result[provider_result["Status"]
+                                                  != TILookupStatus.bad_format.value]
             provider_result["Provider"] = prov_name
             result_list.append(provider_result)
 

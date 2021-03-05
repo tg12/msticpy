@@ -208,12 +208,14 @@ class Pipeline:
         if pl_dict and isinstance(pl_dict, dict):
             steps = [PipelineStep(**step) for step in pl_dict.get("steps", [])]
             return cls(
-                name=pl_name, description=pl_dict.get("description"), steps=steps
-            )
+                name=pl_name,
+                description=pl_dict.get("description"),
+                steps=steps)
         raise ValueError("Dictionary could not be parsed.")
 
     @staticmethod
-    def parse_pipelines(pipelines: Dict[str, Dict[str, Any]]) -> Iterable["Pipeline"]:
+    def parse_pipelines(
+            pipelines: Dict[str, Dict[str, Any]]) -> Iterable["Pipeline"]:
         """
         Parse dict of pipelines.
 
@@ -261,7 +263,8 @@ class Pipeline:
 
         """
         steps = [attr.asdict(step) for step in self.steps]
-        return yaml.dump({self.name: {"description": self.description, "steps": steps}})
+        return yaml.dump(
+            {self.name: {"description": self.description, "steps": steps}})
 
     def run(self, data: pd.DataFrame, verbose: bool = True) -> Optional[Any]:
         """
@@ -281,7 +284,8 @@ class Pipeline:
 
         """
         pipeline_result = data
-        pipe_linesteps = tqdm(self.steps, desc="Steps") if verbose else self.steps
+        pipe_linesteps = tqdm(self.steps,
+                              desc="Steps") if verbose else self.steps
         for step in pipe_linesteps:
             exec_action = step.get_exec_step()
             if verbose:
@@ -293,11 +297,16 @@ class Pipeline:
                 )
                 break
             func = _get_pd_accessor_func(pipeline_result, exec_action.accessor)
-            pipeline_result = func(*exec_action.pos_params, **exec_action.params)
+            pipeline_result = func(
+                *exec_action.pos_params,
+                **exec_action.params)
 
         return pipeline_result
 
-    def print_pipeline(self, df_name: str = "input_df", comments: bool = True) -> str:
+    def print_pipeline(
+            self,
+            df_name: str = "input_df",
+            comments: bool = True) -> str:
         """
         Return the pipeline as text that can be executed in Python.
 

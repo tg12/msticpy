@@ -95,7 +95,8 @@ _TEST_DATA: Dict[str, Iterable] = {
 @pytest.mark.parametrize("test_input, expected", _TEST_DATA["hash_string"])
 def test_hash_string(test_input, expected):
     """Test basic hash string function."""
-    check.is_true((data_obfus.hash_string(test_input) != test_input) == expected)
+    check.is_true((data_obfus.hash_string(
+        test_input) != test_input) == expected)
     if isinstance(test_input, str) and test_input.isnumeric():
         check.is_true(data_obfus.hash_string(test_input).isnumeric())
 
@@ -186,7 +187,8 @@ def test_hash_uuid(test_input, expected):
 
 def test_obfuscate_df():
     """Test obfuscation on DataFrame."""
-    win_procs = pd.read_pickle(Path(TEST_DATA_PATH).joinpath("win_proc_test.pkl"))
+    win_procs = pd.read_pickle(
+        Path(TEST_DATA_PATH).joinpath("win_proc_test.pkl"))
 
     out_df = data_obfus.mask_df(win_procs)
 
@@ -201,7 +203,8 @@ def test_obfuscate_df():
             else:
                 check.equal(row[mapped_col], out_df.loc[idx][mapped_col])
 
-        comp_uc, comp_ch = data_obfus.check_masking(out_df, win_procs, index=idx)
+        comp_uc, comp_ch = data_obfus.check_masking(
+            out_df, win_procs, index=idx)
         n_changed = len(
             [col for col in win_procs.columns if col in data_obfus.OBFUS_COL_MAP]
         )
@@ -213,7 +216,8 @@ def test_obfuscate_df():
 
 def test_pandas_accessor():
     """Test obfuscation with pandas accessor."""
-    win_procs = pd.read_pickle(Path(TEST_DATA_PATH).joinpath("win_proc_test.pkl"))
+    win_procs = pd.read_pickle(
+        Path(TEST_DATA_PATH).joinpath("win_proc_test.pkl"))
 
     out_df = win_procs.mp_mask.mask()
     check.equal(len(out_df), len(win_procs))

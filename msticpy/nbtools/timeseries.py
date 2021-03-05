@@ -130,8 +130,10 @@ def display_timeseries_anomolies(
     series_count = int(len(data) / period)
 
     # Filtering anomalies to create new dataframe
-    source_columns = [col for col in data.columns if col not in [anomalies_column]]
-    data_anomaly = data[data[anomalies_column] == 1][source_columns].reset_index()
+    source_columns = [
+        col for col in data.columns if col not in [anomalies_column]]
+    data_anomaly = data[data[anomalies_column]
+                        == 1][source_columns].reset_index()
 
     tooltips, formatters = _create_tool_tips(data, source_columns)
     hover = HoverTool(tooltips=tooltips, formatters=formatters)

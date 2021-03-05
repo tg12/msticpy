@@ -80,10 +80,12 @@ def find_entity(entity):
         print(f"Match found '{entity_classes[entity_cf].__name__}'")
         return entity_classes[entity_cf]
     # Try to find the closest matches
-    closest = difflib.get_close_matches(entity, entity_classes.keys(), cutoff=0.4)
+    closest = difflib.get_close_matches(
+        entity, entity_classes.keys(), cutoff=0.4)
     mssg = [f"No exact match found for '{entity}'. "]
     if len(closest) == 1:
-        mssg.append(f"Closest match is '{entity_classes[closest[0]].__name__}'")
+        mssg.append(
+            f"Closest match is '{entity_classes[closest[0]].__name__}'")
     elif closest:
         match_list = [f"'{entity_classes[mtch].__name__}'" for mtch in closest]
         mssg.append(f"Closest matches are {', '.join(match_list)}")

@@ -90,7 +90,8 @@ class PivotAccessor:
         if cols:
             disp_df = disp_df[cols]
         if query:
-            disp_df = disp_df.query(query)  # , parser='python', engine='python')
+            # , parser='python', engine='python')
+            disp_df = disp_df.query(query)
         if head:
             disp_df = disp_df.head(head)
         display(disp_df)
@@ -125,7 +126,8 @@ class PivotAccessor:
         """
         if self._ip and var_name:
             if var_name in self._ip.ns_table["user_local"] and not clobber:
-                warnings.warn(f"Did not overwrite existing {var_name} in namespace")
+                warnings.warn(
+                    f"Did not overwrite existing {var_name} in namespace")
             else:
                 self._ip.ns_table["user_local"][var_name] = self._df
         return self._df

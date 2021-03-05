@@ -20,7 +20,7 @@ _TEST_DATA = get_test_data_path()
 
 def test_azure_init():
     az = AzureData()
-    assert type(az) == AzureData
+    assert isinstance(az, AzureData)
 
 
 @pytest.mark.skip

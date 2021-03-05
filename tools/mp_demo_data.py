@@ -59,7 +59,8 @@ class QueryProviderDemo(QueryProvider):
     # pylint: disable=super-init-not-called
     def __init__(self, **kwargs):
         """Initialize Demo query provider."""
-        self._environment = kwargs.get("data_environment", "default environment")
+        self._environment = kwargs.get(
+            "data_environment", "default environment")
         print(f"{self.__class__.__name__} initialized for {self._environment}")
         data_src_file = kwargs.get("data_src_file")
         if not data_src_file:
@@ -103,7 +104,8 @@ class QueryProviderDemo(QueryProvider):
             Connection string for the data source
 
         """
-        return self._query_provider.connect(connection_str=connection_str, **kwargs)
+        return self._query_provider.connect(
+            connection_str=connection_str, **kwargs)
 
     @property
     def schema(self) -> Dict[str, Dict]:
@@ -200,15 +202,18 @@ def read_pd_df(data_file, query_name):
 
     if data_file.lower().endswith("csv"):
         return pd.read_csv(
-            data_file, infer_datetime_format=True, parse_dates=["TimeGenerated"]
-        )
+            data_file,
+            infer_datetime_format=True,
+            parse_dates=["TimeGenerated"])
     return pd.read_pickle(data_file)
 
 
 class TILookupDemo:
     """TILookup demo class."""
 
-    _DATA_DEFS = {"ipv4": "data/ti_results_ipv4.pkl", "url": "data/ti_results_url.pkl"}
+    _DATA_DEFS = {
+        "ipv4": "data/ti_results_ipv4.pkl",
+        "url": "data/ti_results_url.pkl"}
 
     def lookup_ioc(self, ioc_type, **kwargs):
         """Lookup single IoC."""

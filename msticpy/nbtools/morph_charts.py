@@ -39,9 +39,11 @@ class MorphCharts:
             The name of the Morph Chart to plot.
 
         """
-        # Check input data is correct format and that the chart being requested exists
+        # Check input data is correct format and that the chart being requested
+        # exists
         if not isinstance(data, pd.DataFrame):
-            raise MsticpyException("Data provided must be in pandas.DataFrame format")
+            raise MsticpyException(
+                "Data provided must be in pandas.DataFrame format")
 
         if chart_name not in self.charts:
             raise MsticpyException(
@@ -52,7 +54,8 @@ class MorphCharts:
         description_dict = self.charts[chart_name]["DescriptionFile"]
         description_dict["tables"][0]["rows"] = len(data)
         # Create output folder for package files
-        out_path = Path.cwd().joinpath(*["morphchart_package", "description.json"])
+        out_path = Path.cwd().joinpath(
+            *["morphchart_package", "description.json"])
         Path.mkdir(Path.cwd().joinpath("morphchart_package"), exist_ok=True)
         # Write description file
         morph_file = open(out_path, "w")

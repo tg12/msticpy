@@ -85,7 +85,8 @@ class QuerySource:
         self.name = name
         self._source: Dict[str, Any] = source
         self.defaults: Dict[str, Any] = defaults
-        self._global_metadata: Dict[str, Any] = dict(metadata) if metadata else {}
+        self._global_metadata: Dict[str, Any] = dict(
+            metadata) if metadata else {}
         self.query_store: Optional["QueryStore"] = None  # type: ignore  # noqa: F821
 
         # consolidate source metadata - source-specifc
@@ -204,7 +205,10 @@ class QuerySource:
         """
         return self.metadata["data_families"]
 
-    def create_query(self, formatters: Dict[str, Callable] = None, **kwargs) -> str:
+    def create_query(self,
+                     formatters: Dict[str,
+                                      Callable] = None,
+                     **kwargs) -> str:
         """
         Return query with values from kwargs and defaults substituted.
 
@@ -235,8 +239,10 @@ class QuerySource:
 
         """
         param_dict = {
-            name: value.get("default", None) for name, value in self.params.items()
-        }
+            name: value.get(
+                "default",
+                None) for name,
+            value in self.params.items()}
 
         param_dict.update(self.resolve_param_aliases(kwargs))
         missing_params = {
@@ -244,8 +250,8 @@ class QuerySource:
         }
         if missing_params:
             raise ValueError(
-                "These required parameters were not set: ", f"{missing_params.keys()}"
-            )
+                "These required parameters were not set: ",
+                f"{missing_params.keys()}")
 
         # Handle formatting for datetimes and cases where a format
         # template has been supplied
@@ -265,7 +271,8 @@ class QuerySource:
                 param_dict[p_name], datetime
             ):
                 if formatters and "datetime" in formatters:
-                    param_dict[p_name] = formatters["datetime"](param_dict[p_name])
+                    param_dict[p_name] = formatters["datetime"](
+                        param_dict[p_name])
                 else:
                     param_dict[p_name] = self._format_datetime_default(
                         param_dict[p_name]
@@ -274,7 +281,8 @@ class QuerySource:
                 if formatters and "list" in formatters:
                     param_dict[p_name] = formatters["list"](param_dict[p_name])
                 else:
-                    param_dict[p_name] = self._format_list_default(param_dict[p_name])
+                    param_dict[p_name] = self._format_list_default(
+                        param_dict[p_name])
 
         return self._query.format(**param_dict)
 
@@ -301,7 +309,8 @@ class QuerySource:
             # If none of these, assume a time delta
             return self._calc_timeoffset(str(param_value))
 
-    def resolve_param_aliases(self, param_dict: Dict[str, Any]) -> Dict[str, Any]:
+    def resolve_param_aliases(
+            self, param_dict: Dict[str, Any]) -> Dict[str, Any]:
         """Try to resolve any parameters in `param_dict` that are aliases."""
         out_dict = {}
         for param, value in param_dict.items():
@@ -375,9 +384,8 @@ class QuerySource:
         if not m_time or "value" not in m_time.groupdict():
             return timedelta(0)
         tm_val = int(m_time.groupdict()["sign"] + m_time.groupdict()["value"])
-        tm_unit = (
-            m_time.groupdict()["unit"].lower() if m_time.groupdict()["unit"] else "d"
-        )
+        tm_unit = (m_time.groupdict()["unit"].lower(
+        ) if m_time.groupdict()["unit"] else "d")
         # Use relative delta to build the timedelta based on the units
         # in the time range expression
         unit_param = RD_UNIT_MAP.get(tm_unit, "days")
@@ -438,12 +446,15 @@ class QuerySource:
             else:
                 optional = ""
                 def_value = None
-            param_block.append(f'{p_name}: {p_props.get("type", "Any")}{optional}')
-            param_block.append(f'    {p_props.get("description", "no description")}')
+            param_block.append(
+                f'{p_name}: {p_props.get("type", "Any")}{optional}')
+            param_block.append(
+                f'    {p_props.get("description", "no description")}')
             if def_value:
                 param_block.append(f"    (default value is: {def_value})")
             if "aliases" in p_props:
-                alias_list = ", ".join([f"'{alias}'" for alias in p_props["aliases"]])
+                alias_list = ", ".join(
+                    [f"'{alias}'" for alias in p_props["aliases"]])
                 param_block.append(f"    Aliases: {alias_list}")
         doc_string = [f"{self.description}", ""]
         return "\n".join(doc_string + param_block)
@@ -496,8 +507,8 @@ class QuerySource:
             valid_failures.append(msg)
 
         missing_types = {
-            p_name for p_name, p_props in self.params.items() if "type" not in p_props
-        }
+            p_name for p_name,
+            p_props in self.params.items() if "type" not in p_props}
         if missing_types:
             msg = (
                 f"Source {self.name} has parameters that are defined in "

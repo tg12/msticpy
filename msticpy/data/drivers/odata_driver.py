@@ -98,7 +98,8 @@ class OData(DriverBase):
             cs_dict = self._parse_connection_str(connection_str)
         elif kwargs:
             cs_dict = kwargs
-            # Allow user to specify location of connection variables in config file.
+            # Allow user to specify location of connection variables in config
+            # file.
             if "app_name" in cs_dict:
                 app_config = config.settings.get(cs_dict["app_name"])
                 if not app_config:
@@ -111,7 +112,8 @@ class OData(DriverBase):
 
         # self.oauth_url and self.req_body are correctly set in concrete
         # instances __init__
-        req_url = self.oauth_url.format(tenantId=cs_dict["tenant_id"])  # type: ignore
+        req_url = self.oauth_url.format(
+            tenantId=cs_dict["tenant_id"])  # type: ignore
         req_body = dict(self.req_body)  # type: ignore
         req_body["client_id"] = cs_dict["client_id"]
         req_body["client_secret"] = cs_dict["client_secret"]
@@ -160,8 +162,8 @@ class OData(DriverBase):
             self.connect(self.current_connection)
             if not self.connected:
                 raise ConnectionError(
-                    "Source is not connected. ", "Please call connect() and retry."
-                )
+                    "Source is not connected. ",
+                    "Please call connect() and retry.")
 
         if self._debug:
             print(query)
@@ -182,11 +184,12 @@ class OData(DriverBase):
         if response.status_code != requests.codes["ok"]:
             if response.status_code == 401:
                 raise ConnectionRefusedError(
-                    "Authentication failed - possible ", "timeout. Please re-connect."
-                )
+                    "Authentication failed - possible ",
+                    "timeout. Please re-connect.")
             # Raise an exception to handle hittng API limits
             if response.status_code == 429:
-                raise ConnectionRefusedError("You have likely hit the API limit. ")
+                raise ConnectionRefusedError(
+                    "You have likely hit the API limit. ")
             response.raise_for_status()
 
         json_response = response.json()

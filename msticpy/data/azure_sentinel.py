@@ -59,7 +59,8 @@ class AzureSentinel(AzureData):
             A dictionary of workspace names and ids
 
         """
-        # If a subscription ID isn't provided try and get one from config files.
+        # If a subscription ID isn't provided try and get one from config
+        # files.
         if not sub_id:
             config = self._check_config(["subscription_id"])
             sub_id = config["subscription_id"]
@@ -77,7 +78,8 @@ class AzureSentinel(AzureData):
                 res_details = self.get_resource_details(
                     sub_id=sub_id, resource_id=wrkspace  # type: ignore
                 )
-                workspaces.append(res_details["properties"]["workspaceResourceId"])
+                workspaces.append(
+                    res_details["properties"]["workspaceResourceId"])
 
             workspaces_dict = {}
             for wrkspace in workspaces:
@@ -127,22 +129,25 @@ class AzureSentinel(AzureData):
                 ws_name = config["workspace_name"]
             res_id = f"/subscriptions/{sub_id}/resourcegroups/{res_grp}"
             res_id = (
-                res_id + "/providers/Microsoft.OperationalInsights/workspaces/{ws_name}"
-            )
+                res_id +
+                "/providers/Microsoft.OperationalInsights/workspaces/{ws_name}")
 
         url = _build_paths(res_id)
         saved_searches_url = url + _PATH_MAPPING["ss_path"]
         params = {"api-version": "2017-04-26-preview"}
 
         response = requests.get(
-            saved_searches_url, headers=_get_api_headers(self.token), params=params
-        )
+            saved_searches_url,
+            headers=_get_api_headers(
+                self.token),
+            params=params)
         if response.status_code == 200:
             queries_df = _azs_api_result_to_df(response)
         else:
             raise CloudError("Could not get alert rules.")
 
-        return queries_df[queries_df["properties.Category"] == "Hunting Queries"]
+        return queries_df[queries_df["properties.Category"]
+                          == "Hunting Queries"]
 
     def get_alert_rules(
         self,
@@ -181,16 +186,18 @@ class AzureSentinel(AzureData):
                 ws_name = config["workspace_name"]
             res_id = f"/subscriptions/{sub_id}/resourcegroups/{res_grp}"
             res_id = (
-                res_id + "/providers/Microsoft.OperationalInsights/workspaces/{ws_name}"
-            )
+                res_id +
+                "/providers/Microsoft.OperationalInsights/workspaces/{ws_name}")
 
         url = _build_paths(res_id)
         alert_rules_url = url + _PATH_MAPPING["alert_rules"]
         params = {"api-version": "2020-01-01"}
 
         response = requests.get(
-            alert_rules_url, headers=_get_api_headers(self.token), params=params
-        )
+            alert_rules_url,
+            headers=_get_api_headers(
+                self.token),
+            params=params)
         if response.status_code == 200:
             alerts_df = _azs_api_result_to_df(response)
         else:
@@ -240,8 +247,8 @@ class AzureSentinel(AzureData):
                 ws_name = config["workspace_name"]
             res_id = f"/subscriptions/{sub_id}/resourcegroups/{res_grp}"
             res_id = (
-                res_id + "/providers/Microsoft.OperationalInsights/workspaces/{ws_name}"
-            )
+                res_id +
+                "/providers/Microsoft.OperationalInsights/workspaces/{ws_name}")
 
         url = _build_paths(res_id)
         bookmarks_url = url + _PATH_MAPPING["bookmarks"]
@@ -299,8 +306,8 @@ class AzureSentinel(AzureData):
                 ws_name = config["workspace_name"]
             res_id = f"/subscriptions/{sub_id}/resourcegroups/{res_grp}"
             res_id = (
-                res_id + "/providers/Microsoft.OperationalInsights/workspaces/{ws_name}"
-            )
+                res_id +
+                "/providers/Microsoft.OperationalInsights/workspaces/{ws_name}")
         url = _build_paths(res_id)
         incidents_url = url + _PATH_MAPPING["incidents"]
         params = {"api-version": "2020-01-01"}
@@ -360,8 +367,8 @@ class AzureSentinel(AzureData):
                 ws_name = config["workspace_name"]
             res_id = f"/subscriptions/{sub_id}/resourcegroups/{res_grp}"
             res_id = (
-                res_id + "/providers/Microsoft.OperationalInsights/workspaces/{ws_name}"
-            )
+                res_id +
+                "/providers/Microsoft.OperationalInsights/workspaces/{ws_name}")
         url = _build_paths(res_id)
         incidents_url = url + _PATH_MAPPING["incidents"]
         incident_url = incidents_url + f"/{incident_id}"
@@ -372,7 +379,8 @@ class AzureSentinel(AzureData):
         if response.status_code == 200:
             incident_df = _azs_api_result_to_df(response)
         else:
-            raise CloudError(f"Could not get incident status: {response.status_code}")
+            raise CloudError(
+                f"Could not get incident status: {response.status_code}")
 
         return incident_df
 
@@ -420,18 +428,21 @@ class AzureSentinel(AzureData):
                 ws_name = config["workspace_name"]
             res_id = f"/subscriptions/{sub_id}/resourcegroups/{res_grp}"
             res_id = (
-                res_id + "/providers/Microsoft.OperationalInsights/workspaces/{ws_name}"
-            )
+                res_id +
+                "/providers/Microsoft.OperationalInsights/workspaces/{ws_name}")
 
-        incident_dets = self.get_incident(incident_id=incident_id, res_id=res_id)
+        incident_dets = self.get_incident(
+            incident_id=incident_id, res_id=res_id)
         url = _build_paths(res_id)
         incidents_url = url + _PATH_MAPPING["incidents"]
         incident_url = incidents_url + f"/{incident_id}"
         params = {"api-version": "2020-01-01"}
         if "title" not in update_items.keys():
-            update_items.update({"title": incident_dets.iloc[0]["properties.title"]})
+            update_items.update(
+                {"title": incident_dets.iloc[0]["properties.title"]})
         if "status" not in update_items.keys():
-            update_items.update({"status": incident_dets.iloc[0]["properties.status"]})
+            update_items.update(
+                {"status": incident_dets.iloc[0]["properties.status"]})
         data = _build_data(update_items, etag=incident_dets.iloc[0]["etag"])
         response = requests.put(
             incident_url,
@@ -442,7 +453,8 @@ class AzureSentinel(AzureData):
         if response.status_code == 200:
             print("Incident updated.")
         else:
-            raise CloudError(f"Could not get incident status: {response.status_code}")
+            raise CloudError(
+                f"Could not get incident status: {response.status_code}")
 
     def post_comment(
         self,
@@ -487,8 +499,8 @@ class AzureSentinel(AzureData):
                 ws_name = config["workspace_name"]
             res_id = f"/subscriptions/{sub_id}/resourcegroups/{res_grp}"
             res_id = (
-                res_id + "/providers/Microsoft.OperationalInsights/workspaces/{ws_name}"
-            )
+                res_id +
+                "/providers/Microsoft.OperationalInsights/workspaces/{ws_name}")
         url = _build_paths(res_id)
         incident_url = url + _PATH_MAPPING["incidents"]
         comment_url = incident_url + f"/{incident_id}/comments/{str(uuid4())}"
@@ -503,7 +515,8 @@ class AzureSentinel(AzureData):
         if response.status_code == 201:
             print("Comment posted.")
         else:
-            raise CloudError(f"Could not post comment: status {response.status_code}")
+            raise CloudError(
+                f"Could not post comment: status {response.status_code}")
 
     def _check_config(self, items: List) -> Dict:
         """
@@ -527,7 +540,8 @@ class AzureSentinel(AzureData):
             if item in self.config:  # type: ignore
                 config_items.update({item: self.config[item]})  # type: ignore
             else:
-                raise MsticpyAzureConfigError(f"No {item} avaliable in config.")
+                raise MsticpyAzureConfigError(
+                    f"No {item} avaliable in config.")
 
         return config_items
 
@@ -551,7 +565,8 @@ def _build_paths(resid) -> str:
 
 def _get_token(credential) -> str:
     """Extract token from a azure.identity object."""
-    token = credential.modern.get_token("https://management.azure.com/.default")
+    token = credential.modern.get_token(
+        "https://management.azure.com/.default")
     return token.token
 
 

@@ -76,7 +76,9 @@ class KeyringClient:
                     f"for {secret_name} from keyring {self.keyring}",
                 )
         if not secret and self.debug:
-            print("No credentials", f"for {secret_name} from keyring {self.keyring}")
+            print(
+                "No credentials",
+                f"for {secret_name} from keyring {self.keyring}")
         return secret
 
     def set_secret(self, secret_name: str, secret_value: Any):
@@ -133,7 +135,8 @@ class SecretsClient:
             )
         self.kv_secret_vault: Dict[str, str] = {}
         self.kv_vaults: Dict[str, BHKeyVaultClient] = {}
-        self._use_keyring = use_keyring or self._kv_settings.get("UseKeyring", False)
+        self._use_keyring = use_keyring or self._kv_settings.get(
+            "UseKeyring", False)
         if self._use_keyring:
             self._keyring_client = KeyringClient("Providers")
 
@@ -185,7 +188,8 @@ class SecretsClient:
                 # If no value, get the default VaultName from settings
                 # and use the setting path as the secret name
                 if not def_vault_name:
-                    raise ValueError("No VaultName defined in KeyVault settings.")
+                    raise ValueError(
+                        "No VaultName defined in KeyVault settings.")
                 secret_name = self.format_kv_name(setting_path)
                 return def_vault_name, secret_name
             if "/" in kv_val:
@@ -194,8 +198,8 @@ class SecretsClient:
                 return vault_name, self.format_kv_name(secret_name)
             if not def_vault_name:
                 raise MsticpyKeyVaultConfigError(
-                    "Check that you have specified the right value for VaultName"
-                    + " in your configuration",
+                    "Check that you have specified the right value for VaultName" +
+                    " in your configuration",
                     f"No VaultName defined in KeyVault settings for {setting_path}.",
                     title="Key Vault vault name not found.",
                 )
@@ -203,7 +207,11 @@ class SecretsClient:
             return def_vault_name, self.format_kv_name(kv_val)
         return None, None
 
-    def _get_secret_func(self, secret_name: str, vault_name: str) -> Callable[[], Any]:
+    def _get_secret_func(
+        self,
+        secret_name: str,
+        vault_name: str) -> Callable[[],
+                                     Any]:
         """Return a func to access a secret."""
         if self._use_keyring and self._keyring_client.get_secret(secret_name):
             return self._create_secret_func(self._keyring_client, secret_name)
@@ -216,7 +224,8 @@ class SecretsClient:
         if self._use_keyring:
             # store the secret in keyring and return an accessor
             # to the keyring value.
-            self._keyring_client.set_secret(secret_name, vault.get_secret(secret_name))
+            self._keyring_client.set_secret(
+                secret_name, vault.get_secret(secret_name))
             return self._create_secret_func(self._keyring_client, secret_name)
         # if not using Keyring - return a KeyVault accessor
         return self._create_secret_func(vault, secret_name)

@@ -107,13 +107,17 @@ class OPR(HttpProvider):
         results: List[pd.Series] = []
         if not domain_list:
             return pd.DataFrame(columns=LookupResult.column_map())
-        for item_result in self._lookup_bulk_request(domain_list):  # type: ignore
+        for item_result in self._lookup_bulk_request(
+                domain_list):  # type: ignore
             results.append(pd.Series(attr.asdict(item_result)))
 
         all_results = results + bad_requests
-        return pd.DataFrame(data=all_results).rename(columns=LookupResult.column_map())
+        return pd.DataFrame(
+            data=all_results).rename(
+            columns=LookupResult.column_map())
 
-    def parse_results(self, response: LookupResult) -> Tuple[bool, TISeverity, Any]:
+    def parse_results(
+            self, response: LookupResult) -> Tuple[bool, TISeverity, Any]:
         """
         Return the details of the response.
 
@@ -130,7 +134,8 @@ class OPR(HttpProvider):
             Object with match details
 
         """
-        if self._failed_response(response) or not isinstance(response.raw_result, dict):
+        if self._failed_response(response) or not isinstance(
+                response.raw_result, dict):
             return False, TISeverity.information, "Not found."
 
         severity = TISeverity.information
@@ -140,7 +145,9 @@ class OPR(HttpProvider):
             return self._parse_one_record(dom_record)
         return True, severity, {}
 
-    def _parse_multi_results(self, response: LookupResult) -> Iterable[LookupResult]:
+    def _parse_multi_results(
+            self,
+            response: LookupResult) -> Iterable[LookupResult]:
         """Parse details of batch response."""
         if not isinstance(response.raw_result, dict):
             new_result = LookupResult(**attr.asdict(response))
@@ -188,19 +195,22 @@ class OPR(HttpProvider):
             )
         return False, TISeverity.information, {}
 
-    def _lookup_bulk_request(self, ioc_list: Iterable[str]) -> Iterable[LookupResult]:
+    def _lookup_bulk_request(
+            self,
+            ioc_list: Iterable[str]) -> Iterable[LookupResult]:
         ioc_list = list(ioc_list)
         batch_size = 100
 
         l_len = len(ioc_list)
         for step in range(0, l_len, batch_size):
-            batch_list = ioc_list[step : (step + batch_size)]  # noqa: E203
+            batch_list = ioc_list[step: (step + batch_size)]  # noqa: E203
             for result in self._lookup_batch(batch_list):
                 yield result
 
     # pylint: disable=duplicate-code
     def _lookup_batch(self, ioc_list: list) -> Iterable[LookupResult]:
-        # build the query string manually - of the form domains[N]=domN&domains[N+1]...
+        # build the query string manually - of the form
+        # domains[N]=domN&domains[N+1]...
         qry_elements = []
         for idx, dom in zip(range(0, len(ioc_list)), ioc_list):
             qry_elements.append(f"domains[{idx}]={dom}")

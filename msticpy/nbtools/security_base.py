@@ -88,16 +88,20 @@ class SecurityBase(QueryParamProvider):
 
     def __str__(self):
         """Return string representation of object properties."""
-        str_props = [f"{prop}: {val}" for prop, val in self._source_data.items()]
+        str_props = [
+            f"{prop}: {val}" for prop,
+            val in self._source_data.items()]
 
         if self.entities:
-            str_entities = [str(ent).replace("\n", ", ") for ent in self.entities]
+            str_entities = [str(ent).replace("\n", ", ")
+                            for ent in self.entities]
             str_props += str_entities
         return "\n".join(str_props)
 
     def __repr__(self) -> str:
         """Return repr of item."""
-        params = ", ".join([f"{name}={val}" for name, val in self.properties.items()])
+        params = ", ".join(
+            [f"{name}={val}" for name, val in self.properties.items()])
         if len(params) > 80:
             params = params[:80] + "..."
         return f"{self.__class__.__name__}({params})"
@@ -277,15 +281,16 @@ class SecurityBase(QueryParamProvider):
 
             dyn_query_params = {
                 "subscription_filter": self.subscription_filter(),
-                "host_filter_eq": self.host_filter(operator="=="),
-                "host_filter_neq": self.host_filter(operator="!="),
+                "host_filter_eq": self.host_filter(
+                    operator="=="),
+                "host_filter_neq": self.host_filter(
+                    operator="!="),
                 "host_name": host_name,
                 "account_name": acct_name,
                 "process_name": proc_name,
                 "logon_session_id": self.get_logon_id(),
                 "process_id": (
-                    self.primary_process.ProcessId if self.primary_process else None
-                ),
+                    self.primary_process.ProcessId if self.primary_process else None),
                 "path_separator": path_separator,
                 "data_family": self.data_family,
                 "data_environment": self.data_environment,
@@ -317,7 +322,8 @@ class SecurityBase(QueryParamProvider):
         """Return the datetime of event."""
         return self.TimeGenerated
 
-    def get_logon_id(self, account: Account = None) -> Optional[Union[str, int]]:
+    def get_logon_id(
+            self, account: Account = None) -> Optional[Union[str, int]]:
         """
         Get the logon Id for the alert or the account, if supplied.
 
@@ -343,9 +349,8 @@ class SecurityBase(QueryParamProvider):
             if account is None or session["Account"] == account:
                 return session["SessionId"]
         if account is None:
-            for acct in [
-                e for e in self.entities if e["Type"] == "account" and "LogonId" in e
-            ]:
+            for acct in [e for e in self.entities if e["Type"]
+                         == "account" and "LogonId" in e]:
                 return acct["LogonId"]
         elif "LogonId" in account:
             return account["LogonId"]
@@ -360,7 +365,8 @@ class SecurityBase(QueryParamProvider):
                 operator, self._ids["AzSubscriptionId"]
             )
         if self.is_in_workspace:
-            return "WorkspaceId {} '{}'".format(operator, self._ids["WorkspaceId"])
+            return "WorkspaceId {} '{}'".format(
+                operator, self._ids["WorkspaceId"])
 
         # Otherwise we default to including everything
         return "true"
@@ -374,7 +380,8 @@ class SecurityBase(QueryParamProvider):
         """
         if self.primary_host:
             case_insens_op = "=~" if operator == "==" else "!~"
-            return "Computer {} '{}'".format(case_insens_op, self.primary_host.computer)
+            return "Computer {} '{}'".format(
+                case_insens_op, self.primary_host.computer)
 
         if (
             self.is_in_log_analytics
@@ -389,7 +396,8 @@ class SecurityBase(QueryParamProvider):
             and "AzureResourceId" in self._ids
             and self._ids["AzResourceId"]
         ):
-            return "AzureResourceId {} '{}'".format(operator, self._ids["AzResourceId"])
+            return "AzureResourceId {} '{}'".format(
+                operator, self._ids["AzResourceId"])
         if self.is_in_workspace and "AgendId" in self._ids and self._ids["AgentId"]:
             return "AgentId {} '{}'".format(operator, self._ids["AgentId"])
         return None
@@ -466,7 +474,8 @@ class SecurityBase(QueryParamProvider):
             html_doc = html_doc + entity_title + entity_html
         else:
             e_counts = Counter([ent["Type"] for ent in self.entities])
-            e_counts_str = ", ".join([f"{e}: {c}" for e, c in e_counts.items()])
+            e_counts_str = ", ".join(
+                [f"{e}: {c}" for e, c in e_counts.items()])
             html_doc = html_doc + f"<h3>Entity counts: </h3>{e_counts_str}"
         return html_doc
 

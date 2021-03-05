@@ -23,11 +23,17 @@ class TestUtils(unittest.TestCase):
         self.assertFalse(utils.is_not_empty(""))
         self.assertFalse(utils.is_not_empty({}))
 
-        self.assertEqual(utils.escape_windows_path("C:\\windows"), "C:\\\\windows")
+        self.assertEqual(
+            utils.escape_windows_path("C:\\windows"),
+            "C:\\\\windows")
         self.assertEqual(utils.escape_windows_path("C:/windows"), "C:/windows")
 
-        self.assertEqual(utils.unescape_windows_path("C:\\\\windows"), "C:\\windows")
-        self.assertEqual(utils.unescape_windows_path("C:/windows"), "C:/windows")
+        self.assertEqual(
+            utils.unescape_windows_path("C:\\\\windows"),
+            "C:\\windows")
+        self.assertEqual(
+            utils.unescape_windows_path("C:/windows"),
+            "C:/windows")
 
         with self.assertRaises(SystemExit):
             utils.check_py_version((4, 0))

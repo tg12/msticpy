@@ -22,17 +22,22 @@ class TestModel(unittest.TestCase):
                 Cmd("Set-User", {"Identity"}),
             ],
         ]
-        self.sessions3 = [
-            [
-                Cmd("Set-User", {"Identity": "blah"}),
-                Cmd("Set-User", {"Identity": "haha", "City": "york", "Name": "bob"}),
-            ],
-            [
-                Cmd("Set-Mailbox", {"Identity": "blah"}),
-                Cmd("Set-User", {"Identity": "blah", "City": "london"}),
-                Cmd("Set-User", {"Identity": "haha"}),
-            ],
-        ]
+        self.sessions3 = [[Cmd("Set-User",
+                               {"Identity": "blah"}),
+                           Cmd("Set-User",
+                               {"Identity": "haha",
+                                "City": "york",
+                                "Name": "bob"}),
+                           ],
+                          [Cmd("Set-Mailbox",
+                               {"Identity": "blah"}),
+                           Cmd("Set-User",
+                               {"Identity": "blah",
+                                "City": "london"}),
+                           Cmd("Set-User",
+                               {"Identity": "haha"}),
+                           ],
+                          ]
 
     def tearDown(self) -> None:
         self.sessions1 = None
@@ -42,8 +47,15 @@ class TestModel(unittest.TestCase):
     def test__init__(self):
         self.assertRaises(MsticpyException, lambda: Model(sessions=[]))
         self.assertRaises(MsticpyException, lambda: Model(sessions=[[]]))
-        self.assertRaises(MsticpyException, lambda: Model(sessions=["Set-User"]))
-        self.assertRaises(MsticpyException, lambda: Model(sessions=[["Set-User"], []]))
+        self.assertRaises(
+            MsticpyException, lambda: Model(
+                sessions=["Set-User"]))
+        self.assertRaises(
+            MsticpyException,
+            lambda: Model(
+                sessions=[
+                    ["Set-User"],
+                    []]))
         self.assertRaises(
             Exception, lambda: Model(sessions=[[{"Set-User": {"Identity"}}]])
         )
@@ -101,8 +113,9 @@ class TestModel(unittest.TestCase):
         model = Model(sessions=self.sessions1)
         model.train()
         self.assertRaises(
-            Exception, lambda: model.compute_setof_params_cond_cmd(use_geo_mean=False)
-        )
+            Exception,
+            lambda: model.compute_setof_params_cond_cmd(
+                use_geo_mean=False))
 
         model = Model(sessions=self.sessions2)
         model.train()
@@ -116,14 +129,16 @@ class TestModel(unittest.TestCase):
 
         model = Model(sessions=self.sessions3)
         self.assertRaises(
-            Exception, lambda: model.compute_setof_params_cond_cmd(use_geo_mean=False)
-        )
+            Exception,
+            lambda: model.compute_setof_params_cond_cmd(
+                use_geo_mean=False))
 
     def test_compute_scores(self):
         model = Model(sessions=self.sessions3)
         self.assertRaises(
-            MsticpyException, lambda: model.compute_scores(use_start_end_tokens=True)
-        )
+            MsticpyException,
+            lambda: model.compute_scores(
+                use_start_end_tokens=True))
 
         model.train()
         model.compute_scores(use_start_end_tokens=True)
@@ -138,7 +153,8 @@ class TestModel(unittest.TestCase):
         model = Model(sessions=self.sessions3)
         self.assertRaises(
             MsticpyException,
-            lambda: model.compute_likelihoods_of_sessions(use_start_end_tokens=True),
+            lambda: model.compute_likelihoods_of_sessions(
+                use_start_end_tokens=True),
         )
 
         model.train()

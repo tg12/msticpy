@@ -117,7 +117,8 @@ class RegisteredWidget(ABC):
             if self._id in _WIDGET_REG:
                 for attr in val_attrs:
                     if hasattr(_WIDGET_REG[self._id], attr):
-                        setattr(self, attr, getattr(_WIDGET_REG[self._id], attr))
+                        setattr(self, attr, getattr(
+                            _WIDGET_REG[self._id], attr))
             # register the current instance as the last instance
             _WIDGET_REG[self._id] = self
 
@@ -373,8 +374,9 @@ class QueryTime(RegisteredWidget):
 
         # Create widgets
         self._w_origin_dt = widgets.DatePicker(
-            description="Origin Date", disabled=False, value=self.origin_time.date()
-        )
+            description="Origin Date",
+            disabled=False,
+            value=self.origin_time.date())
         self._w_origin_tm = widgets.Text(
             description="Time (24hr)",
             disabled=False,
@@ -490,8 +492,10 @@ class QueryTime(RegisteredWidget):
     def _update_origin(self, change):
         del change
         try:
-            tm_value = datetime.strptime(self._w_origin_tm.value, "%H:%M:%S.%f").time()
-            self.origin_time = datetime.combine(self._w_origin_dt.value, tm_value)
+            tm_value = datetime.strptime(
+                self._w_origin_tm.value, "%H:%M:%S.%f").time()
+            self.origin_time = datetime.combine(
+                self._w_origin_dt.value, tm_value)
             self._time_range_change(change=None)
         except ValueError:
             pass
@@ -597,7 +601,8 @@ class SelectAlert:
 
         items = alerts[columns]
         items = items.sort_values("StartTimeUtc", ascending=True)
-        self._select_items = items.apply(self._alert_summary, axis=1).values.tolist()
+        self._select_items = items.apply(
+            self._alert_summary, axis=1).values.tolist()
 
         self.selected_alert = None
         self.alert_id = None
@@ -623,7 +628,8 @@ class SelectAlert:
         # set up observer callbacks
         self._w_filter_alerts.observe(self._update_options, names="value")
         self._w_select_alert.observe(self._select_alert, names="value")
-        self.layout = widgets.VBox([self._w_filter_alerts, self._w_select_alert])
+        self.layout = widgets.VBox(
+            [self._w_filter_alerts, self._w_select_alert])
 
         if auto_display:
             self.display()
@@ -731,9 +737,8 @@ class SelectAlert:
 
 
 # pylint: disable=too-many-instance-attributes
-@deprecated(
-    reason="Superceded by SelectAlert. Please use that version", version="0.5.2"
-)
+@deprecated(reason="Superceded by SelectAlert. Please use that version",
+            version="0.5.2")
 @export
 class AlertSelector(SelectAlert):
     """
@@ -788,9 +793,8 @@ class AlertSelector(SelectAlert):
     def display(self):
         """Display the interactive widgets."""
         self._select_top_alert()
-        display(
-            widgets.VBox([self._w_filter_alerts, self._w_select_alert, self._w_output])
-        )
+        display(widgets.VBox([self._w_filter_alerts,
+                              self._w_select_alert, self._w_output]))
 
     def _run_action(self):
         self._w_output.clear_output()
@@ -849,7 +853,12 @@ class GetEnvironmentKey(RegisteredWidget):
         self._value = ""
 
         # Call superclass to register
-        super().__init__(id_vals=[env_var, prompt], val_attrs=["_value"], **kwargs)
+        super().__init__(
+            id_vals=[
+                env_var,
+                prompt],
+            val_attrs=["_value"],
+            **kwargs)
 
         # Use the registed widget "remembered" value but if the environment
         # variable is set override with this value.
@@ -950,7 +959,12 @@ class GetText(RegisteredWidget):
         self._value = default
 
         # Call superclass to register
-        super().__init__(id_vals=[default, prompt], val_attrs=["_value"], **kwargs)
+        super().__init__(
+            id_vals=[
+                default,
+                prompt],
+            val_attrs=["_value"],
+            **kwargs)
 
         self._w_text = widgets.Text(
             value=self._value,
@@ -1065,8 +1079,8 @@ class SelectItem:
         self._display_filter = display_filter
         if display_filter:
             self._w_filter = widgets.Text(
-                value="", description="Filter:", style={"description_width": "initial"}
-            )
+                value="", description="Filter:", style={
+                    "description_width": "initial"})
 
             # set up observer callbacks
             self._w_filter.observe(self._update_options, names="value")
@@ -1090,7 +1104,8 @@ class SelectItem:
         ):
             return
         value = selection["new"]
-        self.value = self._item_dict.get(value, None) if self._item_dict else value
+        self.value = self._item_dict.get(
+            value, None) if self._item_dict else value
         if self.item_action is not None:
             self._run_action()
 
@@ -1098,8 +1113,7 @@ class SelectItem:
         """Filter the alert list by substring."""
         if change is not None and "new" in change:
             self._wgt_select.options = [
-                i for i in self._item_list if change["new"].lower() in i.lower()
-            ]
+                i for i in self._item_list if change["new"].lower() in i.lower()]
 
     def _run_action(self):
         """Run any action function and display details, if any."""
@@ -1142,7 +1156,8 @@ class SelectItem:
         self.display()
 
 
-@deprecated(reason="Superceded by SelectItem. Please use that version", version="0.5.2")
+@deprecated(reason="Superceded by SelectItem. Please use that version",
+            version="0.5.2")
 @export
 class SelectString(SelectItem):
     """
@@ -1265,14 +1280,14 @@ class SelectSubset:
 
         self.src_items = sorted(set(source_items))
         if isinstance(self.src_items[0], tuple):
-            self._src_dict = {val: (label, val) for label, val in self.src_items}
+            self._src_dict = {val: (label, val)
+                              for label, val in self.src_items}
         else:
             self._src_dict = {}
 
         w_layout = widgets.Layout(width="40%", height="200px")
-        self._source_list = widgets.SelectMultiple(
-            options=sorted(set(self.src_items)), layout=w_layout, description="Source: "
-        )
+        self._source_list = widgets.SelectMultiple(options=sorted(
+            set(self.src_items)), layout=w_layout, description="Source: ")
 
         if isinstance(default_selected, dict):
             default_selected = list(default_selected.items())
@@ -1289,8 +1304,8 @@ class SelectSubset:
         self._display_filter = display_filter
         if display_filter:
             self._w_filter = widgets.Text(
-                value="", description="Filter:", style={"description_width": "initial"}
-            )
+                value="", description="Filter:", style={
+                    "description_width": "initial"})
 
             # set up observer callbacks
             self._w_filter.observe(self._update_options, names="value")
@@ -1308,7 +1323,8 @@ class SelectSubset:
         v_box = widgets.VBox(
             [self._b_add_all, self._b_add, self._b_del, self._b_del_all]
         )
-        self.layout = widgets.HBox([self._source_list, v_box, self._select_list])
+        self.layout = widgets.HBox(
+            [self._source_list, v_box, self._select_list])
         if self._display_filter:
             self.layout = widgets.VBox([self._w_filter, self.layout])
         if auto_display:
@@ -1374,7 +1390,8 @@ class SelectSubset:
 
     def _on_btn_add_all(self, button):
         del button
-        self._select_list.options = sorted(list(set(self._source_list.options)))
+        self._select_list.options = sorted(
+            list(set(self._source_list.options)))
 
     def _on_btn_del(self, button):
         del button
@@ -1383,7 +1400,8 @@ class SelectSubset:
         cur_index = max(self._select_list.index)
         if selected_set:
             if self._src_dict:
-                # if we're working with tuples, we need to specify the tuple to remove
+                # if we're working with tuples, we need to specify the tuple to
+                # remove
                 for selected in self._select_list.value:
                     selected_set.remove(self._src_dict[selected])
             else:
@@ -1586,9 +1604,8 @@ class OptionButtons:
     @property
     def layout(self):
         """Create layout for buttons."""
-        return widgets.VBox(
-            [self._desc_label, widgets.HBox([*(self._buttons), self._timer_label])]
-        )
+        return widgets.VBox([self._desc_label, widgets.HBox(
+            [*(self._buttons), self._timer_label])])
 
     def _debug_out(self, mssg: str):
         if self._debug:

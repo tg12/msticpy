@@ -17,9 +17,8 @@ DOC_ROOT = "docs."
 HTML_PATH = "build/html"
 
 
-@pytest.mark.skipif(
-    not os.environ.get("MSTICPY_TEST_NOSKIP"), reason="Skipped for local tests."
-)
+@pytest.mark.skipif(not os.environ.get("MSTICPY_TEST_NOSKIP"),
+                    reason="Skipped for local tests.")
 def test_readme_md():
     readme_file = "README.md"
     if Path(".").absolute().joinpath(readme_file).is_file:
@@ -41,9 +40,8 @@ def test_readme_md():
     assert not page_not_found
 
 
-@pytest.mark.skipif(
-    not os.environ.get("MSTICPY_TEST_NOSKIP"), reason="Skipped for local tests."
-)
+@pytest.mark.skipif(not os.environ.get("MSTICPY_TEST_NOSKIP"),
+                    reason="Skipped for local tests.")
 def test_doc_pages_doc_links():
     results = check_docs("./docs", recurse=False)
     page_errors = []

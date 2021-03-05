@@ -196,7 +196,10 @@ Alternatively, you can pass this to the IPStackLookup class when creating it:
 >>> iplookup = IPStackLookup(api_key="your_api_key")
 """
 
-    def __init__(self, api_key: Optional[str] = None, bulk_lookup: bool = False):
+    def __init__(
+            self,
+            api_key: Optional[str] = None,
+            bulk_lookup: bool = False):
         """
         Create a new instance of IPStackLookup.
 
@@ -223,9 +226,8 @@ Alternatively, you can pass this to the IPStackLookup class when creating it:
             raise MsticpyUserConfigError(
                 self._NO_API_KEY_MSSG,
                 help_uri=(
-                    "https://msticpy.readthedocs.io/en/latest/data_acquisition/"
-                    + "GeoIPLookups.html#ipstack-geo-lookup-class"
-                ),
+                    "https://msticpy.readthedocs.io/en/latest/data_acquisition/" +
+                    "GeoIPLookups.html#ipstack-geo-lookup-class"),
                 service_uri="https://ipstack.com/product",
                 title="IPStack API key not found",
             )
@@ -279,7 +281,9 @@ Alternatively, you can pass this to the IPStackLookup class when creating it:
         output_entities = []
         for ip_loc, status in results:
             if status == 200 and "error" not in ip_loc:
-                output_entities.append(self._create_ip_entity(ip_loc, ip_entity))
+                output_entities.append(
+                    self._create_ip_entity(
+                        ip_loc, ip_entity))
             output_raw.append((ip_loc, status))
         return output_raw, output_entities
 
@@ -301,7 +305,8 @@ Alternatively, you can pass this to the IPStackLookup class when creating it:
         ip_entity.Location = geo_entity
         return ip_entity
 
-    def _submit_request(self, ip_list: List[str]) -> List[Tuple[Dict[str, str], int]]:
+    def _submit_request(
+            self, ip_list: List[str]) -> List[Tuple[Dict[str, str], int]]:
         """
         Submit the request to IPStack.
 
@@ -355,7 +360,8 @@ Alternatively, you can pass this to the IPStackLookup class when creating it:
                 )
                 response = session.get(submit_url)
                 if response.status_code == 200:
-                    ip_loc_results.append((response.json(), response.status_code))
+                    ip_loc_results.append(
+                        (response.json(), response.status_code))
                 else:
                     if response:
                         try:
@@ -388,7 +394,11 @@ class GeoLiteLookup(GeoIpLookup):
         + "edition_id=GeoLite2-City&license_key={license_key}&suffix=tar.gz"
     )
 
-    _DB_HOME = str(Path.joinpath(Path("~").expanduser(), ".msticpy", "GeoLite2"))
+    _DB_HOME = str(
+        Path.joinpath(
+            Path("~").expanduser(),
+            ".msticpy",
+            "GeoLite2"))
     _DB_ARCHIVE = "GeoLite2-City.mmdb.{rand}.tar.gz"
     _DB_FILE = "GeoLite2-City.mmdb"
 
@@ -457,20 +467,20 @@ Alternatively, you can pass this to the GeoLiteLookup class when creating it:
         self._dbfolder = str(Path(self._dbfolder).expanduser())  # type: ignore
         self._force_update = force_update
         self._auto_update = auto_update
-        self._check_and_update_db(self._dbfolder, self._force_update, self._auto_update)
+        self._check_and_update_db(
+            self._dbfolder,
+            self._force_update,
+            self._auto_update)
         self._dbpath = self._get_geoip_dbpath(self._dbfolder)
         if not self._dbpath:
             raise MsticpyUserConfigError(
                 "No usable GeoIP Database could be found.",
                 "Check that you have correctly configured the Maxmind API key.",
-                (
-                    "If you are using a custom DBFolder setting in your config, "
-                    + "check that this is a valid path."
-                ),
+                ("If you are using a custom DBFolder setting in your config, " +
+                 "check that this is a valid path."),
                 help_uri=(
-                    "https://msticpy.readthedocs.io/en/latest/data_acquisition/"
-                    + "GeoIPLookups.html#maxmind-geo-ip-lite-lookup-class"
-                ),
+                    "https://msticpy.readthedocs.io/en/latest/data_acquisition/" +
+                    "GeoIPLookups.html#maxmind-geo-ip-lite-lookup-class"),
                 service_uri="https://www.maxmind.com/en/geolite2/signup",
                 title="Maxmind GeoIP database not found",
             )
@@ -524,7 +534,8 @@ Alternatively, you can pass this to the GeoLiteLookup class when creating it:
             # Create a reader object to retrive db info and build date
             # to check age from build_epoch property.
             with geoip2.database.Reader(geoip_db_path) as reader:
-                last_mod_time = datetime.utcfromtimestamp(reader.metadata().build_epoch)
+                last_mod_time = datetime.utcfromtimestamp(
+                    reader.metadata().build_epoch)
 
             # Check for out of date DB file according to db_age
             db_age = datetime.utcnow() - last_mod_time
@@ -582,7 +593,8 @@ Alternatively, you can pass this to the GeoLiteLookup class when creating it:
             db_folder = self._DB_HOME
 
         if not Path(db_folder).exists():
-            # using makedirs to create intermediate-level dirs to contain the leaf dir
+            # using makedirs to create intermediate-level dirs to contain the
+            # leaf dir
             Path(db_folder).mkdir(exist_ok=True)
         rand_int = random.randint(10000, 99999)  # nosec
         db_archive_path = Path(db_folder).joinpath(
@@ -611,12 +623,15 @@ Alternatively, you can pass this to the GeoLiteLookup class when creating it:
             )
         # pylint: disable=broad-except
         except Exception as err:
-            warnings.warn(f"Other error occurred trying to download GeoLite DB: {err}")
+            warnings.warn(
+                f"Other error occurred trying to download GeoLite DB: {err}")
         # pylint: enable=broad-except
         else:
             try:
                 self._extract_to_folder(db_archive_path, db_folder)
-                print("Extraction complete. Local Maxmind city DB:", f"{db_file_path}")
+                print(
+                    "Extraction complete. Local Maxmind city DB:",
+                    f"{db_file_path}")
                 return True
             except PermissionError as err:
                 warnings.warn(
@@ -627,7 +642,8 @@ Alternatively, you can pass this to the GeoLiteLookup class when creating it:
             except Exception as err:  # pylint: disable=broad-except
                 # There are several exception types that might come from
                 # unpacking a tar.gz
-                warnings.warn(f"Error writing GeoIP DB file: {db_file_path} - {err}")
+                warnings.warn(
+                    f"Error writing GeoIP DB file: {db_file_path} - {err}")
         finally:
             if db_archive_path.is_file():
                 db_archive_path.unlink()
@@ -747,16 +763,27 @@ Alternatively, you can pass this to the GeoLiteLookup class when creating it:
             ip_entity = IpAddress()
             ip_entity.Address = ip_address
         geo_entity = GeoLocation()
-        geo_entity.CountryCode = geo_match.get("country", {}).get("iso_code", None)
+        geo_entity.CountryCode = geo_match.get(
+            "country", {}).get("iso_code", None)
         geo_entity.CountryName = (
             geo_match.get("country", {}).get("names", {}).get("en", None)
         )
         subdivs = geo_match.get("subdivisions", [])
         if subdivs:
             geo_entity.State = subdivs[0].get("names", {}).get("en", None)
-        geo_entity.City = geo_match.get("city", {}).get("names", {}).get("en", None)
-        geo_entity.Longitude = geo_match.get("location", {}).get("longitude", None)
-        geo_entity.Latitude = geo_match.get("location", {}).get("latitude", None)
+        geo_entity.City = geo_match.get(
+            "city",
+            {}).get(
+            "names",
+            {}).get(
+            "en",
+            None)
+        geo_entity.Longitude = geo_match.get(
+            "location", {}).get(
+            "longitude", None)
+        geo_entity.Latitude = geo_match.get(
+            "location", {}).get(
+            "latitude", None)
         ip_entity.Location = geo_entity
         return ip_entity
 

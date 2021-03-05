@@ -43,9 +43,10 @@ class Base64Magic(Magics):
     @magic_arguments.argument(
         "--out", "-o", help="The variable to return the results in"
     )
-    @magic_arguments.argument(
-        "--pretty", "-p", help="Print formatted version of output", action="store_true"
-    )
+    @magic_arguments.argument("--pretty",
+                              "-p",
+                              help="Print formatted version of output",
+                              action="store_true")
     @magic_arguments.argument(
         "--clean",
         "-c",
@@ -136,13 +137,15 @@ class IoCExtractMagic(Magics):
         args = magic_arguments.parse_argstring(self.ioc, line)
         ioc_types = None
         if args.ioc_types:
-            ioc_types = [ioc_type.strip() for ioc_type in args.ioc_types.split(",")]
+            ioc_types = [ioc_type.strip()
+                         for ioc_type in args.ioc_types.split(",")]
 
         if cell is None:
             results = self._ioc_extract.extract(src=line, ioc_types=ioc_types)
         else:
             results = self._ioc_extract.extract(src=cell, ioc_types=ioc_types)
-        iocs = [(ioc_type, list(ioc_res)) for ioc_type, ioc_res in results.items()]
+        iocs = [(ioc_type, list(ioc_res))
+                for ioc_type, ioc_res in results.items()]
 
         if args.out is not None:
             self.shell.user_ns[args.out] = results

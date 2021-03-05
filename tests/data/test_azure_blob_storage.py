@@ -13,23 +13,26 @@ import pandas as pd
 from msticpy.data.azure_blob_storage import AzureBlobStorage
 
 
-_CONTAINERS = [
-    {
-        "name": "test",
-        "last_modified": datetime.datetime(
-            2020, 11, 6, 21, 53, 33, tzinfo=datetime.timezone.utc
-        ),
-        "etag": '"0x00000000000000001"',
-        "lease": {"status": "unlocked", "state": "available", "duration": None},
-        "public_access": None,
-        "has_immutability_policy": False,
-        "deleted": None,
-        "version": None,
-        "has_legal_hold": False,
-        "metadata": None,
-        "encryption_scope": "Test",
-    }
-]
+_CONTAINERS = [{"name": "test",
+                "last_modified": datetime.datetime(2020,
+                                                   11,
+                                                   6,
+                                                   21,
+                                                   53,
+                                                   33,
+                                                   tzinfo=datetime.timezone.utc),
+                "etag": '"0x00000000000000001"',
+                "lease": {"status": "unlocked",
+                          "state": "available",
+                          "duration": None},
+                "public_access": None,
+                "has_immutability_policy": False,
+                "deleted": None,
+                "version": None,
+                "has_legal_hold": False,
+                "metadata": None,
+                "encryption_scope": "Test",
+                }]
 _BLOBS = [
     {
         "name": "test.blob",

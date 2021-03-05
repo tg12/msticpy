@@ -176,12 +176,12 @@ class Observations:
                 )
 
             core_fields = {
-                k: v for k, v in kwargs.items() if k in Observation.all_fields()
-            }
+                k: v for k,
+                v in kwargs.items() if k in Observation.all_fields()}
             new_observation = Observation(**core_fields)
             addl_fields = {
-                k: v for k, v in kwargs.items() if k not in Observation.all_fields()
-            }
+                k: v for k,
+                v in kwargs.items() if k not in Observation.all_fields()}
             # pylint: disable=no-member
             new_observation.additional_properties.update(addl_fields)
             self.observation_list[new_observation.caption] = new_observation

@@ -43,11 +43,12 @@ def test_pivot_browser(_create_pivot):
 
     browser._select["pivot_funcs"].value = "util.dns_components"
     check.is_in(
-        "Return&nbsp;components&nbsp;of&nbsp;domain", browser._html["func_help"].value
-    )
+        "Return&nbsp;components&nbsp;of&nbsp;domain",
+        browser._html["func_help"].value)
 
     browser._text["search_txt"].value = "Vir"
-    check.is_in("ti.lookup_file_hash_VirusTotal", browser._html["search_res"].value)
+    check.is_in("ti.lookup_file_hash_VirusTotal",
+                browser._html["search_res"].value)
 
     browser._btn["copy"].click()
 

@@ -47,8 +47,11 @@ def check_url(url: str) -> UrlResult:
             history_status_codes = [str(h.status_code) for h in resp.history]
             report += " [HISTORY: " + ", ".join(history_status_codes) + "]"
             result = UrlResult(
-                resp.status_code, resp.history, url, "No error. Redirect to " + resp.url
-            )
+                resp.status_code,
+                resp.history,
+                url,
+                "No error. Redirect to " +
+                resp.url)
         elif resp.status_code == 200:
             result = UrlResult(
                 resp.status_code, resp.history, url, "No error. No redirect."
@@ -250,7 +253,8 @@ def check_html_doc(
             if url_link in checked_links:
                 print("_", end="")
                 continue
-            if all_links or not top_root or (top_root.lower() not in url_link.lower()):
+            if all_links or not top_root or (
+                    top_root.lower() not in url_link.lower()):
                 print("u", end="")
                 result = check_url(url_link)
         if result:

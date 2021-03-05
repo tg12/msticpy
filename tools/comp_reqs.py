@@ -12,8 +12,8 @@ from packaging.specifiers import SpecifierSet
 
 def _add_script_args(description):
     parser = argparse.ArgumentParser(
-        description=description, formatter_class=argparse.RawDescriptionHelpFormatter
-    )
+        description=description,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("source", help="First requirements file to compare.")
     parser.add_argument("target", help="Second requirements file to compare.")
     return parser
@@ -54,7 +54,8 @@ if __name__ == "__main__":
         v2 = parse(tgt_dict[pkg][1])
         spec1 = SpecifierSet(src_dict[pkg][0] + src_dict[pkg][1])
         if v2 in spec1:
-            compat.append(f"Compatible: {pkg}, {src_dict[pkg]}, {tgt_dict[pkg]}")
+            compat.append(
+                f"Compatible: {pkg}, {src_dict[pkg]}, {tgt_dict[pkg]}")
         else:
             not_compat.append(
                 f"Not compatible: {pkg}, {src_dict[pkg]}, {tgt_dict[pkg]}"

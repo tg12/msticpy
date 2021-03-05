@@ -154,7 +154,8 @@ def plot_process_tree(
 
     data, schema, levels, n_rows = _pre_process_tree(data, schema)
     if schema is None:
-        raise ProcessTreeSchemaException("Could not infer schema from data set.")
+        raise ProcessTreeSchemaException(
+            "Could not infer schema from data set.")
 
     source = ColumnDataSource(data=data)
     # Get legend/color bar map
@@ -181,15 +182,19 @@ def plot_process_tree(
     )
 
     hover = HoverTool(
-        tooltips=_get_tool_tips(schema), formatters={"TimeGenerated": "datetime"}
-    )
+        tooltips=_get_tool_tips(schema),
+        formatters={
+            "TimeGenerated": "datetime"})
     b_plot.add_tools(hover)
 
     # dodge to align rectangle with grid
     rect_x = dodge("Level", 1.75, range=b_plot.x_range)
     rect_plot_params = dict(
-        width=3.5, height=0.95, source=source, fill_alpha=0.4, fill_color=fill_map
-    )
+        width=3.5,
+        height=0.95,
+        source=source,
+        fill_alpha=0.4,
+        fill_color=fill_map)
 
     if color_bar:
         b_plot.add_layout(color_bar, "right")
@@ -199,7 +204,10 @@ def plot_process_tree(
     if legend_col and not color_bar:
         b_plot.legend.title = legend_col
 
-    text_props = {"source": source, "text_align": "left", "text_baseline": "middle"}
+    text_props = {
+        "source": source,
+        "text_align": "left",
+        "text_baseline": "middle"}
 
     def x_dodge(x_offset):
         return dodge("Level", x_offset, range=b_plot.x_range)
@@ -207,15 +215,20 @@ def plot_process_tree(
     def y_dodge(y_offset):
         return dodge("Row", y_offset, range=b_plot.y_range)
 
+    b_plot.text(x=x_dodge(0.1), y=y_dodge(-0.2), text="cmd",
+                text_font_size="7pt", **text_props)
     b_plot.text(
-        x=x_dodge(0.1), y=y_dodge(-0.2), text="cmd", text_font_size="7pt", **text_props
-    )
+        x=x_dodge(0.1),
+        y=y_dodge(0.25),
+        text="Exe",
+        text_font_size="8pt",
+        **text_props)
     b_plot.text(
-        x=x_dodge(0.1), y=y_dodge(0.25), text="Exe", text_font_size="8pt", **text_props
-    )
-    b_plot.text(
-        x=x_dodge(1.8), y=y_dodge(0.25), text="PID", text_font_size="8pt", **text_props
-    )
+        x=x_dodge(1.8),
+        y=y_dodge(0.25),
+        text="PID",
+        text_font_size="8pt",
+        **text_props)
 
     # Plot options
     _set_plot_option_defaults(b_plot)
@@ -286,7 +299,11 @@ def _pre_process_tree(proc_tree: pd.DataFrame, schema: ProcSchema = None):
         else f"PID: 0x{int(x):x} ({int(x)})"
     )
     proc_tree["PID"] = proc_tree[schema.process_id].apply(pid_fmt)
-    return TreeResult(proc_tree=proc_tree, schema=schema, levels=levels, n_rows=n_rows)
+    return TreeResult(
+        proc_tree=proc_tree,
+        schema=schema,
+        levels=levels,
+        n_rows=n_rows)
 
 
 def _validate_plot_schema(proc_tree: pd.DataFrame, schema):
@@ -372,7 +389,8 @@ def _create_fill_map(
             source_column, palette=viridis(max(3, len(values))), factors=values
         )
     elif col_kind in ["i", "u", "f", "M"]:
-        values = [val for val in source.data[source_column] if not np.isnan(val)]
+        values = [val for val in source.data[source_column]
+                  if not np.isnan(val)]
         fill_map = linear_cmap(
             field_name=source_column,
             palette=viridis(256),
@@ -380,15 +398,23 @@ def _create_fill_map(
             high=np.max(values),
         )
         color_bar = ColorBar(
-            color_mapper=fill_map["transform"], width=8, location=(0, 0)  # type: ignore
+            # type: ignore
+            color_mapper=fill_map["transform"], width=8, location=(0, 0)
         )
     return fill_map, color_bar
 
 
 # pylint: disable=too-many-arguments
 def _create_vert_range_tool(
-    data, min_y, max_y, plot_range, width, height, x_col, y_col, fill_map="navy"
-):
+        data,
+        min_y,
+        max_y,
+        plot_range,
+        width,
+        height,
+        x_col,
+        y_col,
+        fill_map="navy"):
     """Return vertical range too for plot."""
     rng_select = figure(
         plot_width=width,

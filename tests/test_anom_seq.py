@@ -24,21 +24,29 @@ class TestAnomalous(unittest.TestCase):
                 Cmd("Set-User", {"Identity"}),
             ],
         ]
-        self.sessions3 = [
-            [
-                Cmd("Set-User", {"Identity": "blah"}),
-                Cmd("Set-User", {"Identity": "haha", "City": "york", "Name": "bob"}),
-            ],
-            [
-                Cmd("Set-Mailbox", {"Identity": "blah"}),
-                Cmd("Set-User", {"Identity": "blah", "City": "london"}),
-                Cmd("Set-User", {"Identity": "haha"}),
-            ],
-        ]
+        self.sessions3 = [[Cmd("Set-User",
+                               {"Identity": "blah"}),
+                           Cmd("Set-User",
+                               {"Identity": "haha",
+                                "City": "york",
+                                "Name": "bob"}),
+                           ],
+                          [Cmd("Set-Mailbox",
+                               {"Identity": "blah"}),
+                           Cmd("Set-User",
+                               {"Identity": "blah",
+                                "City": "london"}),
+                           Cmd("Set-User",
+                               {"Identity": "haha"}),
+                           ],
+                          ]
         self.times = [datetime(2019, 3, 1), datetime(2019, 5, 6)]
-        self.data1 = pd.DataFrame({"session": self.sessions1, "time": self.times})
-        self.data2 = pd.DataFrame({"session": self.sessions2, "time": self.times})
-        self.data3 = pd.DataFrame({"session": self.sessions3, "time": self.times})
+        self.data1 = pd.DataFrame(
+            {"session": self.sessions1, "time": self.times})
+        self.data2 = pd.DataFrame(
+            {"session": self.sessions2, "time": self.times})
+        self.data3 = pd.DataFrame(
+            {"session": self.sessions3, "time": self.times})
 
     def tearDown(self) -> None:
         self.sessions1 = None

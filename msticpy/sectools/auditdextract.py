@@ -103,7 +103,8 @@ _FIELD_DEFS: Dict[str, Dict[str, Optional[str]]] = {
 }
 
 
-def unpack_auditd(audit_str: List[Dict[str, str]]) -> Mapping[str, Mapping[str, Any]]:
+def unpack_auditd(audit_str: List[Dict[str, str]]
+                  ) -> Mapping[str, Mapping[str, Any]]:
     """
     Unpack an Audit message and returns a dictionary of fields.
 
@@ -167,7 +168,8 @@ def unpack_auditd(audit_str: List[Dict[str, str]]) -> Mapping[str, Mapping[str, 
     return event_dict
 
 
-def _extract_event(message_dict: Mapping[str, Any]) -> Tuple[str, Mapping[str, Any]]:
+def _extract_event(
+        message_dict: Mapping[str, Any]) -> Tuple[str, Mapping[str, Any]]:
     """
     Assemble discrete messages sharing the same message Id into a single event.
 
@@ -193,8 +195,9 @@ def _extract_event(message_dict: Mapping[str, Any]) -> Tuple[str, Mapping[str, A
             if mssg_type == "EXECVE":
                 args = int(proc_create_dict.get("argc", 1))
                 arg_strs = [
-                    proc_create_dict.get(f"a{arg_idx}", "") for arg_idx in range(args)
-                ]
+                    proc_create_dict.get(
+                        f"a{arg_idx}",
+                        "") for arg_idx in range(args)]
                 proc_create_dict["cmdline"] = " ".join(arg_strs)
         return "SYSCALL_EXECVE", proc_create_dict
 
@@ -244,7 +247,9 @@ def _extract_mssg_value(
             event_dict[fieldname] = value
 
 
-def _move_cols_to_front(data: pd.DataFrame, column_count: int = 1) -> pd.DataFrame:
+def _move_cols_to_front(
+        data: pd.DataFrame,
+        column_count: int = 1) -> pd.DataFrame:
     """
     Move N columns from end to front of DataFrame.
 
@@ -261,7 +266,8 @@ def _move_cols_to_front(data: pd.DataFrame, column_count: int = 1) -> pd.DataFra
         DataFrame with `column_count` columns shifted to front
 
     """
-    return data[list(data.columns[-column_count:]) + list(data.columns[:-column_count])]
+    return data[list(data.columns[-column_count:]) +
+                list(data.columns[:-column_count])]
 
 
 def extract_events_to_df(
@@ -345,8 +351,10 @@ def extract_events_to_df(
 
     # extract real timestamp from mssg_id
     tmp_df["TimeStamp"] = tmp_df.apply(
-        lambda x: datetime.utcfromtimestamp(float(x["mssg_id"].split(":")[0])), axis=1
-    )
+        lambda x: datetime.utcfromtimestamp(
+            float(
+                x["mssg_id"].split(":")[0])),
+        axis=1)
     if "TimeGenerated" in tmp_df:
         tmp_df = tmp_df.drop(["TimeGenerated"], axis=1)
     tmp_df = tmp_df.rename(columns={"TimeStamp": "TimeGenerated"}).pipe(
@@ -378,14 +386,15 @@ def get_event_subset(data: pd.DataFrame, event_type: str) -> pd.DataFrame:
         data['EventType'] == event_type
 
     """
-    return (
-        data[data["EventType"] == event_type].dropna(axis=1, how="all").infer_objects()
-    )
+    return (data[data["EventType"] == event_type].dropna(
+        axis=1, how="all").infer_objects())
 
 
 def read_from_file(
-    filepath: str, event_type: str = None, verbose: bool = False, dummy_sep: str = "\t"
-) -> pd.DataFrame:
+        filepath: str,
+        event_type: str = None,
+        verbose: bool = False,
+        dummy_sep: str = "\t") -> pd.DataFrame:
     r"""
     Extract Audit events from a log file.
 

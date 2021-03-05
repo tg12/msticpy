@@ -45,7 +45,8 @@ def extract_pkgs(req_file=None, pkg_reqs=None):
         req_match = re.match(PKG_VER_PATTERN, line)
         if not req_match:
             print(f"Failed on {line}")
-        pkg_dict[req_match.groups()[0]] = (req_match.groups()[1], req_match.groups()[2])
+        pkg_dict[req_match.groups()[0]] = (
+            req_match.groups()[1], req_match.groups()[2])
     return pkg_dict
 
 

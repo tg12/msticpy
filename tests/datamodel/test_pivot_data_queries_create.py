@@ -56,7 +56,8 @@ def test_query_functions_methods(azure_sentinel):
     """Test attributes of retrieved functions."""
     az_qry_funcs = PivotQueryFunctions(azure_sentinel)
 
-    ip_addr_q_params = list(az_qry_funcs.get_queries_and_types_for_param("ip_address"))
+    ip_addr_q_params = list(
+        az_qry_funcs.get_queries_and_types_for_param("ip_address"))
     host_queries = list(az_qry_funcs.get_queries_for_param("host_name"))
 
     check.greater_equal(len(ip_addr_q_params), 4)
@@ -130,7 +131,8 @@ def _generate_test_data(**kwargs):
         params[kword] = p_vals
 
     # Generate test DataFrame
-    list_lens = [len(value) for value in params.values() if isinstance(value, list)]
+    list_lens = [len(value)
+                 for value in params.values() if isinstance(value, list)]
     min_len = min(list_lens) if list_lens else 1
     series = []
     for row_num in range(min_len):
@@ -176,15 +178,15 @@ def test_param_and_call_wrapper(test_input, expected):
     call_data_query = _param_and_call_wrapper(
         _dummy_func, f_params, attrib_map, _get_timespan
     )
-    add_params = (
-        {expected["param"][0]: expected["param"][1]} if "param" in expected else {}
-    )
+    add_params = ({expected["param"][0]: expected["param"]
+                   [1]} if "param" in expected else {})
     result_df = call_data_query(**params, **add_params)
 
     check.equal(result_df.shape, expected["shape"])
     if add_params:
         check.is_in(expected["param"][0], result_df)
-        check.equal(result_df.iloc[0][expected["param"][0]], expected["param"][1])
+        check.equal(result_df.iloc[0]
+                    [expected["param"][0]], expected["param"][1])
         result_df = result_df.drop(columns=[expected["param"][0]])
     check.is_true(test_df.compare(result_df).empty)
 
@@ -213,9 +215,8 @@ def test_param_and_call_wrapper_df(test_input, expected):
     call_data_query = _param_and_call_wrapper(
         _dummy_func, f_params, attrib_map, _get_timespan
     )
-    add_params = (
-        {expected["param"][0]: expected["param"][1]} if "param" in expected else {}
-    )
+    add_params = ({expected["param"][0]: expected["param"]
+                   [1]} if "param" in expected else {})
     # We're only expecting column names as values for kwargs
     params = {p_name: p_name for p_name in params}
     params.update({"data": test_df})
@@ -224,7 +225,8 @@ def test_param_and_call_wrapper_df(test_input, expected):
     check.equal(result_df.shape, expected["shape"])
     if add_params:
         check.is_in(expected["param"][0], result_df)
-        check.equal(result_df.iloc[0][expected["param"][0]], expected["param"][1])
+        check.equal(result_df.iloc[0]
+                    [expected["param"][0]], expected["param"][1])
         result_df = result_df.drop(columns=[expected["param"][0]])
     check.is_true(test_df.compare(result_df).empty)
 
@@ -254,6 +256,6 @@ def test_add_queries_to_entities(entity, expected, azure_sentinel):
     for func_name in funcs:
         func = getattr(f_container, func_name)
         check.equal(
-            func.__qualname__, "_param_and_call_wrapper.<locals>.wrapped_query_func"
-        )
+            func.__qualname__,
+            "_param_and_call_wrapper.<locals>.wrapped_query_func")
         check.is_in("Parameters", func.__doc__)

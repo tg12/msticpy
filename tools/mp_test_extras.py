@@ -124,9 +124,13 @@ def _reset_pkgs():
         "list",
         "--disable-pip-version-check",
     ]
-    proc_call = subprocess.run(sp_run, shell=True, capture_output=True)  # nosec
+    proc_call = subprocess.run(
+        sp_run,
+        shell=True,
+        capture_output=True)  # nosec
     inst_pkgs = proc_call.stdout.decode("utf-8").split("\n")[2:]
-    inst_pkgs = {pkg.split()[0] for pkg in inst_pkgs if pkg and not pkg.startswith("-")}
+    inst_pkgs = {pkg.split()[0]
+                 for pkg in inst_pkgs if pkg and not pkg.startswith("-")}
     print(f"{len(inst_pkgs)} packages installed")
     remove_pkgs = inst_pkgs - set(base_pkgs)
 

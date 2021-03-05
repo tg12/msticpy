@@ -119,7 +119,11 @@ def add_unbound_pivot_function(
     """
     if pivot_reg is None:
         pivot_reg = PivotRegistration(**kwargs)
-    _add_func_to_entities(func, piv_reg=pivot_reg, container=container, **kwargs)
+    _add_func_to_entities(
+        func,
+        piv_reg=pivot_reg,
+        container=container,
+        **kwargs)
 
 
 def _read_reg_file(file_path: str):
@@ -158,9 +162,9 @@ def _add_func_to_entities(func, piv_reg, container, **kwargs):
 
         if "debug" in kwargs:
             print(
-                entity_name,
-                [func for func in dir(entity.other) if not func.startswith("_")],
-            )
+                entity_name, [
+                    func for func in dir(
+                        entity.other) if not func.startswith("_")], )
 
 
 def _get_func_from_class(src_module, namespace, piv_reg):
@@ -188,7 +192,11 @@ def _get_func_from_class(src_module, namespace, piv_reg):
 
 def _last_instance_of_type(var_type: Type, namespace: Dict[str, Any]):
     """Return the most recently created instance of type in namespace."""
-    matches = [var for _, var in namespace.items() if isinstance(var, var_type)]
+    matches = [
+        var for _,
+        var in namespace.items() if isinstance(
+            var,
+            var_type)]
     if matches:
         return matches[-1]
     return None

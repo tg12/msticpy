@@ -333,15 +333,18 @@ class AzureData:
         if resource_id is not None:
             try:
                 resource = self.resource_client.resources.get_by_id(  # type: ignore
-                    resource_id, api_version=self._get_api(resource_id, sub_id=sub_id)
+                    resource_id, api_version=self._get_api(
+                        resource_id, sub_id=sub_id)
                 )
             except AttributeError:
                 self._legacy_auth("resource_client", sub_id)
                 resource = self.resource_client.resources.get_by_id(  # type: ignore
-                    resource_id, api_version=self._get_api(resource_id, sub_id=sub_id)
+                    resource_id, api_version=self._get_api(
+                        resource_id, sub_id=sub_id)
                 )
             if resource.type == "Microsoft.Compute/virtualMachines":
-                state = self._get_compute_state(resource_id=resource_id, sub_id=sub_id)
+                state = self._get_compute_state(
+                    resource_id=resource_id, sub_id=sub_id)
             else:
                 state = None
         # If resource details are provided use get to get details
@@ -381,7 +384,8 @@ class AzureData:
                 )
             state = None
         else:
-            raise ValueError("Please provide either a resource ID or resource details")
+            raise ValueError(
+                "Please provide either a resource ID or resource details")
 
         # Parse relevent details into a dictionary to return
         resource_details = attr.asdict(
@@ -463,20 +467,20 @@ class AzureData:
 
         # Get list of API versions for the service
         try:
-            provider = self.resource_client.providers.get(namespace)  # type: ignore
+            provider = self.resource_client.providers.get(
+                namespace)  # type: ignore
         except AttributeError:
             self._legacy_auth("resource_client", sub_id)
-            provider = self.resource_client.providers.get(namespace)  # type: ignore
+            provider = self.resource_client.providers.get(
+                namespace)  # type: ignore
 
         resource_types = next(
-            (t for t in provider.resource_types if t.resource_type == service), None
-        )
+            (t for t in provider.resource_types if t.resource_type == service), None)
 
         # Get first API version that isn't in preview
         if resource_types:
             api_version = [
-                v for v in resource_types.api_versions if "preview" not in v.lower()
-            ]
+                v for v in resource_types.api_versions if "preview" not in v.lower()]
             if api_version is None or not api_version:
                 api_ver = resource_types.api_versions[0]
             else:
@@ -724,9 +728,16 @@ class AzureData:
         client = _CLIENT_MAPPING[client_name]
         if getattr(self, client_name) is None:
             if sub_id is None:
-                setattr(self, client_name, client(self.credentials.modern))  # type: ignore
+                setattr(
+                    self, client_name, client(
+                        self.credentials.modern))  # type: ignore
             else:
-                setattr(self, client_name, client(self.credentials.modern, sub_id))  # type: ignore
+                setattr(
+                    self,
+                    client_name,
+                    client(
+                        self.credentials.modern,
+                        sub_id))  # type: ignore
 
             if getattr(self, client_name) is None:
                 raise CloudError("Could not create client")
@@ -745,6 +756,13 @@ class AzureData:
         """
         client = _CLIENT_MAPPING[client_name]
         if sub_id is None:
-            setattr(self, client_name, client(self.credentials.legacy))  # type: ignore
+            setattr(
+                self, client_name, client(
+                    self.credentials.legacy))  # type: ignore
         else:
-            setattr(self, client_name, client(self.credentials.legacy, sub_id))  # type: ignore
+            setattr(
+                self,
+                client_name,
+                client(
+                    self.credentials.legacy,
+                    sub_id))  # type: ignore

@@ -30,7 +30,8 @@ _ENVIRONMENT_DRIVERS = {
 
 def import_driver(data_environment: DataEnvironment) -> type:
     """Import driver class for a data environment."""
-    mod_name, cls_name = _ENVIRONMENT_DRIVERS.get(data_environment, (None, None))
+    mod_name, cls_name = _ENVIRONMENT_DRIVERS.get(
+        data_environment, (None, None))
 
     if not (mod_name and cls_name):
         raise ValueError(

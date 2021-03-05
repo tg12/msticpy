@@ -81,8 +81,7 @@ class HostLogonSession(Entity):
                 self.StartTimeUtc = src_event["TimeGenerated"]
             self.EndTimeUtc = self.StartTimeUtc
             self.SessionId = (
-                src_event["TargetLogonId"] if "TargetLogonId" in src_event else None
-            )
+                src_event["TargetLogonId"] if "TargetLogonId" in src_event else None)
 
     @property
     def description_str(self) -> str:

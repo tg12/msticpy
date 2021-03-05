@@ -88,9 +88,8 @@ class TestAuditdExtract(unittest.TestCase):
             "Expected USER_ACCT events",
         )
 
-        for _, execve_event in output_df[output_df["EventType"] == "SYSCALL_EXECVE"][
-            1:20
-        ].iterrows():
+        for _, execve_event in output_df[output_df["EventType"]
+                                         == "SYSCALL_EXECVE"][1:20].iterrows():
             self.assertIsNotNone(execve_event.Computer)
             self.assertIsNotNone(execve_event.TimeGenerated)
             self.assertNotEqual(import_time, execve_event.TimeGenerated)
@@ -98,7 +97,8 @@ class TestAuditdExtract(unittest.TestCase):
             self.assertIsNotNone(execve_event.cmdline)
             self.assertIsNotNone(execve_event.cwd)
 
-        for _, login_event in output_df[output_df["EventType"] == "LOGIN"].iterrows():
+        for _, login_event in output_df[output_df["EventType"] == "LOGIN"].iterrows(
+        ):
             self.assertIsNotNone(login_event.Computer)
             self.assertIsNotNone(login_event.acct)
             self.assertIsNotNone(login_event.TimeGenerated)
@@ -110,7 +110,8 @@ class TestAuditdExtract(unittest.TestCase):
         self.assertIsNotNone(parsed_events)
         self.assertEqual(parsed_events.shape, (381, 97))
 
-        proc_events = get_event_subset(parsed_events, event_type="SYSCALL_EXECVE")
+        proc_events = get_event_subset(
+            parsed_events, event_type="SYSCALL_EXECVE")
         self.assertIsNotNone(proc_events)
         self.assertEqual(proc_events.shape, (78, 20))
 

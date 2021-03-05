@@ -49,8 +49,8 @@ class TestFoliumMap(unittest.TestCase):
         ip_entities = list(geo_loc_df.apply(create_ip_entity, axis=1).values)
 
         folium_map = FoliumMap(
-            width="50%", height="50%", location=(47.5982328, -122.331), zoom_start=14
-        )
+            width="50%", height="50%", location=(
+                47.5982328, -122.331), zoom_start=14)
         self.assertIsInstance(folium_map.folium_map, folium.Map)
 
         for ip in ip_entities:
@@ -99,9 +99,8 @@ class TestFoliumMap(unittest.TestCase):
         self.assertAlmostEqual(center[0], 39.847162352941176)
         self.assertAlmostEqual(center[1], -87.36079411764706)
 
-    @pytest.mark.skipif(
-        not os.environ.get("MSTICPY_TEST_NOSKIP"), reason="Skipped for local tests."
-    )
+    @pytest.mark.skipif(not os.environ.get("MSTICPY_TEST_NOSKIP"),
+                        reason="Skipped for local tests.")
     def test_folium_map_notebook(self):
         nb_path = Path(_NB_FOLDER).joinpath(_NB_NAME)
         abs_path = Path(_NB_FOLDER).absolute()
@@ -130,8 +129,7 @@ def create_ip_entity(row):
 
 def create_geo_entity(row):
     # get subset of fields for GeoLocation
-    loc_props = row[
-        ["CountryCode", "CountryName", "State", "City", "Longitude", "Latitude"]
-    ]
+    loc_props = row[["CountryCode", "CountryName",
+                     "State", "City", "Longitude", "Latitude"]]
     geo_loc = GeoLocation(**loc_props.to_dict())
     return geo_loc

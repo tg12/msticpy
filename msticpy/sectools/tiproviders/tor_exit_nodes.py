@@ -123,7 +123,8 @@ class Tor(TIProvider):
             result.details = "Not found."
         return result
 
-    def parse_results(self, response: LookupResult) -> Tuple[bool, TISeverity, Any]:
+    def parse_results(
+            self, response: LookupResult) -> Tuple[bool, TISeverity, Any]:
         """
         Return the details of the response.
 

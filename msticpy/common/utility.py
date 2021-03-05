@@ -42,7 +42,11 @@ def export(func: Callable):
 @export
 def string_empty(string: str) -> bool:
     """Return True if the input string is None or whitespace."""
-    return not (bool(string) or isinstance(string, str) and bool(string.strip()))
+    return not (
+        bool(string) or isinstance(
+            string,
+            str) and bool(
+            string.strip()))
 
 
 @export
@@ -210,13 +214,13 @@ def resolve_pkg_path(part_path: str):
     if Path(part_path).is_absolute():
         return part_path
 
-    resolved_path = str(Path(__file__).resolve().parent.parent.joinpath(part_path))
+    resolved_path = str(
+        Path(__file__).resolve().parent.parent.joinpath(part_path))
     if Path(resolved_path).exists():
         return str(resolved_path)
 
-    searched_paths = list(
-        Path(__file__).resolve().parent.parent.glob(str(Path("**").joinpath(part_path)))
-    )
+    searched_paths = list(Path(__file__).resolve().parent.parent.glob(
+        str(Path("**").joinpath(part_path))))
     if not searched_paths or len(searched_paths) > 1:
         warnings.warn(f"No path or ambiguous match for {part_path} not found")
         return None
@@ -273,7 +277,10 @@ def check_and_install_missing_packages(
 
     print("Missing packages to be installed: ", *missing_packages, sep=" ")
     if is_ipython() or force_notebook:
-        pkgbar = tqdm_notebook(missing_packages, desc="Installing...", unit="bytes")
+        pkgbar = tqdm_notebook(
+            missing_packages,
+            desc="Installing...",
+            unit="bytes")
     else:
         pkgbar = tqdm(missing_packages, desc="Installing...", unit="bytes")
 

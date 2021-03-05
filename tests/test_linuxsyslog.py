@@ -48,12 +48,14 @@ def test_host_data():
             az_net_file = os.path.join(_TEST_DATA, "az_net.csv")
             az_net_df = pd.read_csv(az_net_file)
             try:
-                host_record = ls.create_host_record(syslog_df, heartbeat_df, az_net_df)
-                assert type(host_record) == Host  # nosec
+                host_record = ls.create_host_record(
+                    syslog_df, heartbeat_df, az_net_df)
+                assert isinstance(host_record, Host)  # nosec
                 assert host_record.OSType == "Linux"  # nosec
 
             except GeoIPDatabaseException:
-                # test will fail if no GeoIP database exists or can be downloaded
+                # test will fail if no GeoIP database exists or can be
+                # downloaded
                 other_provider_settings = get_provider_settings(
                     config_section="OtherProviders"
                 ).get("GeoIPLite", {})
@@ -93,6 +95,6 @@ def test_risky_sudo_sessions():
         sudo_sessions=sudo_sessions,
     )
     assert len(output) == 2  # nosec
-    assert type(output) == dict  # nosec
+    assert isinstance(output, dict)  # nosec
     with raises(MsticpyException):
         ls.risky_sudo_sessions(sudo_sessions=sudo_sessions)

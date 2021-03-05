@@ -51,7 +51,8 @@ class UTDataDriver(DriverBase):
         del query_source, kwargs
         return pd.DataFrame(data=query, index=[0], columns=["query"])
 
-    def query_with_results(self, query: str, **kwargs) -> Tuple[pd.DataFrame, Any]:
+    def query_with_results(self, query: str, **
+                           kwargs) -> Tuple[pd.DataFrame, Any]:
         """Test method."""
         return (pd.DataFrame(data=query, index=[0], columns=["query"]), query)
 
@@ -191,12 +192,17 @@ class TestQuerySource(unittest.TestCase):
         )
         self.assertIn(check_dt_str, query)
 
-        query = q_src.create_query(formatters=kql_fmt, ip_address_list=ip_address_list)
-        check_list = ",".join([f"'{ip.strip()}'" for ip in ip_address_list.split(",")])
+        query = q_src.create_query(
+            formatters=kql_fmt,
+            ip_address_list=ip_address_list)
+        check_list = ",".join(
+            [f"'{ip.strip()}'" for ip in ip_address_list.split(",")])
         self.assertIn(check_list, query)
 
         int_list = [1, 2, 3, 4]
-        query = q_src.create_query(formatters=kql_fmt, ip_address_list=int_list)
+        query = q_src.create_query(
+            formatters=kql_fmt,
+            ip_address_list=int_list)
         check_list = ",".join([str(i) for i in int_list])
         self.assertIn(check_list, query)
 
@@ -206,7 +212,9 @@ def test_cust_formatters_splunk():
     """Test SplunkDriver formatting."""
     provider = UTDataDriver()
     provider.connect("testuri")
-    la_provider = QueryProvider(data_environment="LogAnalytics", driver=provider)
+    la_provider = QueryProvider(
+        data_environment="LogAnalytics",
+        driver=provider)
     query_sources = la_provider.query_store.data_families
 
     splunk_provider = QueryProvider(data_environment="Splunk", driver=provider)
@@ -229,9 +237,12 @@ def test_cust_formatters_splunk():
     )
     check.is_in(check_dt_str, query)
 
-    query = q_src.create_query(formatters=splunk_fmt, ip_address_list=ip_address_list)
+    query = q_src.create_query(
+        formatters=splunk_fmt,
+        ip_address_list=ip_address_list)
     # Double-quote list elements
-    check_list = ",".join([f'"{ip.strip()}"' for ip in ip_address_list.split(",")])
+    check_list = ",".join(
+        [f'"{ip.strip()}"' for ip in ip_address_list.split(",")])
     check.is_in(check_list, query)
 
     int_list = [1, 2, 3, 4]
@@ -242,6 +253,9 @@ def test_cust_formatters_splunk():
 
     # Use a splunk query to verify timeformat parameter and datetime formatting
     q_src = splunk_query_sources["SplunkGeneral"]["get_events_parameterized"]
-    query = q_src.create_query(formatters=splunk_fmt, start=test_dt, end=test_dt)
+    query = q_src.create_query(
+        formatters=splunk_fmt,
+        start=test_dt,
+        end=test_dt)
     check.is_in('timeformat="%Y-%m-%d %H:%M:%S.%6N"', query)
     check.is_in(f'earliest="{check_dt_str}"', query)

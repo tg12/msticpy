@@ -75,7 +75,8 @@ _ALERT_RULES = {
                         "groupByEntities": [],
                     },
                 },
-                "eventGroupingSettings": {"aggregationKind": "SingleAlert"},
+                "eventGroupingSettings": {
+                    "aggregationKind": "SingleAlert"},
                 "displayName": "Suspect logon from an IP address recently seen targeting a honeypot",
                 "enabled": True,
                 "description": "A successful Azure Active Directory sign-in event originates from an IP address seen accessing a storage honeybucket!",
@@ -83,9 +84,7 @@ _ALERT_RULES = {
                 "alertRuleTemplateName": None,
                 "lastModifiedUtc": "2020-04-01T15:00:57.6401532Z",
             },
-        }
-    ]
-}
+        }]}
 _BOOKMARK = {
     "value": [
         {
@@ -210,7 +209,8 @@ def test_azuresent_hunting_queries(azs_loader):
         json=_HUNTING_QUERIES,
         status=200,
     )
-    hqs = azs_loader.get_hunting_queries(sub_id="123", res_grp="RG", ws_name="WSName")
+    hqs = azs_loader.get_hunting_queries(
+        sub_id="123", res_grp="RG", ws_name="WSName")
     assert isinstance(hqs, pd.DataFrame)
     assert hqs["properties.Query"].iloc[0] == "QueryText"
 
@@ -224,7 +224,8 @@ def test_azuresent_alert_rules(azs_loader):
         json=_ALERT_RULES,
         status=200,
     )
-    alerts = azs_loader.get_alert_rules(sub_id="123", res_grp="RG", ws_name="WSName")
+    alerts = azs_loader.get_alert_rules(
+        sub_id="123", res_grp="RG", ws_name="WSName")
     assert isinstance(alerts, pd.DataFrame)
     assert alerts["properties.query"].iloc[0] == "AlertText"
 
@@ -238,7 +239,8 @@ def test_azuresent_bookmarks(azs_loader):
         json=_BOOKMARK,
         status=200,
     )
-    bkmarks = azs_loader.get_bookmarks(sub_id="123", res_grp="RG", ws_name="WSName")
+    bkmarks = azs_loader.get_bookmarks(
+        sub_id="123", res_grp="RG", ws_name="WSName")
     assert isinstance(bkmarks, pd.DataFrame)
     print(bkmarks.columns)
     assert bkmarks["name"].iloc[0] == "Bookmark Test"
@@ -253,7 +255,8 @@ def test_azuresent_incidents(azs_loader):
         json=_INCIDENT,
         status=200,
     )
-    incidents = azs_loader.get_incidents(sub_id="123", res_grp="RG", ws_name="WSName")
+    incidents = azs_loader.get_incidents(
+        sub_id="123", res_grp="RG", ws_name="WSName")
     assert isinstance(incidents, pd.DataFrame)
     assert incidents["name"].iloc[0] == "13ffba29-971c-4d70-9cb4-ddd0ec1bbb84"
     incident = azs_loader.get_incident(

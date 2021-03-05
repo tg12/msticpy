@@ -36,7 +36,9 @@ class TestEventCluster(unittest.TestCase):
         self.input_df = pd.read_csv(input_file, parse_dates=["TimeGenerated"])
 
     def test_cluster_features(self):
-        out_df = add_process_features(input_frame=self.input_df, path_separator="\\")
+        out_df = add_process_features(
+            input_frame=self.input_df,
+            path_separator="\\")
 
         # processName: the process file name (minus path)
         # commandlineLen: length of the command line
@@ -80,21 +82,35 @@ class TestEventCluster(unittest.TestCase):
             test_df.apply(lambda x: delim_count(x.input), axis=1).iloc[0], 20
         )
         self.assertEqual(
-            test_df.apply(lambda x: char_ord_score(x.input), axis=1).iloc[0], 6199.0
-        )
+            test_df.apply(
+                lambda x: char_ord_score(
+                    x.input),
+                axis=1).iloc[0],
+            6199.0)
         self.assertEqual(
-            test_df.apply(lambda x: crc32_hash(x.input), axis=1).iloc[0], 2011081507
-        )
+            test_df.apply(
+                lambda x: crc32_hash(
+                    x.input),
+                axis=1).iloc[0],
+            2011081507)
         self.assertEqual(
-            test_df.apply(lambda x: delim_hash(x.input), axis=1).iloc[0], 2337396062
-        )
+            test_df.apply(
+                lambda x: delim_hash(
+                    x.input),
+                axis=1).iloc[0],
+            2337396062)
 
     def test_clustering(self):
-        out_df = add_process_features(input_frame=self.input_df, path_separator="\\")
+        out_df = add_process_features(
+            input_frame=self.input_df,
+            path_separator="\\")
 
         output = dbcluster_events(
             data=out_df,
-            cluster_columns=["pathScore", "commandlineTokensFull", "isSystemSession"],
+            cluster_columns=[
+                "pathScore",
+                "commandlineTokensFull",
+                "isSystemSession"],
             verbose=False,
             normalize=True,
             time_column="TimeGenerated",
@@ -110,7 +126,10 @@ class TestEventCluster(unittest.TestCase):
 
         output = dbcluster_events(
             data=out_df,
-            cluster_columns=["pathHash", "commandlineTokensHash", "isSystemSession"],
+            cluster_columns=[
+                "pathHash",
+                "commandlineTokensHash",
+                "isSystemSession"],
             verbose=False,
             normalize=True,
             time_column="TimeGenerated",

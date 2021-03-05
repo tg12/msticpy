@@ -190,8 +190,8 @@ def _list_secrets(vault_name: str, confirm, **kwargs):
 
 def _add_script_args(description):
     parser = argparse.ArgumentParser(
-        description=description, formatter_class=argparse.RawDescriptionHelpFormatter
-    )
+        description=description,
+        formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument(
         "--path",
         "-p",
@@ -200,16 +200,18 @@ def _add_script_args(description):
         help="Path to msticpyconfig.yaml. Defaults to using MSTICPYCONFIG env variable.",
     )
     parser.add_argument(
-        "--vault", "-v", help="Vault name. Default taken from msticpyconfig.yaml"
-    )
+        "--vault",
+        "-v",
+        help="Vault name. Default taken from msticpyconfig.yaml")
     parser.add_argument(
         "--tenant",
         "-t",
         help="Tenant name or ID. Default taken from msticpyconfig.yaml",
     )
     parser.add_argument(
-        "--sub", "-s", help="Subscription ID. Default taken from msticpyconfig.yaml"
-    )
+        "--sub",
+        "-s",
+        help="Subscription ID. Default taken from msticpyconfig.yaml")
     parser.add_argument(
         "--group",
         "-g",
@@ -253,8 +255,9 @@ def _add_script_args(description):
         help=("Print out more details."),
     )
     parser.add_argument(
-        "--output", "-o", help=("Output file path to save updated msticpyconfig.yaml")
-    )
+        "--output",
+        "-o",
+        help=("Output file path to save updated msticpyconfig.yaml"))
     parser.add_argument(
         "--yes",
         "-y",
@@ -294,7 +297,8 @@ if __name__ == "__main__":
         sys.exit(0)
     if not args.show:
         if not args.output:
-            raise ValueError("No output file specified. --output value is required.")
+            raise ValueError(
+                "No output file specified. --output value is required.")
         _add_secrets_to_vault(
             vault_name=vault, secrets=kv_secrets, confirm=prompt, **kv_args
         )

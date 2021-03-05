@@ -65,7 +65,8 @@ class Model:
             raise MsticpyException("`sessions` should not be an empty list")
         for i, ses in enumerate(sessions):
             if not isinstance(ses, list):
-                raise MsticpyException("each session in `sessions` should be a list")
+                raise MsticpyException(
+                    "each session in `sessions` should be a list")
             if len(ses) == 0:
                 raise MsticpyException(
                     "session at index {} of `sessions` is empty. Each session "
@@ -105,7 +106,8 @@ class Model:
         self.value_probs = None
         self.value_cond_param_probs = None
 
-        self.set_params_cond_cmd_probs = dict()  # type: Dict[str, Dict[str, float]]
+        # type: Dict[str, Dict[str, float]]
+        self.set_params_cond_cmd_probs = dict()
 
         self.session_likelihoods = None
         self.session_geomean_likelihoods = None
@@ -157,14 +159,17 @@ class Model:
             raise MsticpyException(
                 "please train the model first before using this method"
             )
-        self.compute_likelihoods_of_sessions(use_start_end_tokens=use_start_end_tokens)
+        self.compute_likelihoods_of_sessions(
+            use_start_end_tokens=use_start_end_tokens)
         self.compute_geomean_lik_of_sessions()
         self.compute_rarest_windows(
-            window_len=2, use_geo_mean=False, use_start_end_tokens=use_start_end_tokens
-        )
+            window_len=2,
+            use_geo_mean=False,
+            use_start_end_tokens=use_start_end_tokens)
         self.compute_rarest_windows(
-            window_len=3, use_geo_mean=False, use_start_end_tokens=use_start_end_tokens
-        )
+            window_len=3,
+            use_geo_mean=False,
+            use_start_end_tokens=use_start_end_tokens)
 
     def _compute_counts(self):
         """
@@ -253,7 +258,8 @@ class Model:
 
         """
         if self._seq1_counts is None:
-            raise MsticpyException("Please run the _compute_counts method first.")
+            raise MsticpyException(
+                "Please run the _compute_counts method first.")
 
         if self.session_type == SessionType.cmds_only:
             seq1_counts_ls, seq2_counts_ls = cmds_only.laplace_smooth_counts(
@@ -402,7 +408,8 @@ class Model:
                     c_name = cmd.name
                     params = cmd.params
                     pars = set(cmd.params.keys())
-                    intersection_pars = pars.intersection(self.modellable_params)
+                    intersection_pars = pars.intersection(
+                        self.modellable_params)
                     key = set()
                     for par in pars:
                         if par in intersection_pars:
@@ -420,7 +427,8 @@ class Model:
                     result[c_name][tuple(key)] = prob
             self.set_params_cond_cmd_probs = result
 
-    def compute_likelihoods_of_sessions(self, use_start_end_tokens: bool = True):
+    def compute_likelihoods_of_sessions(
+            self, use_start_end_tokens: bool = True):
         """
         Compute the likelihoods for each of the sessions.
 
@@ -609,13 +617,15 @@ class Model:
             ]
 
         if use_geo_mean:
-            self.rare_windows_geo[window_len] = [rare[0] for rare in rare_tuples]
+            self.rare_windows_geo[window_len] = [rare[0]
+                                                 for rare in rare_tuples]
             self.rare_window_likelihoods_geo[window_len] = [
                 rare[1] for rare in rare_tuples
             ]
         else:
             self.rare_windows[window_len] = [rare[0] for rare in rare_tuples]
-            self.rare_window_likelihoods[window_len] = [rare[1] for rare in rare_tuples]
+            self.rare_window_likelihoods[window_len] = [
+                rare[1] for rare in rare_tuples]
 
     def _compute_probs_cmds(self):
         """Compute the individual and transition command probabilties."""
@@ -638,7 +648,8 @@ class Model:
         if self.param_counts is None:
             raise MsticpyException("param_counts attribute should not be None")
         if self.cmd_param_counts is None:
-            raise MsticpyException("cmd_param_counts attribute should not be None")
+            raise MsticpyException(
+                "cmd_param_counts attribute should not be None")
 
         param_probs, param_cond_cmd_probs = probabilities.compute_params_probs(
             param_counts=self.param_counts,
@@ -655,7 +666,8 @@ class Model:
         if self.value_counts is None:
             raise MsticpyException("value_counts attribute should not be None")
         if self.param_value_counts is None:
-            raise MsticpyException("param_value_counts attribute should not be None")
+            raise MsticpyException(
+                "param_value_counts attribute should not be None")
 
         value_probs, value_cond_param_probs = probabilities.compute_values_probs(
             value_counts=self.value_counts,

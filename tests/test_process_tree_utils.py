@@ -62,28 +62,29 @@ def test_tree_utils_win():
     assert len(children) == 13
 
     depth = full_tree["path"].str.count("/").max() + 1
-    bottom_desc = full_tree[full_tree["path"].str.count("/") == depth - 1].iloc[0]
+    bottom_desc = full_tree[full_tree["path"].str.count(
+        "/") == depth - 1].iloc[0]
 
     assert len(ptutil.get_ancestors(p_tree, bottom_desc)) == 3
 
     assert isinstance(ptutil.get_parent(p_tree, bottom_desc), pd.Series)
-    assert (
-        ptutil.get_process(p_tree, bottom_desc.name).dropna() == bottom_desc.dropna()
-    ).all()
-    assert (
-        ptutil.get_process(p_tree, bottom_desc).dropna() == bottom_desc.dropna()
-    ).all()
+    assert (ptutil.get_process(p_tree, bottom_desc.name).dropna()
+            == bottom_desc.dropna()).all()
+    assert (ptutil.get_process(p_tree, bottom_desc).dropna()
+            == bottom_desc.dropna()).all()
     assert ptutil.build_process_key(bottom_desc) == bottom_desc.name
 
-    assert (ptutil.get_root(p_tree, bottom_desc).dropna() == t_root.dropna()).all()
+    assert (
+        ptutil.get_root(
+            p_tree,
+            bottom_desc).dropna() == t_root.dropna()).all()
 
     children2 = ptutil.get_children(p_tree, t_root, include_source=False)
     assert len(children2) == len(
         ptutil.get_siblings(p_tree, children2.iloc[0], include_source=True)
     )
-    assert len(children2) == (
-        len(ptutil.get_siblings(p_tree, children2.iloc[0], include_source=False)) + 1
-    )
+    assert len(children2) == (len(ptutil.get_siblings(
+        p_tree, children2.iloc[0], include_source=False)) + 1)
     assert ptutil.get_summary_info(p_tree) == {
         "Processes": 1010,
         "RootProcesses": 10,
@@ -106,28 +107,29 @@ def test_tree_utils_lx():
     assert len(children) == 452
 
     depth = full_tree["path"].str.count("/").max() + 1
-    bottom_desc = full_tree[full_tree["path"].str.count("/") == depth - 1].iloc[0]
+    bottom_desc = full_tree[full_tree["path"].str.count(
+        "/") == depth - 1].iloc[0]
 
     assert len(ptutil.get_ancestors(p_tree_l, bottom_desc)) == 3
 
     assert isinstance(ptutil.get_parent(p_tree_l, bottom_desc), pd.Series)
-    assert (
-        ptutil.get_process(p_tree_l, bottom_desc.name).dropna() == bottom_desc.dropna()
-    ).all()
-    assert (
-        ptutil.get_process(p_tree_l, bottom_desc).dropna() == bottom_desc.dropna()
-    ).all()
+    assert (ptutil.get_process(p_tree_l, bottom_desc.name).dropna()
+            == bottom_desc.dropna()).all()
+    assert (ptutil.get_process(p_tree_l, bottom_desc).dropna()
+            == bottom_desc.dropna()).all()
     assert ptutil.build_process_key(bottom_desc) == bottom_desc.name
 
-    assert (ptutil.get_root(p_tree_l, bottom_desc).dropna() == t_root.dropna()).all()
+    assert (
+        ptutil.get_root(
+            p_tree_l,
+            bottom_desc).dropna() == t_root.dropna()).all()
 
     children2 = ptutil.get_children(p_tree_l, t_root, include_source=False)
     assert len(children2) == len(
         ptutil.get_siblings(p_tree_l, children2.iloc[0], include_source=True)
     )
-    assert len(children2) == (
-        len(ptutil.get_siblings(p_tree_l, children2.iloc[0], include_source=False)) + 1
-    )
+    assert len(children2) == (len(ptutil.get_siblings(
+        p_tree_l, children2.iloc[0], include_source=False)) + 1)
     assert ptutil.get_summary_info(p_tree_l) == {
         "Processes": 1029,
         "RootProcesses": 29,
@@ -144,9 +146,8 @@ _NB_FOLDER = "docs/notebooks"
 _NB_NAME = "ProcessTree.ipynb"
 
 
-@pytest.mark.skipif(
-    not os.environ.get("MSTICPY_TEST_NOSKIP"), reason="Skipped for local tests."
-)
+@pytest.mark.skipif(not os.environ.get("MSTICPY_TEST_NOSKIP"),
+                    reason="Skipped for local tests.")
 def test_process_tree_notebook():
     nb_path = Path(_NB_FOLDER).joinpath(_NB_NAME)
     abs_path = Path(_NB_FOLDER).absolute()

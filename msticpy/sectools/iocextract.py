@@ -43,7 +43,9 @@ def _compile_regex(regex):
     return re.compile(regex, re.I | re.X | re.M)
 
 
-IoCPattern = namedtuple("IoCPattern", ["ioc_type", "comp_regex", "priority", "group"])
+IoCPattern = namedtuple(
+    "IoCPattern", [
+        "ioc_type", "comp_regex", "priority", "group"])
 
 _RESULT_COLS = ["IoCType", "Observable", "SourceIndex", "Input"]
 
@@ -172,15 +174,22 @@ class IoCExtract:
         # MD5, SHA1, SHA256 hashes
         self.add_ioc_type(IoCType.md5_hash.name, self.MD5_REGEX, 1, "hash")
         self.add_ioc_type(IoCType.sha1_hash.name, self.SHA1_REGEX, 1, "hash")
-        self.add_ioc_type(IoCType.sha256_hash.name, self.SHA256_REGEX, 1, "hash")
+        self.add_ioc_type(
+            IoCType.sha256_hash.name,
+            self.SHA256_REGEX,
+            1,
+            "hash")
 
         self._dom_validator = DomainValidator()
         self._ignore_tld = False
 
     # Public members
     def add_ioc_type(
-        self, ioc_type: str, ioc_regex: str, priority: int = 0, group: str = None
-    ):
+            self,
+            ioc_type: str,
+            ioc_regex: str,
+            priority: int = 0,
+            group: str = None):
         """
         Add an IoC type and regular expression to use to the built-in set.
 
@@ -309,13 +318,15 @@ class IoCExtract:
             raise Exception("No source data was supplied to extract")
 
         if columns is None:
-            raise Exception("No values were supplied for the columns parameter")
+            raise Exception(
+                "No values were supplied for the columns parameter")
 
         ioc_types_to_use = self._get_ioc_types_to_use(ioc_types, include_paths)
 
         col_set = set(columns)
         if not col_set <= set(data.columns):
-            missing_cols = [elem for elem in col_set if elem not in data.columns]
+            missing_cols = [
+                elem for elem in col_set if elem not in data.columns]
             raise Exception(
                 "Source column(s) {} not found in supplied DataFrame".format(
                     ", ".join(missing_cols)
@@ -415,7 +426,8 @@ class IoCExtract:
             columns = [columns]
         col_set = set(columns)
         if not col_set <= set(data.columns):
-            missing_cols = [elem for elem in col_set if elem not in data.columns]
+            missing_cols = [
+                elem for elem in col_set if elem not in data.columns]
             raise Exception(
                 "Source column(s) {} not found in supplied DataFrame".format(
                     ", ".join(missing_cols)
@@ -581,7 +593,8 @@ class IoCExtract:
 
                 self._add_highest_pri_match(iocs_found, match_str, rgx_def)
                 if ioc_type == "url":
-                    self._check_decode_url(match_str, rgx_def, match_pos, iocs_found)
+                    self._check_decode_url(
+                        match_str, rgx_def, match_pos, iocs_found)
                 match_pos = rgx_match.end()
 
         for ioc, ioc_result in iocs_found.items():
@@ -594,7 +607,8 @@ class IoCExtract:
         decoded_url = unquote(match_str)
         for url_match in rgx_def.comp_regex.finditer(decoded_url, match_pos):
             if url_match is not None:
-                self._add_highest_pri_match(iocs_found, url_match.group(), rgx_def)
+                self._add_highest_pri_match(
+                    iocs_found, url_match.group(), rgx_def)
                 self._add_highest_pri_match(
                     iocs_found,
                     url_match.groupdict()["host"],
@@ -613,7 +627,8 @@ class IoCExtract:
         ):
             return
 
-        iocs_found[current_match] = (current_def.ioc_type, current_def.priority)
+        iocs_found[current_match] = (
+            current_def.ioc_type, current_def.priority)
 
 
 # pylint: disable=too-few-public-methods

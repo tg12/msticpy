@@ -51,7 +51,9 @@ try:
 except ImportError:
     ip_stack_cls = None
 
-pytestmark = pytest.mark.skipif(not _KQL_IMP_OK, reason="Partial msticpy install")
+pytestmark = pytest.mark.skipif(
+    not _KQL_IMP_OK,
+    reason="Partial msticpy install")
 
 
 @pytest.fixture(scope="session")
@@ -227,7 +229,9 @@ def test_pivot_time(data_providers):
     check.is_in(end.isoformat(), query)
 
 
-EntityQuery = namedtuple("EntityQuery", "entity, args, provider, pivot_func, expected")
+EntityQuery = namedtuple(
+    "EntityQuery",
+    "entity, args, provider, pivot_func, expected")
 _ENTITY_QUERIES = [
     pytest.param(
         EntityQuery(

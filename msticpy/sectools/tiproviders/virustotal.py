@@ -66,7 +66,8 @@ class VirusTotal(HttpProvider):
 
     _REQUIRED_PARAMS = ["API_KEY"]
 
-    def parse_results(self, response: LookupResult) -> Tuple[bool, TISeverity, Any]:
+    def parse_results(
+            self, response: LookupResult) -> Tuple[bool, TISeverity, Any]:
         """
         Return the details of the response.
 
@@ -83,12 +84,15 @@ class VirusTotal(HttpProvider):
             Object with match details
 
         """
-        if self._failed_response(response) or not isinstance(response.raw_result, dict):
+        if self._failed_response(response) or not isinstance(
+                response.raw_result, dict):
             return False, TISeverity.information, "Not found."
 
         result_dict = {}
-        result_dict["verbose_msg"] = response.raw_result.get("verbose_msg", None)
-        result_dict["response_code"] = response.raw_result.get("response_code", None)
+        result_dict["verbose_msg"] = response.raw_result.get(
+            "verbose_msg", None)
+        result_dict["response_code"] = response.raw_result.get(
+            "response_code", None)
 
         if response.ioc_type in [
             "url",
@@ -98,7 +102,8 @@ class VirusTotal(HttpProvider):
             "file_hash",
         ]:
             result_dict["resource"] = response.raw_result.get("resource", None)
-            result_dict["permalink"] = response.raw_result.get("permalink", None)
+            result_dict["permalink"] = response.raw_result.get(
+                "permalink", None)
             result_dict["positives"] = response.raw_result.get("positives", 0)
 
         else:

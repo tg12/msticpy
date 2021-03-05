@@ -100,18 +100,15 @@ class Process(Entity):
     def _create_from_event(self, src_event, role):
         if role == "new":
             self.ProcessId = (
-                src_event["NewProcessId"] if "NewProcessId" in src_event else None
-            )
+                src_event["NewProcessId"] if "NewProcessId" in src_event else None)
             self.CommandLine = (
-                src_event["CommandLine"] if "CommandLine" in src_event else None
-            )
+                src_event["CommandLine"] if "CommandLine" in src_event else None)
             if "TimeCreatedUtc" in src_event:
                 self.CreationTimeUtc = src_event["TimeCreatedUtc"]
             elif "TimeGenerated" in src_event:
                 self.CreationTimeUtc = src_event["TimeGenerated"]
             self.ProcessId = (
-                src_event["NewProcessId"] if "NewProcessId" in src_event else None
-            )
+                src_event["NewProcessId"] if "NewProcessId" in src_event else None)
             self.ImageFile = File(src_event=src_event, role="new")
             self.Account = Account(src_event=src_event, role="subject")
 
@@ -128,15 +125,12 @@ class Process(Entity):
             self.group = src_event["group"] if "group" in src_event else None
             self.gid = src_event["gid"] if "gid" in src_event else None
             self.effective_user = (
-                src_event["effective_user"] if "effective_user" in src_event else None
-            )
+                src_event["effective_user"] if "effective_user" in src_event else None)
             self.euid = src_event["euid"] if "euid" in src_event else None
             self.effective_group = (
-                src_event["effective_group"] if "effective_group" in src_event else None
-            )
-            self.egid = (
-                src_event["effective_group"] if "effective_group" in src_event else None
-            )
+                src_event["effective_group"] if "effective_group" in src_event else None)
+            self.egid = (src_event["effective_group"]
+                         if "effective_group" in src_event else None)
             self.cwd = src_event["cwd"] if "cwd" in src_event else None
             self.name = src_event["cwd"] if "cwd" in src_event else None
         else:

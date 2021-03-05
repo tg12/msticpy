@@ -61,8 +61,7 @@ class TestPkgConfig(unittest.TestCase):
             for path in settings["QueryDefinitions"]["Custom"]:
                 self.assertTrue(type(path), str)
                 self.assertTrue(
-                    Path(__file__).resolve().parent.parent.joinpath(path).is_dir()
-                )
+                    Path(__file__).resolve().parent.parent.joinpath(path).is_dir())
 
             # TI Providers
             self.assertGreaterEqual(len(settings["TIProviders"]), 4)
@@ -75,8 +74,8 @@ class TestPkgConfig(unittest.TestCase):
                     self.assertIsInstance(prov["Args"], dict)
                     for arg_name, arg_val in prov["Args"].items():
                         self.assertIn(
-                            arg_name, ["ApiID", "AuthKey", "WorkspaceID", "TenantID"]
-                        )
+                            arg_name, [
+                                "ApiID", "AuthKey", "WorkspaceID", "TenantID"])
                         self.assertTrue(
                             isinstance(arg_val, str)
                             or "EnvironmentVar" in arg_val
@@ -112,7 +111,9 @@ class TestPkgConfig(unittest.TestCase):
             wstest_config = WorkspaceConfig(workspace="MyTestWS")
             self.assertIn("workspace_id", wstest_config)
             self.assertIsNotNone(wstest_config["workspace_id"])
-            self.assertEqual(wstest_config["workspace_id"], _NAMED_WS["WorkspaceId"])
+            self.assertEqual(
+                wstest_config["workspace_id"],
+                _NAMED_WS["WorkspaceId"])
             self.assertIn("tenant_id", wstest_config)
             self.assertEqual(wstest_config["tenant_id"], _NAMED_WS["TenantId"])
             self.assertIsNotNone(wstest_config.code_connect_str)
@@ -125,7 +126,8 @@ class TestPkgConfig(unittest.TestCase):
             )
 
         # Fallback to config.json
-        test_config2 = Path(_TEST_DATA).joinpath("msticpyconfig-noAzSentSettings.yaml")
+        test_config2 = Path(_TEST_DATA).joinpath(
+            "msticpyconfig-noAzSentSettings.yaml")
         with custom_mp_config(test_config2):
             _NAMED_WS = {
                 "WorkspaceId": "9997809c-8142-43e1-96b3-4ad87cfe95a3",
@@ -135,7 +137,9 @@ class TestPkgConfig(unittest.TestCase):
                 wstest_config = WorkspaceConfig()
             self.assertIn("workspace_id", wstest_config)
             self.assertIsNotNone(wstest_config["workspace_id"])
-            self.assertEqual(wstest_config["workspace_id"], _NAMED_WS["WorkspaceId"])
+            self.assertEqual(
+                wstest_config["workspace_id"],
+                _NAMED_WS["WorkspaceId"])
             self.assertIn("tenant_id", wstest_config)
             self.assertEqual(wstest_config["tenant_id"], _NAMED_WS["TenantId"])
             self.assertIsNotNone(wstest_config.code_connect_str)

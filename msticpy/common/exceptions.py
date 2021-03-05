@@ -87,7 +87,8 @@ class MsticpyUserError(MsticpyException):
         # holds:
         # just strings - for simple args strings
         # tuples(str, str) - if the item is annotated as a uri or title
-        # tuple(tuple(str, str), str) - if the URI is a tuple of display_name, URI
+        # tuple(tuple(str, str), str) - if the URI is a tuple of display_name,
+        # URI
         self._output: List[
             Union[str, Tuple[str, str], Tuple[Tuple[str, str], str]]
         ] = []
@@ -103,8 +104,8 @@ class MsticpyUserError(MsticpyException):
         self._output.append((help_uri, "uri"))  # type: ignore
 
         help_args = [
-            kw_val for kw_arg, kw_val in kwargs.items() if kw_arg.endswith("_uri")
-        ]
+            kw_val for kw_arg,
+            kw_val in kwargs.items() if kw_arg.endswith("_uri")]
         if help_args:
             self._output.append("You can find other related help here:")
             for uri in help_args:
@@ -219,8 +220,8 @@ class MsticpyKeyVaultConfigError(MsticpyUserConfigError):
 
     DEF_HELP_URI = (
         "Using keyvault to store msticpy secrets",
-        "https://msticpy.readthedocs.io/en/latest/getting_started/msticpyconfig.html"
-        + "#specifying-secrets-as-key-vault-secrets",
+        "https://msticpy.readthedocs.io/en/latest/getting_started/msticpyconfig.html" +
+        "#specifying-secrets-as-key-vault-secrets",
     )
 
     def __init__(
@@ -273,8 +274,8 @@ class MsticpyAzureConfigError(MsticpyUserConfigError):
 
     DEF_HELP_URI = (
         "Using the Azure API connector",
-        "https://msticpy.readthedocs.io/en/latest/data_acquisition/AzureData.html"
-        + "#instantiating-and-connecting-with-an-azure-data-connector",
+        "https://msticpy.readthedocs.io/en/latest/data_acquisition/AzureData.html" +
+        "#instantiating-and-connecting-with-an-azure-data-connector",
     )
 
     def __init__(
@@ -337,8 +338,8 @@ class MsticpyKqlConnectionError(MsticpyUserError):
 
     DEF_HELP_URI = (
         "Connecting to Azure Sentinel",
-        "https://msticpy.readthedocs.io/en/latest/data_acquisition/DataProviders.html"
-        + "#connecting-to-an-azure-sentinel-workspace",
+        "https://msticpy.readthedocs.io/en/latest/data_acquisition/DataProviders.html" +
+        "#connecting-to-an-azure-sentinel-workspace",
     )
 
 
@@ -385,8 +386,8 @@ class MsticpyAzureConnectionError(MsticpyUserError):
 
     DEF_HELP_URI = (
         "Connecting to Azure Sentinel",
-        "https://msticpy.readthedocs.io/en/latest/data_acquisition/AzureData.html"
-        + "#instantiating-and-connecting-with-an-azure-data-connector",
+        "https://msticpy.readthedocs.io/en/latest/data_acquisition/AzureData.html" +
+        "#instantiating-and-connecting-with-an-azure-data-connector",
     )
 
 

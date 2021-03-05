@@ -49,7 +49,10 @@ _TEST_TITLE = "test error"
 
 _TEST_EX_CASES: List[Tuple] = []
 for case in USER_EX_CASES:
-    tst_kwargs = dict(help_uri=_TEST_URI, title=_TEST_TITLE, other_uri=_OTHER_URI)
+    tst_kwargs = dict(
+        help_uri=_TEST_URI,
+        title=_TEST_TITLE,
+        other_uri=_OTHER_URI)
     _TEST_EX_CASES.append((case, [_TEST_ARG], tst_kwargs))
 
 

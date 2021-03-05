@@ -129,7 +129,8 @@ def _filter_credential_warning(record) -> bool:
 
 def _filter_all_warnings(record) -> bool:
     """Filter out credential error messages."""
-    if record.name.startswith("azure.identity") and record.levelno == logging.WARNING:
+    if record.name.startswith(
+            "azure.identity") and record.levelno == logging.WARNING:
         message = record.getMessage()
         if ".get_token" in message:
             return not message

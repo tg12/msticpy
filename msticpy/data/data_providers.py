@@ -85,8 +85,8 @@ class QueryProvider:
                 driver = driver_class(**kwargs)  # type: ignore
             else:
                 raise LookupError(
-                    "Could not find suitable data provider for", f" {self.environment}"
-                )
+                    "Could not find suitable data provider for",
+                    f" {self.environment}")
 
         self._query_provider = driver
         self.all_queries = QueryContainer()
@@ -293,7 +293,8 @@ class QueryProvider:
         params, missing = extract_query_params(query_source, *args, **kwargs)
         if missing:
             query_source.help()
-            raise ValueError(f"No values found for these parameters: {missing}")
+            raise ValueError(
+                f"No values found for these parameters: {missing}")
 
         split_by = kwargs.pop("split_query_by", None)
         if split_by:
@@ -318,7 +319,8 @@ class QueryProvider:
 
         # Handle any query options passed
         query_options = self._get_query_options(params, kwargs)
-        return self._query_provider.query(query_str, query_source, **query_options)
+        return self._query_provider.query(
+            query_str, query_source, **query_options)
 
     @staticmethod
     def _get_query_options(
@@ -360,7 +362,8 @@ class QueryProvider:
                 "No valid query definition files found. ",
                 "Please check your msticpyconfig.yaml settings.",
             )
-        return QueryStore.import_files(source_path=all_query_paths, recursive=True)
+        return QueryStore.import_files(
+            source_path=all_query_paths, recursive=True)
 
     def _add_query_functions(self):
         """Add queries to the module as callable methods."""
@@ -381,8 +384,9 @@ class QueryProvider:
 
             # Create the partial function
             query_func = partial(
-                self._execute_query, query_path=query_cont_name, query_name=query_name
-            )
+                self._execute_query,
+                query_path=query_cont_name,
+                query_name=query_name)
             query_func.__doc__ = self.query_store.get_query(
                 query_path=query_cont_name, query_name=query_name
             ).create_doc_string()
@@ -453,7 +457,10 @@ class QueryProvider:
         return pd.concat(query_dfs)
 
     @staticmethod
-    def _calc_split_ranges(start: datetime, end: datetime, split_delta: pd.Timedelta):
+    def _calc_split_ranges(
+            start: datetime,
+            end: datetime,
+            split_delta: pd.Timedelta):
         """Return a list of time ranges split by `split_delta`."""
         # Use pandas date_range and split the result into 2 iterables
         s_ranges, e_ranges = tee(pd.date_range(start, end, freq=split_delta))
@@ -486,9 +493,11 @@ class QueryProvider:
     def _resolve_package_path(cls, config_path: str) -> Optional[str]:
         """Resolve path relative to current package."""
         if not Path(config_path).is_absolute():
-            config_path = str(Path(__file__).resolve().parent.joinpath(config_path))
+            config_path = str(
+                Path(__file__).resolve().parent.joinpath(config_path))
         if not Path(config_path).is_dir():
-            warnings.warn(f"Custom query definitions path {config_path} not found")
+            warnings.warn(
+                f"Custom query definitions path {config_path} not found")
             return None
         return config_path
 
@@ -498,6 +507,7 @@ class QueryProvider:
         if not Path(config_path).is_absolute():
             config_path = str(Path(config_path).resolve())
         if not Path(config_path).is_dir():
-            warnings.warn(f"Custom query definitions path {config_path} not found")
+            warnings.warn(
+                f"Custom query definitions path {config_path} not found")
             return None
         return config_path

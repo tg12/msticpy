@@ -28,7 +28,10 @@ def la_uploader(mock_put):
     response = Response()
     response.status_code = 200
     mock_put.return_value = response
-    la_uploader = LAUploader(workspace="1234", workspace_secret="password", debug=True)
+    la_uploader = LAUploader(
+        workspace="1234",
+        workspace_secret="password",
+        debug=True)
     return la_uploader
 
 
@@ -74,4 +77,5 @@ def test_upload_fails(mock_put, la_uploader):
     data = pd.read_csv(data_path)
     with pytest.raises(MsticpyConnectionError) as err:
         la_uploader.upload_df(data, "test")
-        assert "LogAnalytics data upload failed with code 503" in str(err.value)
+        assert "LogAnalytics data upload failed with code 503" in str(
+            err.value)

@@ -72,8 +72,12 @@ class Testnbtools(unittest.TestCase):
         self.assertEqual(
             DataFamily.WindowsSecurity, DataFamily.parse("WindowsSecurity")
         )
-        self.assertEqual(DataFamily.LinuxSecurity, DataFamily.parse("LinuxSecurity"))
-        self.assertEqual(DataFamily.SecurityAlert, DataFamily.parse("SecurityAlert"))
+        self.assertEqual(
+            DataFamily.LinuxSecurity,
+            DataFamily.parse("LinuxSecurity"))
+        self.assertEqual(
+            DataFamily.SecurityAlert,
+            DataFamily.parse("SecurityAlert"))
         self.assertEqual(DataFamily.WindowsSecurity, DataFamily.parse(1))
         self.assertEqual(DataFamily.LinuxSecurity, DataFamily.parse(2))
         self.assertEqual(DataFamily.SecurityAlert, DataFamily.parse(3))
@@ -84,7 +88,9 @@ class Testnbtools(unittest.TestCase):
             DataEnvironment.LogAnalytics, DataEnvironment.parse("LogAnalytics")
         )
         self.assertEqual(DataEnvironment.Kusto, DataEnvironment.parse("Kusto"))
-        self.assertEqual(DataEnvironment.LogAnalytics, DataEnvironment.parse(1))
+        self.assertEqual(
+            DataEnvironment.LogAnalytics,
+            DataEnvironment.parse(1))
         self.assertEqual(DataEnvironment.Kusto, DataEnvironment.parse(2))
 
 
