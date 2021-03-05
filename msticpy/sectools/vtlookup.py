@@ -250,14 +250,14 @@ class VTLookup:
         # to our lookup dictionary
         for k in self._get_supported_vt_ioc_types():
             self._ioc_custom_type_map[k] = k
-        for k, val in kwargs.items():
+        for k, val in list(kwargs.items()):
             if k in self._get_supported_vt_ioc_types():
                 self._ioc_custom_type_map[k] = val
 
         src_idx_col = src_index_col if src_index_col in data else None
 
         # for each ioc_type, retrieve observables from dataframe
-        for ioc_type, mapped_type in self._ioc_custom_type_map.items():
+        for ioc_type, mapped_type in list(self._ioc_custom_type_map.items()):
             input_df = data[data[type_col] == mapped_type]
             self._lookup_ioc_type(input_df, ioc_type, src_col, src_idx_col)
 
@@ -325,7 +325,7 @@ class VTLookup:
         if self._VT_TYPE_MAP[ioc_type] not in self._VT_API_TYPES:
             vt_types = {
                 k for k,
-                val in self.ioc_vt_type_mapping.items() if val is not None}
+                val in list(self.ioc_vt_type_mapping.items()) if val is not None}
             err = (
                 "IoC Type {} is recognized by VirusTotal. Valid types are [{}]".format(
                     ioc_type, ", ".join(vt_types)))
@@ -826,7 +826,7 @@ class VTLookup:
             "User-Agent": "VirusTotal",
             "Content-Type": "application/json"}
         if vt_param.headers is not None:
-            for hdr, val in vt_param.headers.items():
+            for hdr, val in list(vt_param.headers.items()):
                 headers[hdr] = val
 
         if vt_param.http_verb == "post":

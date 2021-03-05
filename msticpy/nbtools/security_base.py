@@ -90,7 +90,7 @@ class SecurityBase(QueryParamProvider):
         """Return string representation of object properties."""
         str_props = [
             f"{prop}: {val}" for prop,
-            val in self._source_data.items()]
+            val in list(self._source_data.items())]
 
         if self.entities:
             str_entities = [str(ent).replace("\n", ", ")
@@ -101,7 +101,7 @@ class SecurityBase(QueryParamProvider):
     def __repr__(self) -> str:
         """Return repr of item."""
         params = ", ".join(
-            [f"{name}={val}" for name, val in self.properties.items()])
+            [f"{name}={val}" for name, val in list(self.properties.items())])
         if len(params) > 80:
             params = params[:80] + "..."
         return f"{self.__class__.__name__}({params})"
@@ -475,7 +475,7 @@ class SecurityBase(QueryParamProvider):
         else:
             e_counts = Counter([ent["Type"] for ent in self.entities])
             e_counts_str = ", ".join(
-                [f"{e}: {c}" for e, c in e_counts.items()])
+                [f"{e}: {c}" for e, c in list(e_counts.items())])
             html_doc = html_doc + f"<h3>Entity counts: </h3>{e_counts_str}"
         return html_doc
 

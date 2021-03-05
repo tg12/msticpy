@@ -7,7 +7,7 @@
 import abc
 from typing import Tuple, Any, Dict, Union, Optional
 import re
-import urllib
+import urllib.request, urllib.parse, urllib.error
 
 import requests
 
@@ -194,10 +194,10 @@ class OData(DriverBase):
 
         json_response = response.json()
         if isinstance(json_response, int):
-            print(
+            print((
                 "Warning - query did not complete successfully.",
                 "Check returned response.",
-            )
+            ))
             return None, json_response
 
         if "Results" in json_response:

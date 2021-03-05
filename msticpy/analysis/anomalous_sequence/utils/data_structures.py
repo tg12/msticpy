@@ -45,7 +45,7 @@ class StateMatrix(dict):
             raise MsticpyException("`unk_token` should be a key in `states`")
         self.states = dict(states)
         self.unk_token = unk_token
-        for key, val in self.states.items():
+        for key, val in list(self.states.items()):
             if isinstance(val, dict):
                 self.states[key] = StateMatrix(self.states[key], unk_token)
 

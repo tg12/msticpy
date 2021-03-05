@@ -83,7 +83,7 @@ def check_conflicts(src_pkg, dest_pkg):
     conflicts = []
     compats = []
     matches = []
-    for pkg, ver in src_pkg.items():
+    for pkg, ver in list(src_pkg.items()):
         if pkg in dest_pkg:
             ver2 = dest_pkg[pkg]
             if ver[1] == dest_pkg[pkg][1]:

@@ -33,12 +33,12 @@ if __name__ == "__main__":
         latest_version = LooseVersion(latest_version)
     else:
         latest_version = max(LooseVersion(s)
-                             for s in pkg_data["releases"].keys())
+                             for s in list(pkg_data["releases"].keys()))
 
-    print(
+    print((
         "package:",
         name,
         "installed:",
         installed_version,
         "latest:",
-        latest_version)
+        latest_version))

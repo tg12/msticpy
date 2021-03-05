@@ -189,7 +189,7 @@ def create_time_period_kqlfilter(periods: Dict[datetime, datetime]) -> str:
     time_column = "TimeGenerated"
     time_brackets = [
         f"{time_column} between (datetime({start}) .. datetime({end}))"
-        for start, end in periods.items()
+        for start, end in list(periods.items())
     ]
 
     return f"| where {' or '.join(time_brackets)}"

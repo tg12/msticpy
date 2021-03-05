@@ -101,7 +101,7 @@ class Observation:
         if self.additional_properties:
             display(Markdown("### Additional Properties"))
             # pylint: disable=no-member
-            for key, val in self.additional_properties.items():
+            for key, val in list(self.additional_properties.items()):
                 display(Markdown(f"**{key}**: {val}"))
             # pylint: enable=no-member
 
@@ -139,7 +139,7 @@ class Observations:
 
     def display_observations(self):
         """Display the current observations using IPython.display."""
-        for observation in self.observation_list.values():
+        for observation in list(self.observation_list.values()):
             display(observation)
 
     def add_observation(self, observation: Observation = None, **kwargs):
@@ -168,7 +168,7 @@ class Observations:
             self.observation_list[observation.caption] = observation
         else:
             req_fields = set(Observation.required_fields())
-            missing_fields = req_fields.difference(kwargs.keys())
+            missing_fields = req_fields.difference(list(kwargs.keys()))
             if missing_fields:
                 raise ValueError(
                     "The following fields are required",
@@ -177,11 +177,11 @@ class Observations:
 
             core_fields = {
                 k: v for k,
-                v in kwargs.items() if k in Observation.all_fields()}
+                v in list(kwargs.items()) if k in Observation.all_fields()}
             new_observation = Observation(**core_fields)
             addl_fields = {
                 k: v for k,
-                v in kwargs.items() if k not in Observation.all_fields()}
+                v in list(kwargs.items()) if k not in Observation.all_fields()}
             # pylint: disable=no-member
             new_observation.additional_properties.update(addl_fields)
             self.observation_list[new_observation.caption] = new_observation

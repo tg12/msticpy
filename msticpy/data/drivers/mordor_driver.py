@@ -180,7 +180,7 @@ class MordorDriver(DriverBase):
 
     def _get_driver_queries(self):
         """Generate iterable of Mordor queries."""
-        for mdr_item in self.mordor_data.values():
+        for mdr_item in list(self.mordor_data.values()):
             for file_path in mdr_item.get_file_paths():
                 mitre_data = mdr_item.get_attacks()
                 techniques = ", ".join(
@@ -619,7 +619,7 @@ def _build_mdr_indexes(
     md_idx_techniques = defaultdict(set)
     md_idx_tactics = defaultdict(set)
 
-    for md_id, md_file in mdr_metadata.items():
+    for md_id, md_file in list(mdr_metadata.items()):
         for attack in md_file.get_attacks():
             md_idx_techniques[attack.technique].add(md_id)
             if not attack.tactics:
@@ -686,7 +686,7 @@ def download_mdr_file(
         )
         for file_name in file_names
     }
-    return pd.concat(d_frames.values())
+    return pd.concat(list(d_frames.values()))
 
 
 def _extract_zip_file_to_df(  # noqa: MC0001
@@ -719,7 +719,7 @@ def _extract_zip_file_to_df(  # noqa: MC0001
 
     """
     if not silent:
-        print("Extracting", file_name)
+        print(("Extracting", file_name))
 
     file_path = Path(save_folder).joinpath(file_name)
     if not use_cached or not file_path.is_file():
@@ -755,7 +755,7 @@ def _json_to_df(file_path, silent):
             errs.append(f"Could not parse #{line_num}: '{line}'")
     out_df = pd.DataFrame(df_list)
     if errs:
-        print(f"{len(errs)} errors detected", errs)
+        print((f"{len(errs)} errors detected", errs))
     return out_df
 
 
@@ -784,7 +784,7 @@ def search_mdr_data(mdr_data: Dict[str,
 
     """
     if terms is None:
-        return set(subset or mdr_data.keys())
+        return set(subset or list(mdr_data.keys()))
     logic = "OR"
     if "," in terms:
         search_terms = terms.split(",")
@@ -796,7 +796,7 @@ def search_mdr_data(mdr_data: Dict[str,
     results: Set[str] = set()
     for search_idx, term in enumerate(search_terms):
         item_results = set()
-        for md_id, item in mdr_data.items():
+        for md_id, item in list(mdr_data.items()):
             if subset is not None and md_id not in subset:
                 continue
             if term.strip() in str(item):
@@ -828,7 +828,7 @@ def _get_mitre_categories(uri_template: str) -> pd.DataFrame:
     categories = {"enterprise": "Enterprise", "mobile": "Mobile"}
 
     tables = []
-    for cat, cat_title in categories.items():
+    for cat, cat_title in list(categories.items()):
         try:
             tables.append(
                 pd.read_html(uri_template.format(cat=cat))[0].assign(

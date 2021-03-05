@@ -353,7 +353,7 @@ class IoCExtract:
         result_rows = []
         for col in columns:
             ioc_results = self._scan_for_iocs(datarow[col], ioc_types_to_use)
-            for result_type, result_set in ioc_results.items():
+            for result_type, result_set in list(ioc_results.items()):
                 if result_set:
                     for observable in result_set:
                         result_row = pd.Series(
@@ -552,7 +552,7 @@ class IoCExtract:
 
         # we need to select the type that is an exact match for the whole
         # observable string (_scan_for_iocs will return matching substrings)
-        for ioc_type, match_set in results.items():
+        for ioc_type, match_set in list(results.items()):
             if observable in match_set:
                 return ioc_type
 
@@ -573,7 +573,7 @@ class IoCExtract:
         iocs_found: Dict[str, Tuple[str, int]] = {}
 
         # pylint: disable=too-many-nested-blocks
-        for (ioc_type, rgx_def) in self._content_regex.items():
+        for (ioc_type, rgx_def) in list(self._content_regex.items()):
             if ioc_types and ioc_type not in ioc_types:
                 continue
 
@@ -597,7 +597,7 @@ class IoCExtract:
                         match_str, rgx_def, match_pos, iocs_found)
                 match_pos = rgx_match.end()
 
-        for ioc, ioc_result in iocs_found.items():
+        for ioc, ioc_result in list(iocs_found.items()):
             ioc_results[ioc_result[0]].add(ioc)
 
         return ioc_results

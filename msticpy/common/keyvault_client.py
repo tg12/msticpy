@@ -173,10 +173,10 @@ class BHKeyVaultClient:
             secret_bundle = self.kv_client.get_secret(name=secret_name)
         except ResourceNotFoundError as err:
             if self.debug:
-                print(
+                print((
                     "Secret: '%s' missing from vault: %s"
                     % (secret_name, self.vault_uri)
-                )
+                ))
             raise MsticpyKeyVaultMissingSecretError(
                 f"Secret name {secret_name} could not be found in {self.vault_uri}",
                 f"Provider returned: {err}",
@@ -184,9 +184,9 @@ class BHKeyVaultClient:
             ) from err
         if secret_bundle.value is None or not secret_bundle.value:
             if self.debug:
-                print(
+                print((
                     "Secret: '%s' was empty in vault %s" %
-                    (secret_name, self.vault_uri))
+                    (secret_name, self.vault_uri)))
             raise MsticpyKeyVaultMissingSecretError(
                 f"Secret name {secret_name} in {self.vault_uri}",
                 "has blank or null value.",
@@ -212,7 +212,7 @@ class BHKeyVaultClient:
 
         """
         if self.debug:
-            print("Storing %s in %s" % (secret_name, self.vault_uri))
+            print(("Storing %s in %s" % (secret_name, self.vault_uri)))
         return self.kv_client.set_secret(name=secret_name, value=value)
 
 

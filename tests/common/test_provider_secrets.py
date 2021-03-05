@@ -100,7 +100,7 @@ class _SecretClientTest:
         return sec_bundle
 
     def list_properties_of_secrets(self):
-        return self._sec_props.values()
+        return list(self._sec_props.values())
 
 
 class _KVTestSec:
@@ -121,7 +121,7 @@ class _KeyVaultVaultsMock:
         self.vaults = {}
 
     def list(self):
-        return self.vaults.values()
+        return list(self.vaults.values())
 
     def get(self, res_group, vault_name):
         return self.vaults.get(vault_name, None)
@@ -163,7 +163,7 @@ class TestSecretsConfig(unittest.TestCase):
         """Test keyring client."""
         kr_client = secret_settings.KeyringClient()
 
-        for sec_name, pwd in KV_SECRETS.items():
+        for sec_name, pwd in list(KV_SECRETS.items()):
             self.assertEqual(pwd, kr_client.get_secret(sec_name))
 
         self.assertIsNone(kr_client.get_secret("DoesntExist"))
@@ -279,7 +279,7 @@ class TestSecretsConfig(unittest.TestCase):
             sec_name = sec_id.split("/")[-1]
             self.assertIn(sec_name, KV_SECRETS)
 
-        for sec, val in KV_SECRETS.items():
+        for sec, val in list(KV_SECRETS.items()):
             kv_val = keyvault_client.get_secret(sec)
             self.assertEqual(val, kv_val)
 
@@ -367,7 +367,7 @@ class TestSecretsConfig(unittest.TestCase):
 
     def _check_provider_settings(self, sec_settings):
         prov_settings = get_provider_settings()
-        for p_name, p_settings in prov_settings.items():
+        for p_name, p_settings in list(prov_settings.items()):
             args = prov_settings[p_name].args
             if p_name == "OTX":
                 sec_value = sec_settings.read_secret(args["AuthKey"])

@@ -151,12 +151,12 @@ def draw_alert_entity_graph(
     """
     alert_node = [
         n
-        for (n, node_type) in nx.get_node_attributes(nx_graph, "node_type").items()
+        for (n, node_type) in list(nx.get_node_attributes(nx_graph, "node_type").items())
         if node_type == "alert"
     ]
     entity_nodes = [
         n
-        for (n, node_type) in nx.get_node_attributes(nx_graph, "node_type").items()
+        for (n, node_type) in list(nx.get_node_attributes(nx_graph, "node_type").items())
         if node_type == "entity"
     ]
 

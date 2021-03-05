@@ -102,7 +102,7 @@ class SecurityAlert(SecurityBase):
         if self.extended_properties:
             str_rep = [
                 f"ExtProp: {prop}: {val}"
-                for prop, val in self.extended_properties.items()
+                for prop, val in list(self.extended_properties.items())
             ]
             alert_props = alert_props + "\n" + "\n".join(str_rep)
 
@@ -121,16 +121,16 @@ class SecurityAlert(SecurityBase):
         with a reference to the entity in the dictionary.
 
         """
-        for _, entity in self._src_entities.items():
+        for _, entity in list(self._src_entities.items()):
             if not isinstance(entity, Entity):
                 continue
             # Resolve all the simple references
             ref_props = {
                 name: prop
-                for name, prop in entity.properties.items()
+                for name, prop in list(entity.properties.items())
                 if isinstance(prop, dict) and "$ref" in prop
             }
-            for prop_name, prop_val in ref_props.items():
+            for prop_name, prop_val in list(ref_props.items()):
                 entity_id = prop_val["$ref"]
                 if entity_id in self._src_entities:
                     entity[prop_name] = self._src_entities[entity_id]
@@ -140,11 +140,11 @@ class SecurityAlert(SecurityBase):
             # Resolve all the lists of references
             ref_props_multi = {
                 name: prop
-                for name, prop in entity.properties.items()
+                for name, prop in list(entity.properties.items())
                 if isinstance(prop, list)
                 and any(elem for elem in prop if "$ref" in elem)
             }
-            for prop_name, prop_val in ref_props_multi.items():
+            for prop_name, prop_val in list(ref_props_multi.items()):
                 for idx, elem in enumerate(prop_val):
                     if not isinstance(elem, dict):
                         continue
@@ -162,7 +162,7 @@ class SecurityAlert(SecurityBase):
         if isinstance(src_row.ExtendedProperties, str):
             try:
                 ext_props = json.loads(src_row["ExtendedProperties"])
-                for ent, val in ext_props.items():
+                for ent, val in list(ext_props.items()):
                     if ent in ["IpAddress", "Username"]:
                         input_entities.append({"Entity": val, "Type": ent})
             except json.JSONDecodeError:

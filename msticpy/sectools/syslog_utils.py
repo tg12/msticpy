@@ -263,8 +263,8 @@ def _normalize_to_utc(time_stamp: dt.datetime):
 def _find_risky_sudo_session(risky_actions: dict, sudo_sessions: dict):
     risky_sessions = {}
     # Determine if risky event occurs during a session time window
-    for key, value in risky_actions.items():
-        for sess_key, sess_val in sudo_sessions.items():
+    for key, value in list(risky_actions.items()):
+        for sess_key, sess_val in list(sudo_sessions.items()):
             if (
                 _normalize_to_utc(sess_val["Start"])
                 <= _normalize_to_utc(key)
@@ -280,8 +280,8 @@ def _find_suspicious_sudo_session(
     risky_sessions = {}
     # Determine if suspicious event occurs during a session time window
     for event in suspicious_actions:
-        for value in event.values():
-            for sess_key, sess_val in sudo_sessions.items():
+        for value in list(event.values()):
+            for sess_key, sess_val in list(sudo_sessions.items()):
                 if (
                     _normalize_to_utc(sess_val["Start"])
                     <= _normalize_to_utc(value[0]["TimeGenerated"].iloc[1])

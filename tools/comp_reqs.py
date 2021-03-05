@@ -47,7 +47,7 @@ if __name__ == "__main__":
     both = set(src_dict) - src_only
 
     print(f"{len(src_only)} packages missing from target.")
-    print("\n".join(sorted(src_only)))
+    print(("\n".join(sorted(src_only))))
     not_compat = []
     compat = []
     for pkg in sorted(both):
@@ -63,5 +63,5 @@ if __name__ == "__main__":
     print(
         f"Common packages: {len(compat)} compatible, {len(not_compat)} not compatible."
     )
-    print("\n".join(compat))
-    print("\n".join(not_compat))
+    print(("\n".join(compat)))
+    print(("\n".join(not_compat)))

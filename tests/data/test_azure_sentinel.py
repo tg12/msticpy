@@ -242,7 +242,7 @@ def test_azuresent_bookmarks(azs_loader):
     bkmarks = azs_loader.get_bookmarks(
         sub_id="123", res_grp="RG", ws_name="WSName")
     assert isinstance(bkmarks, pd.DataFrame)
-    print(bkmarks.columns)
+    print((bkmarks.columns))
     assert bkmarks["name"].iloc[0] == "Bookmark Test"
 
 

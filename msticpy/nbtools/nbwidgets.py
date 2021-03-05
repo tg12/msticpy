@@ -124,7 +124,7 @@ class RegisteredWidget(ABC):
 
         # if there are any notebook params relevant to this control
         if nb_params and ns:
-            for attr, nb_param in nb_params.items():
+            for attr, nb_param in list(nb_params.items()):
                 # if this doesn't have a value set explicitly or
                 # one that was recovered from the widget registry
                 # set it from the nb_param value
@@ -1310,10 +1310,10 @@ class SelectSubset:
             # set up observer callbacks
             self._w_filter.observe(self._update_options, names="value")
 
-        self._b_add_all = widgets.Button(description="Add All \u21fe")
-        self._b_add = widgets.Button(description="Add \u21fe")
-        self._b_del = widgets.Button(description="\u21fd Remove")
-        self._b_del_all = widgets.Button(description="\u21fd Remove All")
+        self._b_add_all = widgets.Button(description="Add All \\u21fe")
+        self._b_add = widgets.Button(description="Add \\u21fe")
+        self._b_del = widgets.Button(description="\\u21fd Remove")
+        self._b_del_all = widgets.Button(description="\\u21fd Remove All")
 
         self._b_add.on_click(self._on_btn_add)
         self._b_del.on_click(self._on_btn_del)

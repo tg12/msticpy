@@ -50,14 +50,14 @@ class TestIpUtils(unittest.TestCase):
 
     def test_get_ip_type(self):
 
-        for ip_type, (addr, alts) in self.IPV4.items():
-            print(addr, ip_type)
+        for ip_type, (addr, alts) in list(self.IPV4.items()):
+            print((addr, ip_type))
             if alts:
                 self.assertIn(get_ip_type(addr), alts)
             else:
                 self.assertEqual(get_ip_type(addr), ip_type)
-        for ip_type, (addr, alts) in self.IPV6.items():
-            print(addr, ip_type)
+        for ip_type, (addr, alts) in list(self.IPV6.items()):
+            print((addr, ip_type))
             if alts:
                 self.assertIn(get_ip_type(addr), alts)
             else:

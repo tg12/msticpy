@@ -60,14 +60,14 @@ class PivotQueryFunctions:
         ignore_params = set(ignore_reqd) if ignore_reqd else _DEF_IGNORE_PARAM
 
         # get the query dict for each data family
-        for family, fam_dict in self._provider.query_store.data_families.items():
+        for family, fam_dict in list(self._provider.query_store.data_families.items()):
             # for each query
-            for src_name, q_source in fam_dict.items():
+            for src_name, q_source in list(fam_dict.items()):
                 # get the set of required params
                 reqd_params = set(
                     q_source.required_params.keys()) - ignore_params
                 # add them to the param_usage attrib
-                for param, p_attrs in q_source.params.items():
+                for param, p_attrs in list(q_source.params.items()):
                     self.param_usage[param].append(
                         ParamAttrs(
                             p_attrs["type"],
@@ -89,7 +89,7 @@ class PivotQueryFunctions:
                             family,
                             bool(param in reqd_params),
                         )
-                        for param, p_attrs in q_source.params.items()
+                        for param, p_attrs in list(q_source.params.items())
                     },
                     table=q_source.params.get("table"),
                 )
@@ -271,7 +271,7 @@ def add_queries_to_entities(
 
     """
     # For each parameter in the parameter map
-    for param_name, entity_list in PARAM_ENTITY_MAP.items():
+    for param_name, entity_list in list(PARAM_ENTITY_MAP.items()):
 
         param_funcs = list(prov_qry_funcs.get_queries_for_param(param_name))
         if not (entity_list and param_funcs):
@@ -289,13 +289,13 @@ def add_queries_to_entities(
             # entities.
             param_entities = {
                 param: (ent, attr)
-                for param, ent_list in PARAM_ENTITY_MAP.items()
+                for param, ent_list in list(PARAM_ENTITY_MAP.items())
                 for ent, attr in ent_list
                 if param in func_params.all and ent == entity_cls
             }
             # Build the map of param names to entity attributes
             attr_map = {param: ent_attr for param,
-                        (_, ent_attr) in param_entities.items()}
+                        (_, ent_attr) in list(param_entities.items())}
             # Wrap the function
             cls_func = _param_and_call_wrapper(
                 func, func_params.param_attrs, attr_map, get_timespan
@@ -375,7 +375,7 @@ def _param_and_call_wrapper(
             value = args[0]
             param_dict = {
                 param: getattr(value, attrib, None)
-                for param, attrib in param_attrib_map.items()
+                for param, attrib in list(param_attrib_map.items())
                 if hasattr(value, attrib)
             }
             return exec_query_func(**param_dict, **time_params, **kwargs)
@@ -480,7 +480,7 @@ def _get_join_params(func_kwargs):
             + "Results will joined on index."
         )
     if not left_on:
-        col_keys = list(func_kwargs.keys() - {"start", "end", "data"})
+        col_keys = list(list(func_kwargs.keys()) - {"start", "end", "data"})
         if len(col_keys) == 1:
             # Only one input param so assume this is the src/left
             # join key
@@ -507,7 +507,7 @@ def _exec_query_for_df(func, func_kwargs, func_params, parent_kwargs):
         **parent_kwargs,
     )
 
-    if not df_iter_params or df_iter_params.keys() == list_params.keys():
+    if not df_iter_params or list(df_iter_params.keys()) == list(list_params.keys()):
         # If there are no iter params that are not in the list_params
         # dict - we're only using list params - we're good to go
         return func(**list_params, **func_kwargs)
@@ -519,7 +519,7 @@ def _exec_query_for_df(func, func_kwargs, func_params, parent_kwargs):
     for row_index, row in src_df[list(df_iter_params.values())].iterrows():
         # build a single-line dict of {param1: row_value1...}
         col_param_dict = {param: row[col]
-                          for param, col in df_iter_params.items()}
+                          for param, col in list(df_iter_params.items())}
         # execute the function for each input row with key-value params from
         # col-name, col-value supplied as kwargs (along with any other kwargs)
         row_res_def = func(**col_param_dict, **func_kwargs)
@@ -537,7 +537,7 @@ def _check_df_params_require_iter(
     """Return params that require iteration and those that don't."""
     list_params: Dict[str, Any] = {}
     df_iter_params: Dict[str, Any] = {}
-    for kw_name, arg in kwargs.items():
+    for kw_name, arg in list(kwargs.items()):
         if kw_name in _DEF_IGNORE_PARAM:
             continue
         if (
@@ -564,7 +564,7 @@ def _exec_query_for_values(func, func_kwargs, func_params, parent_kwargs):
         func_params, func_kwargs, **parent_kwargs
     )
 
-    if not var_iter_params or var_iter_params.keys() == simple_params.keys():
+    if not var_iter_params or list(var_iter_params.keys()) == list(simple_params.keys()):
         # If there are no iter params that are not in the simple_params
         # dict - we're only using list params - we're good to go
         return func(**simple_params, **func_kwargs)
@@ -576,7 +576,7 @@ def _exec_query_for_values(func, func_kwargs, func_params, parent_kwargs):
     # iteration so ignore these and run queries per row
     row_results = []
     # zip the value lists into tuples
-    for row in zip(*(var_iter_params.values())):
+    for row in zip(*(list(var_iter_params.values()))):
         # build a single-line dict of {param1: row_value1...}
         col_param_dict = {param: row[idx]
                           for idx, param in enumerate(var_iter_params)}
@@ -594,7 +594,7 @@ def _check_var_params_require_iter(
     """Return params that require iteration and don't."""
     simple_params: Dict[str, Any] = {}
     var_iter_params: Dict[str, Any] = {}
-    for kw_name, arg in kwargs.items():
+    for kw_name, arg in list(kwargs.items()):
         if kw_name in _DEF_IGNORE_PARAM:
             continue
         func_kwargs.pop(kw_name)

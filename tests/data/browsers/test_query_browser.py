@@ -27,10 +27,10 @@ def test_display_function(query_prov):
     disp_func = _query_display_func(query_prov)
     containers = {
         name: cont
-        for name, cont in query_prov.__dict__.items()
+        for name, cont in list(query_prov.__dict__.items())
         if isinstance(cont, QueryContainer)
     }
-    for name, container in containers.items():
+    for name, container in list(containers.items()):
         if name == "all_queries":
             continue
         for qry_name, qry_obj in container:

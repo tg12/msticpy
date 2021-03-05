@@ -57,7 +57,7 @@ class TestVTLookup(unittest.TestCase):
         for test_case in test_ips:
             result, status = preprocess_observable(test_case[1], "ipv4")
             self.assertEqual(result, test_case[2])
-            print(test_case[0], status)
+            print((test_case[0], status))
 
     def test_urlvalidation(self):
         vtlookup = VTLookup(vtkey="fake", verbosity=2)
@@ -78,7 +78,7 @@ class TestVTLookup(unittest.TestCase):
 
         for test_case in test_urls:
             result, status = preprocess_observable(test_case[1], "url")
-            print(test_case[0], status)
+            print((test_case[0], status))
             self.assertEqual(
                 result,
                 test_case[2],
@@ -102,7 +102,7 @@ class TestVTLookup(unittest.TestCase):
 
         test_df = vtlookup.results[self._TEST_COLS]
         self.assertEqual(len(test_df), 1)
-        print(test_df.T)
+        print((test_df.T))
 
         vtlookup = VTLookup(vtkey="fake", verbosity=2)
         FILE_NAME2 = path.join(_TEST_DATA, "file-multi_pos.json")
@@ -119,7 +119,7 @@ class TestVTLookup(unittest.TestCase):
 
         test_df = vtlookup.results[self._TEST_COLS]
         self.assertEqual(len(test_df), 3)
-        print(test_df.T)
+        print((test_df.T))
 
     def test_parse_url_results(self):
         vtlookup = VTLookup(vtkey="fake", verbosity=2)
@@ -137,7 +137,7 @@ class TestVTLookup(unittest.TestCase):
         )
         test_df = vtlookup.results[self._TEST_COLS]
         self.assertEqual(len(test_df), 1)
-        print(test_df.T)
+        print((test_df.T))
 
         vtlookup = VTLookup(vtkey="fake", verbosity=2)
         FILE_NAME2 = path.join(_TEST_DATA, "url_neg.json")
@@ -153,7 +153,7 @@ class TestVTLookup(unittest.TestCase):
         )
         test_df = vtlookup.results[self._TEST_COLS]
         self.assertEqual(len(test_df), 1)
-        print(test_df.T)
+        print((test_df.T))
 
     def test_parse_domain_results(self):
         vtlookup = VTLookup(vtkey="fake", verbosity=2)
@@ -176,7 +176,7 @@ class TestVTLookup(unittest.TestCase):
         self.assertGreater(len(test_df[["DetectedUrls"]].values), 0)
         self.assertGreater(test_df[["Positives"]].values, 0)
 
-        print(test_df.T)
+        print((test_df.T))
 
         vtlookup = VTLookup(vtkey="fake", verbosity=2)
         FILE_NAME2 = path.join(_TEST_DATA, "domain_neg.json")
@@ -194,7 +194,7 @@ class TestVTLookup(unittest.TestCase):
         self.assertEqual(len(test_df), 1)
         self.assertGreater(len(test_df[["ResolvedIPs"]].values), 0)
         self.assertGreater(len(test_df[["DetectedUrls"]].values), 0)
-        print(test_df.T)
+        print((test_df.T))
 
     def test_parse_ip_results(self):
         vtlookup = VTLookup(vtkey="fake", verbosity=2)
@@ -215,7 +215,7 @@ class TestVTLookup(unittest.TestCase):
         self.assertGreater(len(test_df[["ResolvedDomains"]].values), 0)
         self.assertGreater(len(test_df[["DetectedUrls"]].values), 0)
         self.assertGreater(test_df[["Positives"]].values, 0)
-        print(test_df.T)
+        print((test_df.T))
 
         vtlookup = VTLookup(vtkey="fake", verbosity=2)
         FILE_NAME2 = path.join(_TEST_DATA, "ip-address_neg.json")
@@ -233,7 +233,7 @@ class TestVTLookup(unittest.TestCase):
         self.assertEqual(len(test_df), 1)
         self.assertGreater(len(test_df[["ResolvedDomains"]].values), 0)
         self.assertEqual(test_df[["Positives"]].values, 0)
-        print(test_df.T)
+        print((test_df.T))
 
 
 if __name__ == "__main__":

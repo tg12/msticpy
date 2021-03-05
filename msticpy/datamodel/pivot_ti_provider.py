@@ -47,14 +47,14 @@ def add_ioc_queries_to_entities(
 
     """
     ioc_queries = create_ti_pivot_funcs(ti_lookup)
-    for ioc, ioc_funcs in ioc_queries.items():
+    for ioc, ioc_funcs in list(ioc_queries.items()):
         if "debug" in kwargs:
-            print(ioc, ioc_funcs)
+            print((ioc, ioc_funcs))
         entity, _ = TI_ENTITY_ATTRIBS[ioc]
         if entity:
-            for f_name, func in ioc_funcs.items():
+            for f_name, func in list(ioc_funcs.items()):
                 if "debug" in kwargs:
-                    print(ioc, f_name, func)
+                    print((ioc, f_name, func))
                 query_container = getattr(entity, container, None)
                 if not query_container:
                     query_container = QueryContainer()
@@ -77,7 +77,7 @@ def create_ti_pivot_funcs(ti_lookup: TILookup):
 
     # Add functions for provider-specific lookup function names
     # These have a "_provider_name" suffix
-    for prov, ioc_set in ioc_type_supp.items():
+    for prov, ioc_set in list(ioc_type_supp.items()):
         for ioc in ioc_set:
             ioc_name = _merged_ip_ioc_type(
                 ioc, ti_lookup.loaded_providers.get(prov))
@@ -93,7 +93,7 @@ def create_ti_pivot_funcs(ti_lookup: TILookup):
 def _get_supported_ioc_types(ti_lookup: TILookup) -> Dict[str, Set[str]]:
     return {
         ti_prov_name: set(ti_prov.supported_types) & IOC_TYPES
-        for ti_prov_name, ti_prov in ti_lookup.loaded_providers.items()
+        for ti_prov_name, ti_prov in list(ti_lookup.loaded_providers.items())
     }
 
 
@@ -150,7 +150,7 @@ def _get_non_ip_functions(ioc_type_supp, ti_lookup):
     for ioc in IOC_TYPES - {"ipv4", "ipv6"}:
         supporting_provs = [
             prov for prov,
-            supp_types in ioc_type_supp.items() if ioc in supp_types]
+            supp_types in list(ioc_type_supp.items()) if ioc in supp_types]
         _, func_name, func = _create_lookup_func(
             ti_lookup, ioc, ioc, supporting_provs)
         ioc_queries[ioc][func_name] = func
@@ -167,7 +167,7 @@ def _get_ip_functions(ioc_type_supp, ti_lookup):
     ip_types = {"ipv4", "ipv6"}
     ip_all_provs = [
         prov for prov,
-        supp_types in ioc_type_supp.items() if ip_types & supp_types]
+        supp_types in list(ioc_type_supp.items()) if ip_types & supp_types]
 
     # Register providers where IP v4 and v6 are equivalent, or only support
     # ipv4, as "ip"

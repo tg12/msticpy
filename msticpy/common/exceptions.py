@@ -105,7 +105,7 @@ class MsticpyUserError(MsticpyException):
 
         help_args = [
             kw_val for kw_arg,
-            kw_val in kwargs.items() if kw_arg.endswith("_uri")]
+            kw_val in list(kwargs.items()) if kw_arg.endswith("_uri")]
         if help_args:
             self._output.append("You can find other related help here:")
             for uri in help_args:
@@ -164,9 +164,9 @@ class MsticpyUserError(MsticpyException):
             if isinstance(line, tuple):
                 l_content, l_type = line
                 if l_type == "title":
-                    print("-" * len(l_content))
+                    print(("-" * len(l_content)))
                     print(l_content)
-                    print("-" * len(l_content))
+                    print(("-" * len(l_content)))
                 elif l_type == "uri":
                     if isinstance(l_content, tuple):
                         print(f" - {': '.join(l_content)}")

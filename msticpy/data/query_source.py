@@ -170,7 +170,7 @@ class QuerySource:
         """
         return {
             p_key: p_props
-            for p_key, p_props in self.params.items()
+            for p_key, p_props in list(self.params.items())
             if "default" in p_props
         }
 
@@ -187,7 +187,7 @@ class QuerySource:
         """
         return {
             p_key: p_props
-            for p_key, p_props in self.params.items()
+            for p_key, p_props in list(self.params.items())
             if "default" not in p_props
         }
 
@@ -242,11 +242,11 @@ class QuerySource:
             name: value.get(
                 "default",
                 None) for name,
-            value in self.params.items()}
+            value in list(self.params.items())}
 
         param_dict.update(self.resolve_param_aliases(kwargs))
         missing_params = {
-            name: value for name, value in param_dict.items() if value is None
+            name: value for name, value in list(param_dict.items()) if value is None
         }
         if missing_params:
             raise ValueError(
@@ -255,7 +255,7 @@ class QuerySource:
 
         # Handle formatting for datetimes and cases where a format
         # template has been supplied
-        for p_name, settings in self.params.items():
+        for p_name, settings in list(self.params.items()):
             # These types may require custom extraction
             if settings["type"] == "datetime":
                 param_dict[p_name] = self._convert_datetime(param_dict[p_name])
@@ -313,7 +313,7 @@ class QuerySource:
             self, param_dict: Dict[str, Any]) -> Dict[str, Any]:
         """Try to resolve any parameters in `param_dict` that are aliases."""
         out_dict = {}
-        for param, value in param_dict.items():
+        for param, value in list(param_dict.items()):
             if param in self.params:
                 out_dict[param] = value
             else:
@@ -328,10 +328,10 @@ class QuerySource:
         """Return first parameter with a matching alias."""
         aliased_params = {
             p_name: p_prop
-            for p_name, p_prop in self.params.items()
+            for p_name, p_prop in list(self.params.items())
             if "aliases" in p_prop
         }
-        for param, props in aliased_params.items():
+        for param, props in list(aliased_params.items()):
             if alias in props["aliases"]:
                 return param
         return None
@@ -418,12 +418,12 @@ class QuerySource:
 
     def help(self):
         """Print help for query."""
-        print("Query: ", self.name)
+        print(("Query: ", self.name))
         if self.query_store is not None:
-            print("Data source: ", self.query_store.environment)
-        print(self.create_doc_string())
+            print(("Data source: ", self.query_store.environment))
+        print((self.create_doc_string()))
         print("Query:")
-        print(self.query)
+        print((self.query))
 
     def create_doc_string(self) -> str:
         """
@@ -476,7 +476,7 @@ class QuerySource:
         valid_failures = []
 
         # Need req_source_items AND query item to be present
-        source_props = self._source.keys() | self.defaults.keys()
+        source_props = list(self._source.keys()) | list(self.defaults.keys())
         if not req_source_items.issubset(source_props):
             msg = (
                 f"Source {self.name} does not have all required "
@@ -493,7 +493,7 @@ class QuerySource:
         # Now get the query and the parameter definitions from the source and
         # check that every parameter specified in the query has a corresponding
         # 'parameter definition in either the source or the defaults.
-        source_params = self.params.keys()
+        source_params = list(self.params.keys())
         q_params = set(re.findall(param_pattern, self._query))
 
         missing_params = q_params - source_params
@@ -508,7 +508,7 @@ class QuerySource:
 
         missing_types = {
             p_name for p_name,
-            p_props in self.params.items() if "type" not in p_props}
+            p_props in list(self.params.items()) if "type" not in p_props}
         if missing_types:
             msg = (
                 f"Source {self.name} has parameters that are defined in "
@@ -527,7 +527,7 @@ class QuerySource:
         if "query_macros" in self._source:
             replace_values = {
                 name: properties.get("value", "")
-                for name, properties in self["query_macros"].items()
+                for name, properties in list(self["query_macros"].items())
             }
         for key in replace_keys:
             if key in replace_keys:

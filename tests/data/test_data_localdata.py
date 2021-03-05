@@ -40,7 +40,7 @@ class TestLocalDataQuery(unittest.TestCase):
             self.assertGreater(len(d_frame), 1)
 
         schema = qry_prov.schema
-        for cols in schema.values():
+        for cols in list(schema.values()):
             self.assertIsInstance(cols, dict)
             self.assertGreater(len(cols), 10)
 

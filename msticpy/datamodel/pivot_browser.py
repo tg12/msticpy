@@ -94,7 +94,7 @@ class PivotBrowser:
         self._create_help_controls()
         self._create_search_controls()
 
-        deflt_funcs = next(iter(self.piv_entities.values()))[1][0]
+        deflt_funcs = next(iter(list(self.piv_entities.values())))[1][0]
         self._select_function({"new": deflt_funcs})
         self._search_func(change={"new": ""})
         self.layout = widgets.VBox(
@@ -110,7 +110,7 @@ class PivotBrowser:
         """Instantiate and set up select widgets."""
         self._select["pivot_funcs"] = widgets.Select(
             description="pivot function",
-            options=next(iter(self.piv_entities.values()))[1],
+            options=next(iter(list(self.piv_entities.values())))[1],
             layout=widgets.Layout(height="300px", width="95%"),
         )
 
@@ -238,7 +238,7 @@ class PivotBrowser:
             ent for ent in self.piv_entities if search_txt.casefold() in ent.casefold()}
         matching_funcs = [
             (ent, func)
-            for ent, ent_piv in self.piv_entities.items()
+            for ent, ent_piv in list(self.piv_entities.items())
             for func in ent_piv[1]
             if search_txt.casefold() in func.casefold()
         ]

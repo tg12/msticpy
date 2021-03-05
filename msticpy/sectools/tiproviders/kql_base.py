@@ -185,7 +185,7 @@ class KqlTIProvider(TIProvider):
                 ioc_groups[result.ioc_type].add(result.ioc)
 
         all_results = []
-        for ioc_type, obs_set in ioc_groups.items():
+        for ioc_type, obs_set in list(ioc_groups.items()):
             try:
                 query_obj, query_params = self._get_query_and_params(
                     ioc=list(obs_set),
@@ -212,14 +212,14 @@ class KqlTIProvider(TIProvider):
                 ):
                     print("No results return from data provider.")
                 elif data_result and hasattr(data_result, "completion_query_info"):
-                    print(
+                    print((
                         "No results returned from data provider. "
                         + str(data_result.completion_query_info)
-                    )
+                    ))
                 else:
-                    print(
+                    print((
                         "Unknown response from provider: " +
-                        str(data_result))
+                        str(data_result)))
 
             src_ioc_frame = pd.DataFrame(obs_set, columns=["Ioc"])
             src_ioc_frame["IocType"] = ioc_type
@@ -322,7 +322,7 @@ class KqlTIProvider(TIProvider):
             "tenantid": ["tenant_id", "tenantid"],
         }
         variants = variant_dict.get(name, [name.casefold()])
-        for key, val in kwargs.items():
+        for key, val in list(kwargs.items()):
             if key.casefold() in variants:
                 return val
         return None

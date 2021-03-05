@@ -169,14 +169,14 @@ class MordorBrowser:
             style=self.w_style,
         )
         ds_select.observe(self._select_ds_item, names="value")
-        self._select_ds_item({"new": next(iter(self.mdr_metadata.keys()))})
+        self._select_ds_item({"new": next(iter(list(self.mdr_metadata.keys())))})
         self.widgets["ds_select"] = ds_select
 
     def _init_field_ctls(self):
         """Initialize the data field controls."""
         fields = {}
         dl_button = None
-        for field, field_attrs in MORDOR_FIELDS.items():
+        for field, field_attrs in list(MORDOR_FIELDS.items()):
             if field == "file_paths":
                 dl_button = widgets.Button(description="Download")
                 fields[field] = widgets.HBox(
@@ -224,7 +224,7 @@ class MordorBrowser:
             self._clear_fields()
             return
 
-        for field, field_attrs in MORDOR_FIELDS.items():
+        for field, field_attrs in list(MORDOR_FIELDS.items()):
             if mdr_item and field_attrs["type"] != "cust":
                 value = getattr(mdr_item, field)
             else:
@@ -286,7 +286,7 @@ class MordorBrowser:
         """Return current set of datasets for select control."""
         return [
             (f"{mdr.id} {mdr.title} ({mdr.platform})", mdr.id)
-            for mdr in self.mdr_metadata.values()
+            for mdr in list(self.mdr_metadata.values())
             if subset is None or mdr.id in subset
         ]
 

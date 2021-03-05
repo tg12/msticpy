@@ -66,7 +66,7 @@ def is_benign_ioc(request_item):
         return any([item for item in ioc_benign_iocs if item in request_item])
     if isinstance(request_item, dict):
         return any(
-            [item for item in ioc_benign_iocs if item in request_item.values()])
+            [item for item in ioc_benign_iocs if item in list(request_item.values())])
     return False
 
 
@@ -179,8 +179,8 @@ class mock_req_session:
                     "status_code": 200,
                     "response": [dom_responses["unknown.dom"]],
                 }
-                for domain in dom_responses.keys():
-                    if domain in kwargs["params"].values():
+                for domain in list(dom_responses.keys()):
+                    if domain in list(kwargs["params"].values()):
                         mocked_result = {
                             "status_code": 200,
                             "response": [dom_responses[domain]],
@@ -299,7 +299,7 @@ class TestTIProviders(unittest.TestCase):
         }
 
         # Lookup multiple IoCs
-        for ioc, ioc_params in iocs.items():
+        for ioc, ioc_params in list(iocs.items()):
             result = ti_lookup.lookup_ioc(
                 observable=ioc,
                 ioc_type=ioc_params[0],
@@ -349,7 +349,7 @@ class TestTIProviders(unittest.TestCase):
         }
 
         # Lookup multiple IoCs
-        for ioc, ioc_params in iocs.items():
+        for ioc, ioc_params in list(iocs.items()):
             result = ti_lookup.lookup_ioc(
                 observable=ioc,
                 ioc_type=ioc_params[0],
@@ -418,7 +418,7 @@ class TestTIProviders(unittest.TestCase):
         # we can't use a fixed list since this changes all the time
         # so take a sample from the current list
         tor_prov = ti_lookup.loaded_providers["Tor"]
-        tor_nodes = random.sample(tor_prov._nodelist.keys(), 4)
+        tor_nodes = random.sample(list(tor_prov._nodelist.keys()), 4)
 
         other_ips = [
             "104.117.0.237",

@@ -169,7 +169,7 @@ def _dict_to_html(detail_dict):
     html_txt = []
     if not isinstance(detail_dict, dict):
         return detail_dict
-    for key, val in detail_dict.items():
+    for key, val in list(detail_dict.items()):
         html_txt.append(
             f"<tr class='cell_ti'><td class='cell_ti_first'>{key}</td>")
         if not isinstance(val, dict):

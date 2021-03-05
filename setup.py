@@ -47,7 +47,7 @@ with open("requirements-dev.txt", "r") as fh:
 
 
 def _combine_extras(extras: list) -> list:
-    return list({pkg for name, pkgs in EXTRAS.items()
+    return list({pkg for name, pkgs in list(EXTRAS.items())
                  for pkg in pkgs if name in extras})
 
 
@@ -75,7 +75,7 @@ EXTRAS = {
     "sql2kql": ["moz_sql_parser>=4.5.0,<=4.11.21016"],
 }
 extras_all = [
-    extra for name, extras in EXTRAS.items() for extra in extras if name != "dev"
+    extra for name, extras in list(EXTRAS.items()) for extra in extras if name != "dev"
 ]
 EXTRAS["all"] = extras_all
 

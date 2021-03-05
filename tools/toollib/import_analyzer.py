@@ -68,7 +68,7 @@ def _get_setup_reqs(package_root: str,
     # for packages that do not match top-level names
     # add the mapping
     # create a dictionary so that we can re-map some names
-    for src, tgt in _PKG_RENAME_NAME.items():
+    for src, tgt in list(_PKG_RENAME_NAME.items()):
         if tgt in setup_reqs:
             setup_reqs.pop(tgt)
             setup_reqs[src] = tgt
@@ -78,7 +78,7 @@ def _get_setup_reqs(package_root: str,
             "-",
             "."): pkg for pkg in setup_reqs if pkg.startswith("azure-")}
 
-    for key, pkg in az_mgmt_reqs.items():
+    for key, pkg in list(az_mgmt_reqs.items()):
         setup_reqs.pop(pkg)
         setup_reqs[key] = pkg
 
@@ -351,8 +351,8 @@ def print_module_imports(
         import type, by default "setup_reqs"
 
     """
-    for py_mod_name, py_mod in modules.items():
-        print(py_mod_name, getattr(py_mod, imp_type))
+    for py_mod_name, py_mod in list(modules.items()):
+        print((py_mod_name, getattr(py_mod, imp_type)))
 
 
 def build_import_graph(modules: Dict[str, ModuleImports]) -> nx.Graph:
@@ -370,9 +370,9 @@ def build_import_graph(modules: Dict[str, ModuleImports]) -> nx.Graph:
         Networkx DiGraph
 
     """
-    req_imports = {mod: attribs.setup_reqs for mod, attribs in modules.items()}
+    req_imports = {mod: attribs.setup_reqs for mod, attribs in list(modules.items())}
     import_graph = nx.DiGraph()
-    for py_mod, mod_imps in req_imports.items():
+    for py_mod, mod_imps in list(req_imports.items()):
         for imp in mod_imps:
             import_graph.add_node(
                 py_mod, n_type="module", degree=len(mod_imps))

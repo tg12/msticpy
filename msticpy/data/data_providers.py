@@ -125,7 +125,7 @@ class QueryProvider:
 
         # If the driver has any attributes to expose via the provider
         # add those here.
-        for attr_name, attr in self._query_provider.public_attribs.items():
+        for attr_name, attr in list(self._query_provider.public_attribs.items()):
             setattr(self, attr_name, attr)
 
         # Add any built-in or dynamically retrieved queries from driver
@@ -331,7 +331,7 @@ class QueryProvider:
         if not query_options:
             # Any kwargs left over we send to the query provider driver
             query_options = {
-                key: val for key, val in kwargs.items() if key not in params
+                key: val for key, val in list(kwargs.items()) if key not in params
             }
         return query_options
 

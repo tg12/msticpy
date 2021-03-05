@@ -92,4 +92,4 @@ class AzureResource(Entity):
         res_elems = res_match.groupdict().get("res_path", "").split("/")
         keys = islice(res_elems, 0, len(res_elems), 2)
         vals = islice(res_elems, 1, len(res_elems), 2)
-        self.ResourceIdParts = dict(zip(keys, vals))
+        self.ResourceIdParts = dict(list(zip(keys, vals)))

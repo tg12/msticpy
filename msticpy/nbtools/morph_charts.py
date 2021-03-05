@@ -74,7 +74,7 @@ class MorphCharts:
 
     def list_charts(self):
         """Get a list of avaliable charts."""
-        for key, _ in self.charts.items():
+        for key, _ in list(self.charts.items()):
             print(key)
 
     def get_chart_details(self, chart_name):
@@ -88,7 +88,7 @@ class MorphCharts:
 
         """
         try:
-            print(
+            print((
                 chart_name,
                 ":",
                 "\n",
@@ -96,7 +96,7 @@ class MorphCharts:
                 "\n",
                 "Query: ",
                 self.charts[chart_name]["Query"],
-            )
+            ))
         except KeyError as key_err:
             raise KeyError(f"Unknown chart {chart_name}") from key_err
 
@@ -110,13 +110,13 @@ class MorphCharts:
             The keyword to search charts for.
 
         """
-        for key, value in self.charts.items():
+        for key, value in list(self.charts.items()):
             if keyword.casefold() in [tag.casefold() for tag in value["Tags"]]:
-                print(key, ":", "\n", self.charts[key]["Description"])
+                print((key, ":", "\n", self.charts[key]["Description"]))
             elif keyword.casefold() in [
                 word.casefold() for word in value["Description"].split()
             ]:
-                print(key, ":", "\n", self.charts[key]["Description"])
+                print((key, ":", "\n", self.charts[key]["Description"]))
             else:
                 print("No matching charts found")
 

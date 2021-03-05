@@ -55,7 +55,7 @@ def _create_call_graph(
     func_span = dict()
     last_func = None
     for lineno, name in sorted([(span[0], name)
-                                for name, span in funcs.items()]):
+                                for name, span in list(funcs.items())]):
         if last_func:
             func_span[last_func] = [func_span[last_func][0], lineno - 1]
 
@@ -65,11 +65,11 @@ def _create_call_graph(
     # create graph and add funcs as nodes
     call_graph = nx.MultiDiGraph()
     call_graph.add_nodes_from(
-        [(name, {"start": span[0], "end": span[1]}) for name, span in func_span.items()]
+        [(name, {"start": span[0], "end": span[1]}) for name, span in list(func_span.items())]
     )
 
     # add edged to the calls from each function
-    for call_name, call_lines in calls.items():
+    for call_name, call_lines in list(calls.items()):
         if call_name in funcs:
             _add_call_edge(
                 call_graph,
@@ -104,7 +104,7 @@ def _add_call_edge(
     for line in call_lines:
         calling_func = [
             func for func,
-            span in func_span.items() if span[0] <= line <= span[1]]
+            span in list(func_span.items()) if span[0] <= line <= span[1]]
         if calling_func:
             call_graph.add_edge(calling_func[0], call_name, line=line)
         else:
@@ -119,7 +119,7 @@ def _print_decendents(graph, par_node, indent=0):
                 edge_line = attr["line"]
                 edge_list.append((edge_line, par_node, node))
         for e_line, p_node, t_node in sorted(edge_list, key=lambda k: k[0]):
-            print(" " * indent, f"+->({e_line}) {t_node}")
+            print((" " * indent, f"+->({e_line}) {t_node}"))
             if p_node != t_node:
                 _print_decendents(graph, t_node, indent + 4)
 
@@ -170,15 +170,15 @@ def print_call_tree(call_graph: nx.Graph, level="top"):
     for node in call_graph.nodes():
         if level == "top":
             if call_graph.in_degree(node) == 0:
-                print(
+                print((
                     f"\n{node} [{call_graph.nodes()[node]['start']}",
                     f"- {call_graph.nodes()[node]['end']}]",
-                )
-                print("-" * len(str(node)))
+                ))
+                print(("-" * len(str(node))))
                 _print_decendents(call_graph, node, indent=0)
         elif "start" in call_graph.nodes()[node]:
             print(
                 f"\n{node} [{call_graph.nodes()[node]['start']}-{call_graph.nodes()[node]['end']}]"
             )
-            print("-" * len(str(node)))
+            print(("-" * len(str(node))))
             _print_decendents(call_graph, node, indent=0)

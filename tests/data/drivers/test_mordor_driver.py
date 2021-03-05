@@ -78,7 +78,7 @@ def test_mordor_load(mdr_driver: MordorDriver):
 
     check.is_true(len(mdr_driver.mordor_data) > 50)
 
-    _, first_item = next(iter(mdr_driver.mordor_data.items()))
+    _, first_item = next(iter(list(mdr_driver.mordor_data.items())))
     check.is_instance(first_item.title, str)
     check.is_instance(first_item.id, str)
     check.is_instance(first_item.author, str)

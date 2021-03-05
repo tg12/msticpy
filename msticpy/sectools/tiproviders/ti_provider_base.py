@@ -74,7 +74,7 @@ class TISeverity(Enum):
         if isinstance(value, str) and value.lower() in cls.__members__:
             return cls[value.lower()]
         if isinstance(value, int) and value in [
-            v.value for v in cls.__members__.values()
+            v.value for v in list(cls.__members__.values())
         ]:
             return cls(value)
         return TISeverity.unknown
@@ -149,11 +149,11 @@ class LookupResult:
     def summary(self):
         """Print a summary of the Lookup Result."""
         p_pr = pprint.PrettyPrinter(indent=4)
-        print("ioc:", self.ioc, "(", self.ioc_type, ")")
-        print("result:", self.result)
+        print(("ioc:", self.ioc, "(", self.ioc_type, ")"))
+        print(("result:", self.result))
         # print("severity:", self.severity)
         p_pr.pprint(self.details)
-        print("reference: ", self.reference)
+        print(("reference: ", self.reference))
 
     @property
     def raw_result_fmtd(self):
@@ -698,7 +698,7 @@ def entropy(input_str: str) -> float:
     return -sum(
         map(
             lambda a: (a / str_len) * math.log2(a / str_len),
-            Counter(input_str).values(),
+            list(Counter(input_str).values()),
         )
     )
 
@@ -747,7 +747,7 @@ def _(
         data: dict,
         obs_col: Optional[str] = None,
         ioc_type_col: Optional[str] = None):
-    for obs, ioc_type in data.items():
+    for obs, ioc_type in list(data.items()):
         if not ioc_type:
             ioc_type = TIProvider.resolve_ioc_type(obs)
         yield obs, ioc_type

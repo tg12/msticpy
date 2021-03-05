@@ -363,7 +363,7 @@ def _iterate_func(target_func, input_df, input_column, pivot_reg):
                              **(pivot_reg.func_static_params or {}))
         if not pivot_reg.return_raw_output and not isinstance(
                 result, pd.DataFrame):
-            col_value = next(iter(row._asdict().values()))
+            col_value = next(iter(list(row._asdict().values())))
             if isinstance(result, dict):
                 # if result is a dict - make that into a row.
                 result = pd.DataFrame(pd.Series(result)).T

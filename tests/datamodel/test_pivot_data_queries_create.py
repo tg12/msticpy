@@ -120,10 +120,10 @@ def _get_timespan():
 def _generate_test_data(**kwargs):
     """Generate test data for iterable funcs."""
     # Generate function settings
-    func_params = {kw: _PType(arg[0]) for kw, arg in kwargs.items()}
+    func_params = {kw: _PType(arg[0]) for kw, arg in list(kwargs.items())}
     # Generate test params
     params = {}
-    for kword, arg in kwargs.items():
+    for kword, arg in list(kwargs.items()):
         if arg[1] > 1:
             p_vals = [f"{kword}_val{num}" for num in range(arg[1])]
         else:
@@ -132,13 +132,13 @@ def _generate_test_data(**kwargs):
 
     # Generate test DataFrame
     list_lens = [len(value)
-                 for value in params.values() if isinstance(value, list)]
+                 for value in list(params.values()) if isinstance(value, list)]
     min_len = min(list_lens) if list_lens else 1
     series = []
     for row_num in range(min_len):
         row_dict = {
             param: value[row_num] if isinstance(value, list) else value
-            for param, value in params.items()
+            for param, value in list(params.items())
         }
 
         series.append(pd.Series(row_dict))

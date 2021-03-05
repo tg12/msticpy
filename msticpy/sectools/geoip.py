@@ -160,7 +160,7 @@ class GeoIpLookup(metaclass=ABCMeta):
         if self._LICENSE_HTML and get_ipython():
             display(HTML(self._LICENSE_HTML))
         elif self._LICENSE_TXT:
-            print(self._LICENSE_TXT)
+            print((self._LICENSE_TXT))
         self.__class__._license_shown = True
 
     # pylint: enable=protected-access
@@ -525,10 +525,10 @@ Alternatively, you can pass this to the GeoLiteLookup class when creating it:
         url = self._MAXMIND_DOWNLOAD.format(license_key=self._api_key)
 
         if geoip_db_path is None:
-            print(
+            print((
                 "No local Maxmind City Database found. ",
                 f"Attempting to downloading new database to {db_folder}",
-            )
+            ))
             self._download_and_extract_archive(url, db_folder)
         else:
             # Create a reader object to retrive db info and build date
@@ -541,18 +541,18 @@ Alternatively, you can pass this to the GeoLiteLookup class when creating it:
             db_age = datetime.utcnow() - last_mod_time
             db_updated = True
             if db_age > timedelta(30) and auto_update:
-                print(
+                print((
                     "Latest local Maxmind City Database present is older than 30 days.",
                     f"Attempting to download new database to {db_folder}",
-                )
+                ))
                 if not self._download_and_extract_archive(url, db_folder):
                     warnings.warn("DB download failed")
                     db_updated = False
             elif force_update:
-                print(
+                print((
                     "force_update is set to True.",
                     f"Attempting to download new database to {db_folder}",
-                )
+                ))
                 if not self._download_and_extract_archive(url, db_folder):
                     warnings.warn("DB download failed")
                     db_updated = False
@@ -629,9 +629,9 @@ Alternatively, you can pass this to the GeoLiteLookup class when creating it:
         else:
             try:
                 self._extract_to_folder(db_archive_path, db_folder)
-                print(
+                print((
                     "Extraction complete. Local Maxmind city DB:",
-                    f"{db_file_path}")
+                    f"{db_file_path}"))
                 return True
             except PermissionError as err:
                 warnings.warn(

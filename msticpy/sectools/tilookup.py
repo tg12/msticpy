@@ -114,11 +114,11 @@ class TILookup:
         """
         prim = [
             f"{prov_name} - {prov.description} (primary)"
-            for prov_name, prov in self._providers.items()
+            for prov_name, prov in list(self._providers.items())
         ]
         sec = [
             f"{prov_name} - {prov.description} (secondary)"
-            for prov_name, prov in self._secondary_providers.items()
+            for prov_name, prov in list(self._secondary_providers.items())
         ]
         return prim + sec
 
@@ -205,7 +205,7 @@ class TILookup:
         print("Primary providers")
         print("-----------------")
         if self._providers:
-            for prov_name, prov in self._providers.items():
+            for prov_name, prov in list(self._providers.items()):
                 print(f"\nProvider class: {prov_name}")
                 prov.usage()
         else:
@@ -213,7 +213,7 @@ class TILookup:
         print("\nSecondary providers")
         print("-------------------")
         if self._secondary_providers:
-            for prov_name, prov in self._secondary_providers.items():
+            for prov_name, prov in list(self._secondary_providers.items()):
                 print(f"\nProvider class: {prov_name}")
                 prov.usage()
         else:
@@ -223,10 +223,10 @@ class TILookup:
     def reload_provider_settings(cls):
         """Reload provider settings from config."""
         reload_settings()
-        print(
+        print((
             "Settings reloaded. Use reload_providers to update settings",
             "for loaded providers.",
-        )
+        ))
 
     def reload_providers(self):
         """
@@ -245,7 +245,7 @@ class TILookup:
         """Load provider classes based on config."""
         prov_settings = get_provider_settings()
 
-        for provider_entry, settings in prov_settings.items():
+        for provider_entry, settings in list(prov_settings.items()):
             # Allow overriding provider name to use another class
             provider_name = settings.provider or provider_entry
             if self._providers_to_load and provider_name not in self._providers_to_load:
@@ -360,7 +360,7 @@ class TILookup:
             raise RuntimeError(_NO_PROVIDERS_MSSG)
 
         ioc_type = ioc_type or TIProvider.resolve_ioc_type(observable)
-        for prov_name, provider in selected_providers.items():
+        for prov_name, provider in list(selected_providers.items()):
             provider_result: LookupResult = provider.lookup_ioc(
                 ioc=observable, ioc_type=ioc_type, query_type=ioc_query_type, **kwargs)
             result_list.append((prov_name, provider_result))
@@ -412,7 +412,7 @@ class TILookup:
         if not selected_providers:
             raise RuntimeError(_NO_PROVIDERS_MSSG)
 
-        for prov_name, provider in selected_providers.items():
+        for prov_name, provider in list(selected_providers.items()):
             provider_result = provider.lookup_iocs(
                 data=data,
                 obs_col=obs_col,
@@ -488,7 +488,7 @@ class TILookup:
         if providers:
             selected_providers = {
                 prov_name: prov
-                for prov_name, prov in self._all_providers.items()
+                for prov_name, prov in list(self._all_providers.items())
                 if prov_name in providers
             }
         else:

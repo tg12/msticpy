@@ -248,9 +248,9 @@ def _print_url_results(results: Dict[str, Dict[str, UrlResult]]):
 
     # non-200s
     print("\n==========\nERRORS")
-    for page, result_dict in results.items():
+    for page, result_dict in list(results.items()):
         page_errors = []
-        for result in result_dict.values():
+        for result in list(result_dict.values()):
             if result.status != 200:
                 page_errors.append(f"{result.status} - {result.url}")
         if page_errors:

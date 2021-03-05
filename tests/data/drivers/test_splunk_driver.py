@@ -163,24 +163,24 @@ def test_splunk_connect_errors(splunk_client):
     sp_driver = SplunkDriver()
     check.is_true(sp_driver.loaded)
 
-    print("connected", sp_driver.connected)
+    print(("connected", sp_driver.connected))
     with pytest.raises(MsticpyConnectionError) as mp_ex:
         # [SuppressMessage("Microsoft.Security", "CS002:SecretInNextLine", Justification="Test code")]
         sp_driver.connect(
             host="AuthError", username="ian", password=_FAKE_STRING
         )  # nosec
-        print("connected", sp_driver.connected)
+        print(("connected", sp_driver.connected))
         check.is_false(sp_driver.connected)
     check.is_in("Splunk connection", mp_ex.value.args)
 
     sp_driver = SplunkDriver()
-    print("connected", sp_driver.connected)
+    print(("connected", sp_driver.connected))
     with pytest.raises(MsticpyConnectionError) as mp_ex:
         # [SuppressMessage("Microsoft.Security", "CS002:SecretInNextLine", Justification="Test code")]
         sp_driver.connect(
             host="HTTPError", username="ian", password=_FAKE_STRING
         )  # nosec
-        print("connected", sp_driver.connected)
+        print(("connected", sp_driver.connected))
         check.is_false(sp_driver.connected)
     check.is_in("Splunk connection", mp_ex.value.args)
 
@@ -239,7 +239,7 @@ def test_splunk_saved_searches(splunk_client):
     queries, name = sp_driver.service_queries
     check.equal(name, "SavedSearches")
     check.is_instance(queries, dict)
-    for name, query in queries.items():
+    for name, query in list(queries.items()):
         check.is_true(name.startswith("query"))
         check.equal(query, "search get stuff from somewhere")
 

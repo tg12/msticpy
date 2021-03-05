@@ -134,22 +134,22 @@ def dbcluster_events(
     labels = db_cluster.labels_
     cluster_set, counts = np.unique(labels, return_counts=True)
     if verbose:
-        print(
+        print((
             "Clustering for set size ",
             len(x_norm),
             " - ",
             len(cluster_set),
             " clusters",
-        )
-        print("Individual cluster sizes: ",
-              ", ".join([str(c) for c in counts]))
+        ))
+        print(("Individual cluster sizes: ",
+              ", ".join([str(c) for c in counts])))
 
     clustered_events = _merge_clustered_items(
         cluster_set, labels, data, time_column, counts
     )
 
     if verbose:
-        print("Cluster output rows: ", len(clustered_events))
+        print(("Cluster output rows: ", len(clustered_events)))
 
     return clustered_events, db_cluster, x_norm
 
@@ -707,8 +707,8 @@ def plot_cluster(
     _, counts = np.unique(labels, return_counts=True)
 
     if verbose:
-        print("Estimated number of clusters: %d" % n_clusters_)
-        print("Estimated number of noise points: %d" % n_noise_)
+        print(("Estimated number of clusters: %d" % n_clusters_))
+        print(("Estimated number of noise points: %d" % n_noise_))
         # print("Silhouette Coefficient: %0.3f"
         #       % metrics.silhouette_score(x_predict, labels))
 

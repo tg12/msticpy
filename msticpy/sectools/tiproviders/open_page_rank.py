@@ -48,10 +48,10 @@ class OPR(HttpProvider):
         super().__init__(**kwargs)
 
         self._provider_name = self.__class__.__name__
-        print(
+        print((
             "Using Open PageRank.",
             "See https://www.domcop.com/openpagerank/what-is-openpagerank",
-        )
+        ))
 
     # pylint: disable=duplicate-code
     def lookup_iocs(
@@ -212,7 +212,7 @@ class OPR(HttpProvider):
         # build the query string manually - of the form
         # domains[N]=domN&domains[N+1]...
         qry_elements = []
-        for idx, dom in zip(range(0, len(ioc_list)), ioc_list):
+        for idx, dom in zip(list(range(0, len(ioc_list))), ioc_list):
             qry_elements.append(f"domains[{idx}]={dom}")
         qry_str = "&".join(qry_elements)
         path = self._IOC_QUERIES["dns"].path

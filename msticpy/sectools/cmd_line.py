@@ -100,7 +100,7 @@ def risky_cmd_line(
     risky_actions = {}
     detections = rules[log_type]
     for detection in detections:
-        for date, message in activity[cmd_field].items():
+        for date, message in list(activity[cmd_field].items()):
             if b64_regex.match(message):
                 b64match = b64_regex.search(message)
                 b64string = unpack(input_string=b64match[1])  # type: ignore

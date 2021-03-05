@@ -50,7 +50,7 @@ def compute_cmds_probs(  # nosec
         prior_probs[cmd] = seq1_counts[cmd] / total_cmds
 
     # compute trans probs
-    for prev, currents in seq2_counts.items():
+    for prev, currents in list(seq2_counts.items()):
         for current in currents:
             trans_probs[prev][current] = seq2_counts[prev][current] / sum(
                 seq2_counts[prev].values()
@@ -112,13 +112,13 @@ def compute_params_probs(  # nosec
     param_cond_cmd_probs: DefaultDict[str, DefaultDict[str, float]] = defaultdict(
         lambda: defaultdict(lambda: 0))
 
-    for cmd, params in cmd_param_counts.items():
+    for cmd, params in list(cmd_param_counts.items()):
         n_cmd = seq1_counts[cmd]
-        for param, count in params.items():
+        for param, count in list(params.items()):
             param_cond_cmd_probs[cmd][param] = count / n_cmd
 
     tot_cmd = sum(seq1_counts.values())
-    for param, count in param_counts.items():
+    for param, count in list(param_counts.items()):
         param_probs[param] = count / tot_cmd
 
     param_probs_sm = StateMatrix(states=param_probs, unk_token=unk_token)
@@ -167,13 +167,13 @@ def compute_values_probs(  # nosec
     value_cond_param_probs: DefaultDict[str, DefaultDict[str, float]] = defaultdict(
         lambda: defaultdict(lambda: 0))
 
-    for param, values in param_value_counts.items():
+    for param, values in list(param_value_counts.items()):
         n_val = sum(values.values())
-        for value, count in values.items():
+        for value, count in list(values.items()):
             value_cond_param_probs[param][value] = count / n_val
 
     tot_val = sum(value_counts.values())
-    for value, count in value_counts.items():
+    for value, count in list(value_counts.items()):
         value_probs[value] = count / tot_val
 
     value_probs_sm = StateMatrix(states=value_probs, unk_token=unk_token)

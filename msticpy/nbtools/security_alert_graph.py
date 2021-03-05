@@ -64,7 +64,7 @@ def create_alert_graph(alert: SecurityAlert):
         else:
             continue
         for prop, rel_entity in [
-            (p, v) for (p, v) in ent_props.items() if isinstance(v, Entity)
+            (p, v) for (p, v) in list(ent_props.items()) if isinstance(v, Entity)
         ]:
             if rel_entity["Type"] == "host":
                 # don't add a new edge to the host
@@ -180,7 +180,7 @@ def _find_graph_node(nx_graph, node_type, target_name):
     node_prefix = "{}: {}".format(node_type, target_name)
     nodes = [
         n
-        for (n, n_type) in nx.get_node_attributes(nx_graph, "entitytype").items()
+        for (n, n_type) in list(nx.get_node_attributes(nx_graph, "entitytype").items())
         if n_type == node_type and n.startswith(node_prefix)
     ]
     if nodes:
@@ -269,7 +269,7 @@ def _get_other_name_desc(entity):
     e_properties = "\n".join(
         {
             "{}:{}".format(k, v)
-            for (k, v) in ent_props.items()
+            for (k, v) in list(ent_props.items())
             if (k not in ("Type", "Name") and isinstance(v, str))
         }
     )

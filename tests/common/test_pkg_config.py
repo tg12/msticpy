@@ -66,13 +66,13 @@ class TestPkgConfig(unittest.TestCase):
             # TI Providers
             self.assertGreaterEqual(len(settings["TIProviders"]), 4)
             self.assertIsInstance(settings["TIProviders"], dict)
-            for _, prov in settings["TIProviders"].items():
+            for _, prov in list(settings["TIProviders"].items()):
 
                 self.assertIn("Primary", prov)
                 self.assertIn("Provider", prov)
                 if "Args" in prov:
                     self.assertIsInstance(prov["Args"], dict)
-                    for arg_name, arg_val in prov["Args"].items():
+                    for arg_name, arg_val in list(prov["Args"].items()):
                         self.assertIn(
                             arg_name, [
                                 "ApiID", "AuthKey", "WorkspaceID", "TenantID"])

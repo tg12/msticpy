@@ -277,10 +277,10 @@ class VTLookupV3:
                     observable, observable_type)
                 dfs_futures.append(ioc_df_future)
             except KeyError:
-                print(
+                print((
                     "ERROR\t It was not possible to obtain results for",
                     f"{observable_type} {observable}",
-                )
+                ))
         dfs = await asyncio.gather(*dfs_futures)
         return pd.concat(dfs) if dfs else pd.DataFrame()
 
@@ -488,10 +488,10 @@ class VTLookupV3:
                 )
                 dfs_futures.append(result_df_future)
             except KeyError:
-                print(
+                print((
                     "ERROR:\t It was not possible to get the data for",
                     f"{observable_type} {observable}",
-                )
+                ))
         dfs = await asyncio.gather(*dfs_futures)
         return pd.concat(dfs) if len(dfs) > 0 else pd.DataFrame()
 

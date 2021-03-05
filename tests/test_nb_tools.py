@@ -32,7 +32,7 @@ class Testnbtools(unittest.TestCase):
                 entity_dict = json.loads(txt)
 
             parsed_entities = []
-            for _, entity in entity_dict.items():
+            for _, entity in list(entity_dict.items()):
                 e = Entity.instantiate_entity(entity)
                 self.assertIsInstance(e, Entity)
 

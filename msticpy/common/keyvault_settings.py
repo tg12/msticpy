@@ -79,7 +79,7 @@ class KeyVaultSettings:
                 "No KeyVault section found in msticpyconfig.yaml",
                 title="missing Key Vault configuration",
             ) from err
-        norm_settings = {key.casefold(): val for key, val in kv_config.items()}
+        norm_settings = {key.casefold(): val for key, val in list(kv_config.items())}
         self.__dict__.update(norm_settings)
         if "authority_uri" in self:
             rev_lookup = {

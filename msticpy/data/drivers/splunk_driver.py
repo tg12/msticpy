@@ -106,7 +106,7 @@ class SplunkDriver(DriverBase):
 
         arg_dict = {
             key: val for key,
-            val in cs_dict.items() if key in SPLUNK_CONNECT_ARGS}
+            val in list(cs_dict.items()) if key in SPLUNK_CONNECT_ARGS}
         try:
             self.service = sp_client.connect(**arg_dict)
         except AuthenticationError as err:
@@ -158,14 +158,14 @@ class SplunkDriver(DriverBase):
         elif isinstance(verify_opt, bool):
             cs_dict["verify"] = verify_opt
 
-        missing_args = set(self._SPLUNK_REQD_ARGS) - cs_dict.keys()
+        missing_args = set(self._SPLUNK_REQD_ARGS) - list(cs_dict.keys())
         if missing_args:
             raise MsticpyUserConfigError(
                 "One or more connection parameters missing for Splunk connector",
                 ", ".join(missing_args),
                 f"Required parameters are {', '.join(self._SPLUNK_REQD_ARGS)}",
                 "All parameters:",
-                *[f"{arg}: {desc}" for arg, desc in SPLUNK_CONNECT_ARGS.items()],
+                *[f"{arg}: {desc}" for arg, desc in list(SPLUNK_CONNECT_ARGS.items())],
                 title="no Splunk connection parameters",
             )
         return cs_dict

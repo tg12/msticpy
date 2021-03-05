@@ -92,10 +92,10 @@ def run_txt2df(line, cell, local_ns) -> pd.DataFrame:
             error_bad_lines=False,
             engine="python",
         )
-        print(
+        print((
             "One or more rows had more columns than specified in first row.",
             "Ignoring header row.",
-        )
+        ))
     if not args.keepna:
         parsed_df = parsed_df.dropna(axis=1, how="all")
     if local_ns is not None and args.name:

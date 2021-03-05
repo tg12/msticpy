@@ -209,7 +209,7 @@ def compute_prob_setofparams_given_cmd(
         return 1.0
     ref = param_cond_cmd_probs[cmd]
     lik: float = 1
-    for param, prob in ref.items():
+    for param, prob in list(ref.items()):
         if param in pars:
             lik *= prob
         else:

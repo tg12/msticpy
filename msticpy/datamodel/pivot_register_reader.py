@@ -132,7 +132,7 @@ def _read_reg_file(file_path: str):
         # use safe_load instead load
         pivot_regs = yaml.safe_load(f_handle)
 
-    for entry_name, settings in pivot_regs.get("pivot_providers").items():
+    for entry_name, settings in list(pivot_regs.get("pivot_providers").items()):
         try:
             yield PivotRegistration(
                 src_config_path=file_path, src_config_entry=entry_name, **settings
@@ -161,10 +161,10 @@ def _add_func_to_entities(func, piv_reg, container, **kwargs):
         setattr(query_container, func_name, pivot_func)
 
         if "debug" in kwargs:
-            print(
+            print((
                 entity_name, [
                     func for func in dir(
-                        entity.other) if not func.startswith("_")], )
+                        entity.other) if not func.startswith("_")], ))
 
 
 def _get_func_from_class(src_module, namespace, piv_reg):
@@ -194,7 +194,7 @@ def _last_instance_of_type(var_type: Type, namespace: Dict[str, Any]):
     """Return the most recently created instance of type in namespace."""
     matches = [
         var for _,
-        var in namespace.items() if isinstance(
+        var in list(namespace.items()) if isinstance(
             var,
             var_type)]
     if matches:

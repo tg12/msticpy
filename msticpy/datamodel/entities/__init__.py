@@ -71,9 +71,9 @@ def find_entity(entity):
     """Find entity name."""
     entity_cf = entity.casefold()
     entity_classes = {
-        cls.__name__.casefold(): cls for cls in Entity.ENTITY_NAME_MAP.values()
+        cls.__name__.casefold(): cls for cls in list(Entity.ENTITY_NAME_MAP.values())
     }
-    if entity_cf in Entity.ENTITY_NAME_MAP.keys():
+    if entity_cf in list(Entity.ENTITY_NAME_MAP.keys()):
         print(f"Match found '{Entity.ENTITY_NAME_MAP[entity].__name__}'")
         return Entity.ENTITY_NAME_MAP[entity]
     if entity_cf in entity_classes:
@@ -81,7 +81,7 @@ def find_entity(entity):
         return entity_classes[entity_cf]
     # Try to find the closest matches
     closest = difflib.get_close_matches(
-        entity, entity_classes.keys(), cutoff=0.4)
+        entity, list(entity_classes.keys()), cutoff=0.4)
     mssg = [f"No exact match found for '{entity}'. "]
     if len(closest) == 1:
         mssg.append(
@@ -93,8 +93,8 @@ def find_entity(entity):
         mssg.extend(
             [
                 "No close match found. Entities available:",
-                *(cls.__name__ for cls in entity_classes.values()),
+                *(cls.__name__ for cls in list(entity_classes.values())),
             ]
         )
-    print("\n".join(mssg))
+    print(("\n".join(mssg)))
     return None

@@ -40,12 +40,12 @@ class ProcSchema:
     @property
     def column_map(self) -> Dict[str, str]:
         """Return a dictionary that maps fields to schema names."""
-        return {key: str(val) for key, val in attr.asdict(self).items()}
+        return {key: str(val) for key, val in list(attr.asdict(self).items())}
 
     @property
     def columns(self) -> Iterable[str]:
         """Return an interable of target column names."""
-        return [str(val) for val in attr.asdict(self).values() if val]
+        return [str(val) for val in list(attr.asdict(self).values()) if val]
 
     @property
     def event_type_col(self) -> str:
@@ -198,7 +198,7 @@ def build_process_tree(
     proc_tree = _build_proc_tree(merged_procs_keys, progress_ui)
 
     if show_progress:
-        print(get_summary_info(proc_tree))
+        print((get_summary_info(proc_tree)))
     return proc_tree
 
 
@@ -804,31 +804,31 @@ def _check_merge_status(procs, merged_procs, schema):
     )
 
     # Check status
-    print("Original # procs", len(procs))
-    print("Merged # procs", len(merged_procs))
-    print("Merged # procs - dropna", len(merged_procs.dropna()))
+    print(("Original # procs", len(procs)))
+    print(("Merged # procs", len(merged_procs)))
+    print(("Merged # procs - dropna", len(merged_procs.dropna())))
 
-    print("Unique merged_procs index in merge",
-          len(merged_procs["source_index"].unique()))
+    print(("Unique merged_procs index in merge",
+          len(merged_procs["source_index"].unique())))
     print("These two should add up to top line")
     row_dups = len(rows_with_dups2)
-    print("Rows with dups", row_dups)
+    print(("Rows with dups", row_dups))
     row_nodups = len(
         merged_procs[~merged_procs["source_index"].isin(rows_with_dups2)])
-    print("Rows with no dups", row_nodups)
-    print(row_dups, "+", row_nodups, "=", row_dups + row_nodups)
+    print(("Rows with no dups", row_nodups))
+    print((row_dups, "+", row_nodups, "=", row_dups + row_nodups))
 
 
 def _check_inferred_parents(procs, procs_par):
     """Diagnostic for _extract_inferred_parents."""
-    print(
+    print((
         "original:",
         len(procs),
         "inferred_parents",
         len(procs_par) - len(procs),
         "combined",
         len(procs_par),
-    )
+    ))
 
 
 def _check_proc_keys(merged_procs_par, schema):
@@ -849,12 +849,12 @@ def _check_proc_keys(merged_procs_par, schema):
         merged_procs_par[schema.parent_id])
     crit5 = merged_procs_par["parent_key"].isin(merged_procs_par.index)
     crit6 = merged_procs_par["parent_key"].isna()
-    print("has parent time", len(merged_procs_par[crit1]))
-    print("effectivelogonId in subjectlogonId", len(merged_procs_par[crit2]))
+    print(("has parent time", len(merged_procs_par[crit1])))
+    print(("effectivelogonId in subjectlogonId", len(merged_procs_par[crit2])))
     if schema.target_logon_id and c2a:
-        print("effectivelogonId in targetlogonId", len(merged_procs_par[c2a]))
-    print("parent_proc_lc in procs", len(merged_procs_par[crit3]))
-    print("ProcessId in ParentProcessId", len(merged_procs_par[crit4]))
-    print("Parent_key in proc_key", len(merged_procs_par[crit5]))
-    print("Parent_key not in proc_key", len(merged_procs_par[~crit5]))
-    print("Parent_key is NA", len(merged_procs_par[crit6]))
+        print(("effectivelogonId in targetlogonId", len(merged_procs_par[c2a])))
+    print(("parent_proc_lc in procs", len(merged_procs_par[crit3])))
+    print(("ProcessId in ParentProcessId", len(merged_procs_par[crit4])))
+    print(("Parent_key in proc_key", len(merged_procs_par[crit5])))
+    print(("Parent_key not in proc_key", len(merged_procs_par[~crit5])))
+    print(("Parent_key is NA", len(merged_procs_par[crit6])))

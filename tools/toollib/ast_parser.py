@@ -46,7 +46,7 @@ def analyze(
     if node_types:
         return {
             n_type: res
-            for n_type, res in analyzer.results.items()
+            for n_type, res in list(analyzer.results.items())
             if n_type in node_types
         }
     return analyzer.results
@@ -142,7 +142,7 @@ class Analyzer(ast.NodeVisitor):
             Optional list of node types, by default None
 
         """
-        for node_type, results in self.nodes.items():
+        for node_type, results in list(self.nodes.items()):
             if node_types is not None and node_type in node_types:
                 print(node_type)
                 pprint(results)

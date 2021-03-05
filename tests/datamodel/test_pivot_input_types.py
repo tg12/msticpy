@@ -45,7 +45,7 @@ def _reset_entities():
 @pytest.fixture(scope="session")
 def _create_pivot(data_providers):
     _reset_entities()
-    providers = data_providers.values()
+    providers = list(data_providers.values())
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=UserWarning)
         return Pivot(providers=providers)
@@ -141,12 +141,12 @@ def test_pivot_funcs_value(_create_pivot, test_case):
             test_case.provider),
         test_case.pivot_func)
     # Test value input
-    val = next(iter(test_case.value.keys()))
+    val = next(iter(list(test_case.value.keys())))
     params = {test_case.func_param: val}
     result_df = func(**params)
-    expected = next(iter(test_case.value.values()))
+    expected = next(iter(list(test_case.value.values())))
     if isinstance(expected, dict):
-        for exp_value in expected.values():
+        for exp_value in list(expected.values()):
             if exp_value == "input":
                 exp_value = val
             check.is_in(exp_value, result_df[test_case.exp_col].values)
@@ -163,15 +163,15 @@ def test_pivot_funcs_itbl(_create_pivot, test_case):
             test_case.provider),
         test_case.pivot_func)
     # Test value input
-    val = test_case.value.keys()
+    val = list(test_case.value.keys())
 
     params = {test_case.func_param: val}
     result_df = func(**params)
 
-    for key, expected in test_case.value.items():
+    for key, expected in list(test_case.value.items()):
         key_results = result_df[result_df[test_case.key_col] == key]
         if isinstance(expected, dict):
-            for exp_value in expected.values():
+            for exp_value in list(expected.values()):
                 if exp_value == "input":
                     exp_value = key
                 check.is_in(exp_value, key_results[test_case.exp_col].values)
@@ -188,13 +188,13 @@ def test_pivot_funcs_df(_create_pivot, test_case):
             test_case.provider),
         test_case.pivot_func)
     # Test DF input
-    val = test_case.value.keys()
+    val = list(test_case.value.keys())
     in_df = pd.DataFrame(val, columns=[test_case.src_df_col])
     result_df = func(data=in_df, src_column=test_case.src_df_col)
-    for key, expected in test_case.value.items():
+    for key, expected in list(test_case.value.items()):
         key_results = result_df[result_df[test_case.key_col] == key]
         if isinstance(expected, dict):
-            for exp_value in expected.values():
+            for exp_value in list(expected.values()):
                 if exp_value == "input":
                     exp_value = key
                 check.is_in(exp_value, key_results[test_case.exp_col].values)

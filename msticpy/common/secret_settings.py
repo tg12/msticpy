@@ -71,14 +71,14 @@ class KeyringClient:
             secret = keyring.get_password(self.keyring, secret_name)
         except (KeyringError, KeyringLocked):
             if self.debug:
-                print(
+                print((
                     "Keyring error retrieving credentials",
                     f"for {secret_name} from keyring {self.keyring}",
-                )
+                ))
         if not secret and self.debug:
-            print(
+            print((
                 "No credentials",
-                f"for {secret_name} from keyring {self.keyring}")
+                f"for {secret_name} from keyring {self.keyring}"))
         return secret
 
     def set_secret(self, secret_name: str, secret_value: Any):

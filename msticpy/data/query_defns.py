@@ -54,7 +54,7 @@ class DataFamily(Enum):
                 parsed_enum = cls[value]
             except KeyError:
                 # match to value if case is incorrect
-                for e_name, e_val in cls.__members__.items():
+                for e_name, e_val in list(cls.__members__.items()):
                     if e_name.upper() == value.upper():
                         return e_val
                 return cls.Unknown

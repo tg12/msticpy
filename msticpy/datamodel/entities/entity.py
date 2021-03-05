@@ -97,7 +97,7 @@ class Entity(ABC, Node):
         """
         schema_dict = self._entity_schema.copy()
         schema_dict["Type"] = None
-        for attr, val in schema_dict.items():
+        for attr, val in list(schema_dict.items()):
             if attr not in src_entity:
                 continue
             self[attr] = src_entity[attr]
@@ -106,7 +106,7 @@ class Entity(ABC, Node):
                 continue
             try:
                 # If the property is an enum
-                if val in ENTITY_ENUMS.values():
+                if val in list(ENTITY_ENUMS.values()):
                     self[attr] = val[src_entity[attr]]
                 elif val in ENTITY_ENUMS:
                     self[attr] = ENTITY_ENUMS[val][src_entity[attr]]
@@ -184,7 +184,7 @@ class Entity(ABC, Node):
     def __repr__(self) -> str:
         """Return repr of entity."""
         params = ", ".join(
-            f"{name}={val}" for name, val in self.properties.items() if val
+            f"{name}={val}" for name, val in list(self.properties.items()) if val
         )
 
         if len(params) > 80:
@@ -195,7 +195,7 @@ class Entity(ABC, Node):
         """Return as simple nested dictionary."""
         return {
             prop: self._to_dict(val) if isinstance(val, Entity) else val
-            for prop, val in entity.properties.items()
+            for prop, val in list(entity.properties.items())
             if val is not None
         }
 
@@ -250,7 +250,7 @@ class Entity(ABC, Node):
         return hash(
             " ".join(
                 f"{prop}:{str(val)}"
-                for prop, val in self.properties.items()
+                for prop, val in list(self.properties.items())
                 if str(val)
             )
         )
@@ -312,7 +312,7 @@ class Entity(ABC, Node):
         if not self.can_merge(other):
             raise AttributeError("Entities cannot be merged.")
         merged = self.copy()
-        for prop, value in other.properties.items():
+        for prop, value in list(other.properties.items()):
             if not value:
                 continue
             if not self.properties[prop]:
@@ -340,16 +340,16 @@ class Entity(ABC, Node):
 
         other_id_props = {
             prop: value
-            for prop, value in other.properties.items()
+            for prop, value in list(other.properties.items())
             if prop in self.id_properties and value
         }
         self_id_props = {
             prop: value
-            for prop, value in self.properties.items()
+            for prop, value in list(self.properties.items())
             if prop in self.id_properties and value
         }
         # Return True if there is no overlap
-        overlap = self_id_props.keys() - other_id_props.keys()
+        overlap = list(self_id_props.keys()) - list(other_id_props.keys())
         if not overlap:
             return True
         return all(self.properties[prop] ==
@@ -368,7 +368,7 @@ class Entity(ABC, Node):
         """
         return {
             name: value
-            for name, value in self.__dict__.items()
+            for name, value in list(self.__dict__.items())
             if not name.startswith("_")
         }
 
@@ -442,7 +442,7 @@ class Entity(ABC, Node):
         """
         name = next(
             iter(
-                (key for key, val in cls.ENTITY_NAME_MAP.items() if val == entity_type)
+                (key for key, val in list(cls.ENTITY_NAME_MAP.items()) if val == entity_type)
             )
         )
         return name or "unknown"
@@ -460,7 +460,7 @@ class Entity(ABC, Node):
         """
         return {
             name: value
-            for name, value in self.properties.items()
+            for name, value in list(self.properties.items())
             if not isinstance(value, (Entity, list)) and name != "edges"
         }
 
@@ -530,6 +530,6 @@ class Entity(ABC, Node):
 
     def list_pivot_funcs(self):
         """Print list of pivot functions assigned to entity."""
-        print("\n".join(self.get_pivot_list()))
+        print(("\n".join(self.get_pivot_list())))
 
     pivots = get_pivot_list

@@ -32,7 +32,7 @@ def test_readme_md():
             assert Path(".").absolute().joinpath(readme_file).is_file
 
     results = check_md_document(str(readme_file))
-    page_not_found = [p for p in results.values() if p.status == 404]
+    page_not_found = [p for p in list(results.values()) if p.status == 404]
     if page_not_found:
         print("Please fix the following 404 Errors:")
         for page in page_not_found:
@@ -45,8 +45,8 @@ def test_readme_md():
 def test_doc_pages_doc_links():
     results = check_docs("./docs", recurse=False)
     page_errors = []
-    for page, result_dict in results.items():
-        for result in result_dict.values():
+    for page, result_dict in list(results.items()):
+        for result in list(result_dict.values()):
             if result.status == 404:
                 page_errors.append(f"{result.status} - {result.url}")
     if page_errors:

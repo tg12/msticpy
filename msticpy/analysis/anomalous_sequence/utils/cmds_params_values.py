@@ -105,7 +105,7 @@ def compute_counts(  # noqa MC0001  # nosec
             pars = cmd.params
             if isinstance(pars, set):
                 pars = dict.fromkeys(pars)
-            for par, val in pars.items():
+            for par, val in list(pars.items()):
                 param_counts[par] += 1
                 value_counts[val] += 1
                 cmd_param_counts[cmd.name][par] += 1
@@ -262,7 +262,7 @@ def get_params_to_model_values(
     """
     param_stats = [
         (param, len(vals), param_counts[param], 100 * len(vals) / param_counts[param])
-        for param, vals in param_value_counts.items()
+        for param, vals in list(param_value_counts.items())
     ]
 
     modellable_params = [
@@ -326,7 +326,7 @@ def compute_prob_setofparams_given_cmd(
     ref_cmd = param_cond_cmd_probs[cmd]
     lik: float = 1
     num = 0
-    for param, prob in ref_cmd.items():
+    for param, prob in list(ref_cmd.items()):
         if param in pars:
             lik *= prob
             if param in modellable_params:

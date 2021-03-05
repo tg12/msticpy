@@ -193,7 +193,7 @@ class QueryStore:
         """
         sources, defaults, metadata = read_query_def_file(query_file)
 
-        for source_name, source in sources.items():
+        for source_name, source in list(sources.items()):
             new_source = QuerySource(source_name, source, defaults, metadata)
             self.add_data_source(new_source)
 
@@ -249,7 +249,7 @@ class QueryStore:
                     if environment.name not in env_stores:
                         env_stores[environment.name] = cls(
                             environment=environment.name)
-                    for source_name, source in sources.items():
+                    for source_name, source in list(sources.items()):
                         new_source = QuerySource(
                             source_name, source, defaults, metadata
                         )
@@ -315,6 +315,6 @@ class QueryStore:
         """
         return {
             query_dict.get(query_name)
-            for family, query_dict in self.data_families.items()
+            for family, query_dict in list(self.data_families.items())
             if query_name in query_dict
         }

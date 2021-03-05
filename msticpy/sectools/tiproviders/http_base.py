@@ -213,15 +213,15 @@ class HttpProvider(TIProvider):
         )
         if src.headers:
             headers: Dict[str, Any] = {key: val.format(
-                **req_params) for key, val in src.headers.items()}
+                **req_params) for key, val in list(src.headers.items())}
             req_dict["headers"] = headers
         if src.params:
             q_params: Dict[str, Any] = {key: val.format(
-                **req_params) for key, val in src.params.items()}
+                **req_params) for key, val in list(src.params.items())}
             req_dict["params"] = q_params
         if src.data:
             q_data: Dict[str, Any] = {
-                key: val.format(**req_params) for key, val in src.data.items()
+                key: val.format(**req_params) for key, val in list(src.data.items())
             }
             req_dict["data"] = q_data
         if src.auth_type and src.auth_str:

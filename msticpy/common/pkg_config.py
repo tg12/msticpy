@@ -176,7 +176,7 @@ def _consolidate_configs(
 
 
 def _override_config(base_config: Dict[str, Any], new_config: Dict[str, Any]):
-    for c_key, c_item in new_config.items():
+    for c_key, c_item in list(new_config.items()):
         if c_item is None:
             continue
         if isinstance(base_config.get(c_key), dict):
@@ -235,8 +235,8 @@ def _create_data_providers(mp_config: Dict[str, Any]) -> Dict[str, Any]:
 
     az_sent_config = mp_config.get(_AZ_SENTINEL)
     if az_sent_config and az_sent_config.get("Workspaces"):
-        for section, prov_settings in mp_config[_AZ_SENTINEL]["Workspaces"].items(
-        ):
+        for section, prov_settings in list(mp_config[_AZ_SENTINEL]["Workspaces"].items(
+        )):
             sec_name = f"{_AZ_SENTINEL}_{section}"
             if sec_name in data_providers:
                 continue
@@ -302,14 +302,14 @@ def validate_config(mp_config: Dict[str, Any] = None, config_file: str = None):
 def _print_validation_report(mp_errors, mp_warn):
     if mp_errors:
         title = "\nThe following configuration errors were found:"
-        print(title, "\n", "-" * len(title))
+        print((title, "\n", "-" * len(title)))
         for err in mp_errors:
             print(err)
     else:
         print("No errors found.")
     if mp_warn:
         title = "\nThe following configuration warnings were found:"
-        print(title, "\n", "-" * len(title))
+        print((title, "\n", "-" * len(title)))
         for err in mp_warn:
             print(err)
     else:
@@ -329,7 +329,7 @@ def _validate_azure_sentinel(mp_config):
             "Missing or empty 'Workspaces' key in 'AzureSentinel' section")
         return mp_errors, mp_warnings
     no_default = True
-    for ws, ws_settings in ws_settings.items():
+    for ws, ws_settings in list(ws_settings.items()):
         if ws == "Default":
             no_default = False
         ws_id = ws_settings.get("WorkspaceId")
@@ -348,7 +348,7 @@ def _check_provider_settings(mp_config, section, key_provs):
     if not mp_config:
         mp_warnings.append(f"'{section}' section has no settings.")
         return mp_errors, mp_warnings
-    for p_name, p_setting in mp_config.items():
+    for p_name, p_setting in list(mp_config.items()):
         if not p_setting:
             mp_warnings.append(
                 f"'{section}/{p_name}' sub-section has no settings.")
@@ -414,7 +414,7 @@ def _check_env_vars(args_key, section):
     mp_errs = []
     if not args_key:
         return mp_errs
-    for val in args_key.values():
+    for val in list(args_key.values()):
         if "EnvironmentVar" in val:
             env_name = val.get("EnvironmentVar")
             if not env_name:

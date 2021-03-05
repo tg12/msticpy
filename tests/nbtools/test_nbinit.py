@@ -31,7 +31,7 @@ def test_nbinit_no_params():
     check.is_in("Path", ns_dict)
     check.is_in("np", ns_dict)
 
-    print(ns_dict.keys())
+    print((list(ns_dict.keys())))
     # Note - msticpy imports throw when exec'd from unit test
     # e.g. check.is_in("QueryProvider", ns_dict) fails
 
@@ -55,7 +55,7 @@ def test_nbinit_imports():
         def_imports="nb",
         verbose=True,
     )
-    print(ns_dict.keys())
+    print((list(ns_dict.keys())))
 
     check.is_in("pathlib", ns_dict)
     check.is_in("time", ns_dict)
@@ -110,8 +110,8 @@ def test_install_pkgs():
         def_imports="nb",
     )
 
-    for name, obj in ns_dict.items():
-        print(name, type(obj))
+    for name, obj in list(ns_dict.items()):
+        print((name, type(obj)))
     check.is_in("pip_install_test", ns_dict)
 
     subprocess.run(["pip", "uninstall", "-y", test_pkg], check=True)  # nosec

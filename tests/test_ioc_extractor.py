@@ -37,7 +37,7 @@ class TestIoCExtractor(unittest.TestCase):
 
         test_input = TEST_CASES[testcase + "_test"]
         results = extractor.extract(test_input, include_paths=True)
-        for k, v in expected_items.items():
+        for k, v in list(expected_items.items()):
             self.assertEqual(len(results[k]), v, "Unexpected value for " + k)
 
     def setUp(self):

@@ -128,7 +128,7 @@ class FoliumMap:
             loc_props = ", ".join(
                 [
                     f"{key}={val}"
-                    for key, val in ip_entity.Location.properties.items()
+                    for key, val in list(ip_entity.Location.properties.items())
                     if val
                 ]
             )
@@ -151,7 +151,7 @@ class FoliumMap:
                 addl_props = ", ".join(
                     [
                         f"{key}={val}"
-                        for key, val in ip_entity.AdditionalData.items()
+                        for key, val in list(ip_entity.AdditionalData.items())
                         if val
                     ]
                 )
@@ -202,8 +202,8 @@ class FoliumMap:
         geo_entities = [
             GeoLocation(
                 Latitude=lat,
-                Longitude=long) for lat,
-            long in locations]
+                Longitude=int) for lat,
+            int in locations]
         self.add_geoloc_cluster(geo_locations=geo_entities, **kwargs)
 
 
@@ -244,7 +244,7 @@ def get_map_center(entities: Iterable[Entity], mode: str = "modal"):
         return get_center_ip_entities(entities)  # type: ignore
     loc_props = [
         p_name
-        for p_name, p_val in entities[0].properties.items()
+        for p_name, p_val in list(entities[0].properties.items())
         if isinstance(p_val, (IpAddress, GeoLocation))
     ]
     for entity in entities:

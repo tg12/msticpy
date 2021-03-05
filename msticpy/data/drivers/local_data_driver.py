@@ -98,7 +98,7 @@ class LocalDataDriver(DriverBase):
                 continue
             df_schema = test_df.dtypes
             self._schema[df_fname] = {
-                key: dtype.name for key, dtype in df_schema.to_dict().items()
+                key: dtype.name for key, dtype in list(df_schema.to_dict().items())
             }
 
         return self._schema

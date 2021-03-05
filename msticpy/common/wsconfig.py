@@ -187,7 +187,7 @@ class WorkspaceConfig:
                 cls.PKG_CONF_WS_KEY: ws.get(cls.PKG_CONF_WS_KEY),
                 cls.PKG_CONF_TENANT_KEY: ws.get(cls.PKG_CONF_TENANT_KEY),
             }
-            for ws_name, ws in ws_settings.items()
+            for ws_name, ws in list(ws_settings.items())
         }
 
     def _read_pkg_config_values(self, workspace_name: str = None):

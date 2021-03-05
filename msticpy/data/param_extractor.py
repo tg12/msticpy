@@ -49,7 +49,7 @@ def extract_query_params(
     # template. Build a dictionary to hold the values. This will contain
     # at least the required params plus any that are extracted from args and
     # kwargs and have been added dynamically.
-    req_param_names = query_source.required_params.keys()
+    req_param_names = list(query_source.required_params.keys())
     req_params: Dict[str, Any] = {param: None for param in req_param_names}
 
     # try to retrieve any parameters as attributes of the args objects
@@ -60,13 +60,13 @@ def extract_query_params(
     if kwargs:
         resolved_params = query_source.resolve_param_aliases(kwargs)
         req_params.update(
-            {key: arg for key, arg in resolved_params.items() if key in all_params}
+            {key: arg for key, arg in list(resolved_params.items()) if key in all_params}
         )
 
     # Get the names of any params that were required but we didn't
     # find a value for
     missing_params = [
-        p_name for p_name, p_value in req_params.items() if p_value is None
+        p_name for p_name, p_value in list(req_params.items()) if p_value is None
     ]
     return req_params, missing_params
 
@@ -103,4 +103,4 @@ def _get_object_params(
                     req_params[param] = getattr(arg_object, param)
         remaining_params = [
             p_name for p_name,
-            p_value in req_params.items() if p_value is not None]
+            p_value in list(req_params.items()) if p_value is not None]

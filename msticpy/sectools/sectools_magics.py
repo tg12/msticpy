@@ -145,7 +145,7 @@ class IoCExtractMagic(Magics):
         else:
             results = self._ioc_extract.extract(src=cell, ioc_types=ioc_types)
         iocs = [(ioc_type, list(ioc_res))
-                for ioc_type, ioc_res in results.items()]
+                for ioc_type, ioc_res in list(results.items())]
 
         if args.out is not None:
             self.shell.user_ns[args.out] = results

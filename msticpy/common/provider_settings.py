@@ -92,7 +92,7 @@ def get_provider_settings(
         return {}
 
     settings = {}
-    for provider, item_settings in section_settings.items():
+    for provider, item_settings in list(section_settings.items()):
         prov_args = item_settings.get("Args")
         prov_settings = ProviderSettings(
             name=provider,
@@ -178,7 +178,7 @@ def _get_settings(
         return ProviderArgs()
     setting_dict: ProviderArgs = ProviderArgs(conf_group.copy())
 
-    for arg_name, arg_value in conf_group.items():
+    for arg_name, arg_value in list(conf_group.items()):
         target_name = arg_name
         if name_map:
             target_name = name_map.get(target_name.casefold(), target_name)

@@ -98,12 +98,12 @@ class PipelineStep:
         ]
         params_str = [
             f"{p_name}='{p_val}'"
-            for p_name, p_val in self.params.items()
+            for p_name, p_val in list(self.params.items())
             if isinstance(p_val, str)
         ]
         params_other = [
             f"{p_name}={p_val}"
-            for p_name, p_val in self.params.items()
+            for p_name, p_val in list(self.params.items())
             if not isinstance(p_val, str)
         ]
         return ", ".join(pos_params + params_str + params_other)
@@ -204,7 +204,7 @@ class Pipeline:
             The dictionary could not be parsed as a pipeline.
 
         """
-        pl_name, pl_dict = next(iter(pipeline.items()))
+        pl_name, pl_dict = next(iter(list(pipeline.items())))
         if pl_dict and isinstance(pl_dict, dict):
             steps = [PipelineStep(**step) for step in pl_dict.get("steps", [])]
             return cls(
@@ -230,7 +230,7 @@ class Pipeline:
             Iterable of pipeline instances
 
         """
-        for p_name, pipeline in pipelines.get("pipelines", {}).items():
+        for p_name, pipeline in list(pipelines.get("pipelines", {}).items()):
             yield Pipeline.parse_pipeline({p_name: pipeline})
 
     @classmethod
@@ -289,12 +289,12 @@ class Pipeline:
         for step in pipe_linesteps:
             exec_action = step.get_exec_step()
             if verbose:
-                print("step =", step.name, "\n", exec_action)
+                print(("step =", step.name, "\n", exec_action))
             if not isinstance(pipeline_result, pd.DataFrame):
-                print(
+                print((
                     "Output type from previous step is {type(pipeline_result}",
                     "This is not a valid input type for the next stage.",
-                )
+                ))
                 break
             func = _get_pd_accessor_func(pipeline_result, exec_action.accessor)
             pipeline_result = func(

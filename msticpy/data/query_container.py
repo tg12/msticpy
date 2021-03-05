@@ -25,7 +25,7 @@ class QueryContainer:
 
     def __iter__(self):
         """Return iterator over the attributes."""
-        return iter(self.__dict__.items())
+        return iter(list(self.__dict__.items()))
 
     def __getattr__(self, name):
         """Print usable error message if attribute not found."""
@@ -47,7 +47,7 @@ class QueryContainer:
     def __repr__(self):
         """Return list of attributes."""
         repr_list = []
-        for name, obj in self.__dict__.items():
+        for name, obj in list(self.__dict__.items()):
             if isinstance(obj, QueryContainer):
                 repr_list.append(f"{name} (container)")
             elif isinstance(obj, partial):
@@ -61,7 +61,7 @@ class QueryContainer:
         if args or kwargs:
             print(f"{self.__name__} is a container, not a query.")
             print("Items in this container:")
-        print(repr(self))
+        print((repr(self)))
 
 
 def _get_dot_attrib(obj, elem_path: str) -> Any:

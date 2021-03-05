@@ -324,7 +324,7 @@ def display_timeline_values(
     # plot groups individually so that we can create an interactive legend
     if group_by:
         legend_items = []
-        for _, group_id in group_count_df[group_by].items():
+        for _, group_id in list(group_count_df[group_by].items()):
             first_group_item = graph_df[graph_df[group_by] == group_id].iloc[0]
             legend_label = str(first_group_item[group_by])
             inline_legend = str(group_id)
@@ -516,7 +516,7 @@ def _display_timeline_dict(data: dict, **kwargs) -> figure:  # noqa: C901, MC000
         if data:
             y_labels = {
                 ser_def["y_index"]: str(lbl) for lbl,
-                ser_def in data.items()}
+                ser_def in list(data.items())}
             plot.yaxis.major_label_overrides = y_labels
     if ygrid:
         plot.ygrid.minor_grid_line_color = "navy"
@@ -551,7 +551,7 @@ def _display_timeline_dict(data: dict, **kwargs) -> figure:  # noqa: C901, MC000
     # if legend_pos is "inline", we add add the normal legend inside the plot
     # if legend_pos is "left" or "right", we add the legend to the side
     legend_items = []
-    for ser_name, series_def in data.items():
+    for ser_name, series_def in list(data.items()):
         if legend_pos == "inline":
             p_series = plot.diamond(
                 x=series_def["time_column"],
@@ -632,7 +632,7 @@ def _unpack_data_series_dict(data, **kwargs):
     series_count = len(data)
     colors, palette_size = _get_color_palette(series_count)
 
-    for series_def in data.values():
+    for series_def in list(data.values()):
         data_columns: Set[str] = set()
         series_data = series_def["data"]
 
@@ -806,7 +806,7 @@ def _create_tool_tips(
     # the tooltip columns for all of the data sets.
     if isinstance(data, dict):
         tool_tip_dict = {}
-        for data_set in data.values():
+        for data_set in list(data.values()):
             data_df = data_set.get("data", {})
             for col in columns:
                 disp_col, col_tooltip, col_fmt = _get_datetime_tooltip(
@@ -836,7 +836,7 @@ def _plot_dict_series(data, plot, legend_pos):
     # seperately.
     # We plot groups individually so that we can create an interactive legend.
     legend_items = []
-    for ser_name, series_def in data.items():
+    for ser_name, series_def in list(data.items()):
         if legend_pos == "inline":
             p_series = plot.diamond(
                 x=series_def["time_column"],
@@ -936,7 +936,7 @@ def _create_range_tool(
     )
     rng_select.xaxis[0].formatter = _get_tick_formatter()
     if isinstance(data, dict):
-        for _, series_def in data.items():
+        for _, series_def in list(data.items()):
             rng_select.circle(
                 x=series_def["time_column"],
                 y=y,

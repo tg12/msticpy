@@ -437,10 +437,10 @@ class AzureSentinel(AzureData):
         incidents_url = url + _PATH_MAPPING["incidents"]
         incident_url = incidents_url + f"/{incident_id}"
         params = {"api-version": "2020-01-01"}
-        if "title" not in update_items.keys():
+        if "title" not in list(update_items.keys()):
             update_items.update(
                 {"title": incident_dets.iloc[0]["properties.title"]})
-        if "status" not in update_items.keys():
+        if "status" not in list(update_items.keys()):
             update_items.update(
                 {"status": incident_dets.iloc[0]["properties.status"]})
         data = _build_data(update_items, etag=incident_dets.iloc[0]["etag"])
@@ -591,7 +591,7 @@ def _azs_api_result_to_df(response) -> pd.DataFrame:
 def _build_data(items: dict, **kwargs) -> dict:
     """Build request data body from items."""
     data_body = {"properties": {}}  # type: Dict[str, Dict[str, str]]
-    for key in items.keys():
+    for key in list(items.keys()):
         if key in ["severity", "status", "title", "message"]:
             data_body["properties"].update({key: items[key]})  # type:ignore
         else:

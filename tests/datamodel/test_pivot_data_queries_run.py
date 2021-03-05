@@ -48,7 +48,7 @@ def _reset_entities():
 @pytest.fixture(scope="session")
 def _create_pivot(data_providers):
     _reset_entities()
-    providers = data_providers.values()
+    providers = list(data_providers.values())
     with warnings.catch_warnings():
         warnings.simplefilter("ignore", category=UserWarning)
         return Pivot(providers=providers)
@@ -277,12 +277,12 @@ def test_pivot_funcs_df_merge(_create_pivot, join_type, test_case):
 
     if join_type in ("inner", "right"):
         check.equal(len(result_df), len(result_no_merge_df))
-        for val in join_in_data.values():
+        for val in list(join_in_data.values()):
             if val != "no_match":
                 check.is_in(val, result_df["TargetLogonId"].values)
             else:
                 check.is_not_in(val, result_df["TargetLogonId"].values)
     if join_type == "left":
         check.equal(len(result_df), len(result_no_merge_df) + 1)
-        for val in join_in_data.values():
+        for val in list(join_in_data.values()):
             check.is_in(val, result_df["TargetLogonId"].values)

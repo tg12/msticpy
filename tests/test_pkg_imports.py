@@ -34,24 +34,24 @@ def test_missing_pkgs_req():
     mod_imports = analyze_imports(
         package_root=PKG_ROOT, package_name=PKG_NAME, req_file=REQS_FILE
     )
-    import_errs = {v for s in mod_imports.values() for v in s.unknown}
-    print("re module path:", re.__file__)
-    print("Import errors:\n", import_errs)
+    import_errs = {v for s in list(mod_imports.values()) for v in s.unknown}
+    print(("re module path:", re.__file__))
+    print(("Import errors:\n", import_errs))
     paths = {str(Path(p).resolve()) for p in sys.path}
     stdlib_paths = {
         p
         for p in paths
         if p.lower().startswith(sys.prefix.lower()) and "site-packages" not in p
     }
-    print("sys.path", sys.path)
-    print("paths", paths)
-    print("sys.prefix", sys.prefix)
-    print("Stdlib paths:\b", stdlib_paths)
+    print(("sys.path", sys.path))
+    print(("paths", paths))
+    print(("sys.prefix", sys.prefix))
+    print(("Stdlib paths:\b", stdlib_paths))
 
-    missing_reqs = {v for s in mod_imports.values() for v in s.missing_reqs}
+    missing_reqs = {v for s in list(mod_imports.values()) for v in s.missing_reqs}
     missing_reqs = missing_reqs - EXTRAS_EXCEPTIONS
     if missing_reqs:
-        print("Missing packages:\n", "\n".join(missing_reqs))
+        print(("Missing packages:\n", "\n".join(missing_reqs)))
     check.is_false(missing_reqs)
 
 
@@ -70,11 +70,11 @@ def test_conda_reqs(extras_from_setup):
     conda_reqs_dict = _get_reqs_from_file(conda_reqs_file)
     conda_reqs_pip_dict = _get_reqs_from_file(conda_reqs_pip_file)
 
-    for key, val in main_reqs_dict.items():
-        print(f"Checking {key} in conda-reqs.txt",
-              bool(key in conda_reqs_dict))
-        print(f"Checking {key} in conda-reqs-pip.txt",
-              bool(key in conda_reqs_pip_dict))
+    for key, val in list(main_reqs_dict.items()):
+        print((f"Checking {key} in conda-reqs.txt",
+              bool(key in conda_reqs_dict)))
+        print((f"Checking {key} in conda-reqs-pip.txt",
+              bool(key in conda_reqs_pip_dict)))
 
         check.is_true(
             key in conda_reqs_dict
@@ -90,19 +90,19 @@ def test_conda_reqs(extras_from_setup):
         if key in conda_reqs_dict:
             if conda_reqs_dict[key]:
                 if val != conda_reqs_dict[key]:
-                    print(
+                    print((
                         f"{key} version mismatch - setup: {val}: {conda_reqs_dict[key]}",
                         "in conda-reqs.txt",
-                    )
+                    ))
                 check.equal(val, conda_reqs_dict[key], f"{key} in condas reqs")
             conda_reqs_dict.pop(key)
         if key in conda_reqs_pip_dict:
             if conda_reqs_pip_dict[key]:
                 if val != conda_reqs_pip_dict[key]:
-                    print(
+                    print((
                         f"{key} version mismatch - setup: {val}: {conda_reqs_pip_dict[key]}",
                         "in conda-reqs-pip.txt",
-                    )
+                    ))
                 check.equal(
                     val,
                     conda_reqs_pip_dict[key],
@@ -110,10 +110,10 @@ def test_conda_reqs(extras_from_setup):
             conda_reqs_pip_dict.pop(key)
 
     if conda_reqs_dict:
-        print("Extra items found in conda-reqs.txt", conda_reqs_pip_dict)
+        print(("Extra items found in conda-reqs.txt", conda_reqs_pip_dict))
     check.is_false(conda_reqs_dict, "no extra items in conda-reqs.txt")
     if conda_reqs_pip_dict:
-        print("Extra items found in conda-reqs-pip.txt", conda_reqs_dict)
+        print(("Extra items found in conda-reqs-pip.txt", conda_reqs_dict))
     check.is_false(conda_reqs_pip_dict, "no extra items in conda-reqs-pip.txt")
 
 

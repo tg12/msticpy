@@ -415,7 +415,7 @@ def _check_and_reload_pkg(
     if pkg_version < req_version:
         display(HTML(_MISSING_PKG_WARN.format(package=pkg_name)))
         if not unit_testing():
-            resp = input("Install the package now? (y/n)")  # nosec
+            resp = eval(input("Install the package now? (y/n)"))  # nosec
         else:
             resp = "y"
         if resp.casefold().startswith("y"):

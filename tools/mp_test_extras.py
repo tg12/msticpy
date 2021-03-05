@@ -106,14 +106,14 @@ def _install_pkg(app_args):
 
     start = datetime.now()
     print(f"Install extras {app_args.extras}")
-    print("start", start)
+    print(("start", start))
     print(sp_run)
     if not test:
         subprocess.run(sp_run, shell=True)  # nosec
 
     end = datetime.now()
-    print("end", end)
-    print("duration", end - start)
+    print(("end", end))
+    print(("duration", end - start))
 
 
 def _reset_pkgs():
